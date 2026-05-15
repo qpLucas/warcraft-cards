@@ -2898,24 +2898,27 @@
     .meta-label, .meta-value { font-size: 10px; }
 
     /* ── MODAL ── */
-    #modal-overlay { padding: 0; align-items: flex-end; }
+    #modal-overlay {
+      padding: 48px 12px;
+      align-items: flex-start;
+      overflow-y: auto;
+    }
     #modal {
-      max-height: 92vh;
-      height: 92vh;
-      border-radius: 16px 16px 0 0;
-      margin: 0;
-      overflow: hidden;
+      max-height: none;
+      height: auto;
+      border-radius: 12px;
+      margin: 0 auto;
+      overflow: visible;
       display: flex;
       flex-direction: column;
     }
     #modal-close { display: none; }
-    #modal-back-btn { display: flex; }
+    #modal-back-btn { display: flex; border-radius: 12px 12px 0 0; }
     #modal-inner {
       flex-direction: column;
-      overflow-y: auto;
+      overflow-y: visible;
       overflow-x: hidden;
       flex: 1;
-      -webkit-overflow-scrolling: touch;
     }
     #modal-img-side {
       width: 100%;
@@ -2926,8 +2929,8 @@
     }
     #modal-img-side img {
       min-height: unset;
-      max-height: 50vw;
-      height: 50vw;
+      height: auto;
+      max-height: none;
       width: 100%;
       object-fit: contain;
       background: #0c0904;
@@ -2936,7 +2939,7 @@
     #modal-info-side {
       max-height: none;
       overflow-y: visible;
-      padding: 16px 16px 60px;
+      padding: 16px 16px 32px;
       gap: 12px;
     }
     #modal-card-name { font-size: 16px; }
@@ -4092,7 +4095,8 @@ async function openModal(id) {
   generateCaptcha();
   document.getElementById('c-text').oninput = function() { document.getElementById('c-char-count').textContent = 500-this.value.length; };
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
+  // On mobile, let the overlay scroll instead of locking body
+  if (window.innerWidth > 768) document.body.style.overflow='hidden';
 }
 
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; currentModalId=null; }
