@@ -2857,15 +2857,7 @@
     #filters {
       padding: 10px 14px;
       gap: 8px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 89;
-      transform: translateY(0) !important;
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      transition: none !important;
+      top: 60px;
     }
     .filter-select, .filter-search { font-size: 13px; }
     .filter-label { display: none; }
@@ -2873,7 +2865,6 @@
 
     /* ── GALLERY ── */
     #gallery, #leaderboard, #forsale-section { padding: 12px 14px; }
-    #gallery { padding-top: 56px; }
     #cards-grid, #forsale-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
@@ -4329,44 +4320,7 @@ function renderAdminList(){const list=document.getElementById('admin-cards-list'
 function updateTopbarCount(){document.getElementById('topbar-count-num').textContent=cards.length;}
 
 // ── FILTER HIDE ON SCROLL ──
-(function(){
-  let lastY=0;
-  const filterEl=document.getElementById('filters');
-  const topbar=document.getElementById('topbar');
-
-  function positionFilter() {
-    if(window.innerWidth<=768) {
-      const h = topbar.getBoundingClientRect().height;
-      filterEl.style.top = h + 'px';
-    } else {
-      filterEl.style.top = '';
-    }
-  }
-
-  positionFilter();
-  window.addEventListener('resize', positionFilter, {passive:true});
-
-  window.addEventListener('scroll',()=>{
-    if(window.innerWidth<=768){
-      positionFilter();
-      filterEl.style.transform='translateY(0)';
-      filterEl.style.opacity='1';
-      filterEl.style.pointerEvents='';
-      return;
-    }
-    const currentY=window.scrollY;
-    if(currentY>lastY&&currentY>80){
-      filterEl.style.transform='translateY(-100%)';
-      filterEl.style.opacity='0';
-      filterEl.style.pointerEvents='none';
-    } else {
-      filterEl.style.transform='translateY(0)';
-      filterEl.style.opacity='1';
-      filterEl.style.pointerEvents='';
-    }
-    lastY=currentY;
-  },{passive:true});
-})();
+(function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
 
 // ── MOBILE NAV ──
 function toggleMobileNav(){document.getElementById('topbar-nav').classList.toggle('open');}
