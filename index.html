@@ -252,6 +252,7 @@
     top: 68px;
     z-index: 90;
     backdrop-filter: blur(8px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
   .filter-label {
@@ -336,13 +337,13 @@
   /* ── CARD GRID ── */
   #gallery {
     padding: 32px;
-    max-width: 1600px;
+    max-width: 1440px;
     margin: 0 auto;
   }
 
   #cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(6, 1fr);
     gap: 24px;
   }
 
@@ -799,15 +800,56 @@
     text-transform: uppercase;
     transition: opacity 0.2s;
     align-self: flex-end;
+    margin-top: 8px;
   }
   #fs-submit-btn:hover { opacity: 0.88; }
 
-  /* ── SHOW MORE ── */
+  /* ── FOR SALE SECTION ── */
+  #forsale-section {
+    padding: 0 32px 48px;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: none;
+  }
+  #forsale-section.visible { display: block; }
+
+  #forsale-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  #forsale-show-more-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  #forsale-show-more-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1a6b3a;
+    background: transparent;
+    border: 1px solid rgba(46,204,113,0.4);
+    padding: 11px 36px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  #forsale-show-more-btn:hover {
+    color: #2ecc71;
+    border-color: #2ecc71;
+    background: rgba(46,204,113,0.06);
+  }
+
+  /* ── SHOW MORE (main gallery) ── */
   #show-more-wrap {
     display: flex;
     justify-content: center;
     padding: 24px 0 8px;
-    grid-column: 1 / -1;
   }
 
   #show-more-btn {
@@ -858,7 +900,7 @@
   /* ── LEADERBOARD ── */
   #leaderboard {
     padding: 0 32px 48px;
-    max-width: 1600px;
+    max-width: 1440px;
     margin: 0 auto;
   }
 
@@ -1150,6 +1192,243 @@
   }
   #modal-rating-text .avg { color: var(--gold); font-weight: 600; }
 
+  /* ── ADMIN TABS ── */
+  #admin-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #admin-tabs {
+    display: flex;
+    gap: 6px;
+  }
+
+  .admin-tab-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    padding: 5px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .admin-tab-btn:hover { color: var(--gold); border-color: var(--gold); }
+  .admin-tab-btn.active {
+    color: var(--bg-deep);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-color: var(--gold);
+  }
+
+  /* ── POLLS TAB ── */
+  #admin-polls-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  #admin-poll-form-col {
+    border-right: 1px solid var(--border-gold);
+    padding: 28px 32px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
+  }
+
+  #admin-poll-form-col h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  #admin-poll-save-btn {
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--bg-deep);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    border: none;
+    padding: 11px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+  }
+  #admin-poll-save-btn:hover { opacity: 0.9; }
+
+  #admin-poll-cancel-btn {
+    width: 100%;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    padding: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 6px;
+    transition: all 0.2s;
+  }
+  #admin-poll-cancel-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+  #admin-poll-list-col {
+    padding: 28px 28px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
+  }
+
+  #admin-poll-list-col h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #admin-poll-count {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  #admin-poll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    max-height: calc(90vh - 180px);
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  #admin-poll-list::-webkit-scrollbar { width: 4px; }
+  #admin-poll-list::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+  .admin-poll-row {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: border-color 0.2s;
+  }
+  .admin-poll-row:hover { border-color: rgba(201,168,76,0.5); }
+
+  .admin-poll-row-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .admin-poll-question {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    color: var(--text-cream);
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .admin-poll-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .poll-badge-active   { background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid rgba(46,204,113,0.4); }
+  .poll-badge-inactive { background: rgba(100,80,20,0.2);   color: var(--gold-dim); border: 1px solid var(--border-gold); }
+
+  .admin-poll-meta {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .admin-poll-options-preview {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .admin-poll-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .poll-toggle-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid rgba(46,204,113,0.4);
+    background: transparent;
+    color: #2ecc71;
+    transition: all 0.18s;
+    text-transform: uppercase;
+  }
+  .poll-toggle-btn:hover { background: rgba(46,204,113,0.1); }
+  .poll-toggle-btn.deactivate { border-color: var(--gold-dim); color: var(--gold-dim); }
+  .poll-toggle-btn.deactivate:hover { color: var(--gold); border-color: var(--gold); }
+
+  .poll-edit-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid var(--gold-dim);
+    background: transparent;
+    color: var(--gold-dim);
+    transition: all 0.18s;
+    text-transform: uppercase;
+  }
+  .poll-edit-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+  .poll-del-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid #4a1515;
+    background: transparent;
+    color: #7a2222;
+    transition: all 0.18s;
+    text-transform: uppercase;
+  }
+  .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }
+
   /* ── ADMIN PANEL ── */
   #admin-overlay {
     display: none;
@@ -1158,13 +1437,14 @@
     background: rgba(0,0,0,0.95);
     z-index: 2000;
     overflow-y: auto;
-    padding: 24px;
+    padding: 16px;
     backdrop-filter: blur(8px);
   }
   #admin-overlay.open { display: block; }
 
   #admin-panel {
-    max-width: 960px;
+    max-width: 100%;
+    width: 100%;
     margin: 0 auto;
     background: var(--bg-panel);
     border: 1px solid var(--border-gold-strong);
@@ -1180,6 +1460,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
   #admin-header h2 {
@@ -1189,6 +1471,79 @@
     color: var(--gold);
     letter-spacing: 0.15em;
     text-transform: uppercase;
+  }
+
+  #admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  #admin-minratings-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #admin-minratings-wrap label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  #admin-minratings {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-cream);
+    background: rgba(201,168,76,0.08);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 4px 8px;
+    width: 56px;
+    text-align: center;
+  }
+  #admin-minratings:focus { outline: none; border-color: var(--gold); }
+
+  #admin-popularlimit {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-cream);
+    background: rgba(201,168,76,0.08);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 4px 8px;
+    width: 56px;
+    text-align: center;
+  }
+  #admin-popularlimit:focus { outline: none; border-color: var(--gold); }
+
+  .admin-setting-confirm {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .admin-setting-confirm:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.08);
   }
 
   #admin-close-btn {
@@ -1208,13 +1563,15 @@
 
   #admin-body {
     display: grid;
-    grid-template-columns: 1fr 1.4fr;
+    grid-template-columns: 1fr 1fr;
     gap: 0;
   }
 
   #admin-form-col {
     border-right: 1px solid var(--border-gold);
-    padding: 24px 28px;
+    padding: 28px 32px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
   }
 
   #admin-form-col h3 {
@@ -1228,7 +1585,7 @@
   }
 
   .admin-field {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
   }
 
   .admin-field label {
@@ -1239,7 +1596,7 @@
     letter-spacing: 0.18em;
     color: var(--gold-dim);
     text-transform: uppercase;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
   }
 
   .admin-field input,
@@ -1247,12 +1604,13 @@
   .admin-field textarea {
     width: 100%;
     font-family: 'Crimson Pro', serif;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 600;
     color: var(--text-cream);
     background: rgba(201,168,76,0.05);
     border: 1px solid var(--border-gold);
     border-radius: 3px;
-    padding: 7px 10px;
+    padding: 9px 12px;
     transition: border-color 0.2s;
     resize: vertical;
   }
@@ -1275,12 +1633,19 @@
     padding-right: 30px;
   }
 
+  .admin-field select option {
+    background: #1C1509;
+    color: var(--text-cream);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
   .admin-field textarea { min-height: 60px; }
 
   .admin-field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 16px;
   }
 
   #admin-save-btn {
@@ -1333,7 +1698,9 @@
 
   /* Admin list */
   #admin-list-col {
-    padding: 24px 28px;
+    padding: 28px 28px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
   }
 
   #admin-list-col h3 {
@@ -1357,6 +1724,47 @@
     text-transform: none;
     letter-spacing: 0;
   }
+
+  /* Admin list */
+  #admin-list-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  #admin-list-filters select,
+  #admin-list-filters input {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-cream);
+    background: rgba(201,168,76,0.05);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 5px 8px;
+    transition: border-color 0.2s;
+  }
+
+  #admin-list-filters select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A84C'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-color: rgba(201,168,76,0.05);
+    padding-right: 24px;
+    cursor: pointer;
+  }
+
+  #admin-list-filters select option {
+    background: #1C1509;
+    color: var(--text-cream);
+  }
+
+  #admin-list-filters input { flex: 1; min-width: 80px; }
+  #admin-list-filters input::placeholder { color: var(--text-dim); }
+  #admin-list-filters select:focus,
+  #admin-list-filters input:focus { outline: none; border-color: var(--gold); }
 
   #admin-cards-list {
     display: flex;
@@ -1831,6 +2239,34 @@
     font-style: italic;
   }
 
+  #popular-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .popular-tab {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    padding: 7px 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .popular-tab:hover { color: var(--gold); border-color: var(--gold); }
+  .popular-tab.active {
+    color: var(--bg-deep);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-color: var(--gold);
+  }
+
   /* ── DONATE MODAL ── */
   #donate-overlay {
     display: none;
@@ -2157,22 +2593,19 @@
 
   /* ── HIDDEN ADMIN LINK ── */
   #admin-secret-link {
-    position: fixed;
-    bottom: 16px;
-    right: 20px;
     font-family: 'Cinzel', serif;
     font-size: 9px;
     letter-spacing: 0.14em;
-    color: rgba(201,168,76,0.18);
+    color: rgba(201,168,76,0.12);
     text-decoration: none;
     text-transform: uppercase;
     cursor: pointer;
     transition: color 0.3s;
-    z-index: 50;
     background: none;
     border: none;
+    padding: 0;
   }
-  #admin-secret-link:hover { color: rgba(201,168,76,0.5); }
+  #admin-secret-link:hover { color: rgba(201,168,76,0.35); }
 
   /* ── ADMIN LOGIN MODAL ── */
   #admin-login-overlay {
@@ -2295,6 +2728,10 @@
   }
   #lightbox-close:hover { color: var(--gold); border-color: var(--gold); }
 
+  @media (min-width: 769px) and (max-width: 1100px) {
+    #cards-grid, #forsale-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
   @media (max-width: 768px) {
     /* ── TOPBAR ── */
     #topbar {
@@ -2307,7 +2744,7 @@
     #topbar-logo { padding: 10px 0; }
     .logo-emblem { width: 40px; height: 40px; }
     #topbar-title .site-name { font-size: 15px; }
-    #topbar-title .site-tagline { display: none; }
+    #topbar-title .site-tagline { font-size: 11px; }
     #topbar-collection-count { display: none; }
 
     /* Hamburger */
@@ -2361,10 +2798,10 @@
     .filter-count { font-size: 11px; }
 
     /* ── GALLERY ── */
-    #gallery, #leaderboard { padding: 12px 14px; }
-    #cards-grid {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 14px;
+    #gallery, #leaderboard, #forsale-section { padding: 12px 14px; }
+    #cards-grid, #forsale-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
     .card-name { font-size: 11px; }
     .meta-label, .meta-value { font-size: 10px; }
@@ -2420,8 +2857,62 @@
     #show-more-btn { padding: 10px 28px; font-size: 10px; }
   }
 
+  /* ── FOOTER ── */
+  #site-footer {
+    border-top: 1px solid var(--border-gold);
+    background: linear-gradient(180deg, transparent, rgba(201,168,76,0.03));
+    padding: 14px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  #footer-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  #footer-ig {
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+  #footer-ig:hover { color: #E1306C; }
+
+  #footer-right {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  #footer-left { flex: 1; }
+
+  @media (max-width: 768px) {
+    #site-footer {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding: 14px 16px;
+      gap: 6px;
+    }
+    #footer-center { justify-content: center; }
+    #footer-right { text-align: center; }
+  }
+
   @media (max-width: 420px) {
-    #cards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    #cards-grid, #forsale-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .modal-meta-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -2458,11 +2949,11 @@
   <nav id="topbar-nav">
     <a href="#" onclick="event.preventDefault();openPopular()">Popular</a>
     <div class="nav-divider"></div>
+    <a href="#" onclick="event.preventDefault();openDonate()">Offer Cards</a>
+    <div class="nav-divider"></div>
+    <a href="#" onclick="event.preventDefault();openSupport()" id="support-btn">Tip Jar</a>
+    <div class="nav-divider"></div>
     <a href="#" onclick="event.preventDefault();openAbout()">About</a>
-    <div class="nav-divider"></div>
-    <a href="#" onclick="event.preventDefault();openDonate()">Donate Cards</a>
-    <div class="nav-divider"></div>
-    <a href="#" onclick="event.preventDefault();openSupport()" id="support-btn">Support Me</a>
     <div class="nav-divider"></div>
     <a href="https://instagram.com/warcraftcardscom" target="_blank" rel="noopener" id="ig-btn" title="Follow on Instagram">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2539,6 +3030,36 @@
   </div>
   <div id="leaderboard-list"></div>
 </div>
+
+<!-- FOR SALE SECTION -->
+<div id="forsale-section">
+  <div class="section-title">
+    <h2>💚 For Sale</h2>
+    <div class="title-ornament"></div>
+  </div>
+  <div id="forsale-grid"></div>
+  <div id="forsale-show-more-wrap" style="display:none">
+    <button id="forsale-show-more-btn" onclick="forsaleShowMore()">Show More</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="site-footer">
+  <div id="footer-left">
+    <button id="admin-secret-link" onclick="openAdminLogin()">admin</button>
+  </div>
+  <div id="footer-center">
+    <span>Warcraft Cards collection of Lucas</span>
+    <a href="https://instagram.com/lucascharvat" target="_blank" rel="noopener" id="footer-ig">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+      </svg>
+    </a>
+  </div>
+  <div id="footer-right">Since 2026 · All rights reserved</div>
+</footer>
 
 <!-- CARD MODAL -->
 <div id="modal-overlay" onclick="closeModalOutside(event)">
@@ -2620,8 +3141,11 @@
         <div class="ornament-diamond"></div>
         <div class="ornament-line"></div>
       </div>
-      <h2>Most Popular Cards</h2>
-      <p id="popular-subtitle">Ranked by votes</p>
+      <h2>Popular</h2>
+      <div id="popular-tabs">
+        <button class="popular-tab active" id="tab-votes" onclick="switchPopularTab('votes')">Most Voted</button>
+        <button class="popular-tab" id="tab-fav" onclick="switchPopularTab('fav')">Fan Favourites</button>
+      </div>
     </div>
     <div id="popular-list"></div>
   </div>
@@ -2637,10 +3161,10 @@
         <div class="ornament-diamond"></div>
         <div class="ornament-line"></div>
       </div>
-      <h2>Donate Cards</h2>
+      <h2>Offer Cards</h2>
     </div>
     <div id="donate-body">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Have cards you no longer need? Send them a new home — every card donated helps grow this collection and is deeply appreciated.</p>
+      <p>If you have any interesting Warcraft cards for sale or you would like to support my collection by donating your Warcraft cards (shipping/taxes/customs covered by me), don't hesitate to contact me via the email form below.</p>
       <div id="donate-form">
         <div class="admin-field">
           <label>Your Email *</label>
@@ -2648,7 +3172,7 @@
         </div>
         <div class="admin-field">
           <label>Message *</label>
-          <textarea id="d-message" placeholder="Tell me what cards you'd like to donate…" rows="4" maxlength="1000"></textarea>
+          <textarea id="d-message" placeholder="Tell me what cards we will talk about..." rows="4" maxlength="1000"></textarea>
         </div>
         <!-- Honeypot -->
         <input type="text" id="d-trap" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;">
@@ -2672,10 +3196,10 @@
         <div class="ornament-diamond"></div>
         <div class="ornament-line"></div>
       </div>
-      <h2>Support the Collection</h2>
+      <h2>Tip Jar</h2>
     </div>
     <div id="support-body">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim velit vel tincidunt auctor. Nulla facilisi — every contribution, big or small, means the world and helps this collection grow.</p>
+      <p>Every tip is completely voluntary — but deeply appreciated. If you enjoy browsing this collection, any contribution goes directly towards growing it with new Warcraft cards. Thank you for your kindness and support.</p>
       <a id="paypal-btn" href="https://paypal.me/lukascharvat" target="_blank" rel="noopener">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M7.5 21H4.5L6.75 7.5H12C14.4853 7.5 16.5 9.51472 16.5 12C16.5 14.4853 14.4853 16.5 12 16.5H9.75L9 21H7.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
@@ -2701,8 +3225,9 @@
       <h2>About This Collection</h2>
     </div>
     <div id="about-body">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim, velit vel tincidunt auctor, nisl libero gravida odio, vel consequat sapien arcu eget est. Nulla facilisi. Sed euismod, nunc vel ultricies lacinia, nisl nisl aliquam nisl, nec aliquam nisl nisl sit amet nisl.</p>
-      <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.</p>
+      <p>Starting slowly in 2024 after discovering the Upper Deck Blizzard Legacy Collection set from 2023 — even the base cards of Warcraft were enough to get me excited — my passion for building a collection only grew from there. Joining eBay, COMC and Upper Deck E-Pack, I found many ways to dive deeper into the hobby whenever the opportunity arose.</p>
+      <p>What I love most about collecting cards is that it's a never-ending marathon — and that's exactly why I enjoy waiting for the right deals at the right price. There's no need to rush.</p>
+      <p>Enjoy!</p>
     </div>
   </div>
 </div>
@@ -2728,12 +3253,33 @@
 <div id="admin-overlay">
   <div id="admin-panel">
     <div id="admin-header">
-      <h2>⚙ Card Manager</h2>
-      <button id="admin-close-btn" onclick="closeAdmin()">Close Panel</button>
+      <div id="admin-header-left">
+        <h2>⚙ Card Manager</h2>
+        <div id="admin-tabs">
+          <button class="admin-tab-btn active" id="atab-cards" onclick="switchAdminTab('cards')">Cards</button>
+          <button class="admin-tab-btn" id="atab-polls" onclick="switchAdminTab('polls')">Polls</button>
+        </div>
+      </div>
+      <div id="admin-header-right">
+          <div id="admin-minratings-wrap">
+            <label for="admin-minratings">Fan Favourites min. ratings:</label>
+            <input type="number" id="admin-minratings" min="1" max="100" value="3">
+            <button class="admin-setting-confirm" onclick="saveMinRatings()">Confirm</button>
+          </div>
+          <div id="admin-minratings-wrap">
+            <label for="admin-popularlimit">Popular page max cards:</label>
+            <input type="number" id="admin-popularlimit" min="1" max="500" value="100">
+            <button class="admin-setting-confirm" onclick="savePopularLimit()">Confirm</button>
+          </div>
+          <button id="admin-close-btn" onclick="closeAdmin()">Close Panel</button>
+        </div>
     </div>
-    <div id="admin-body">
-      <div id="admin-form-col">
-        <h3 id="admin-form-title">Add New Card</h3>
+
+    <!-- CARDS TAB -->
+    <div id="admin-tab-cards">
+      <div id="admin-body">
+        <div id="admin-form-col">
+          <h3 id="admin-form-title">Add New Card</h3>
         <p class="admin-edit-mode-note" id="edit-mode-note">Editing existing card</p>
         <input type="hidden" id="admin-edit-id">
 
@@ -2746,18 +3292,16 @@
           <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
           <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
         </div>
-        <div class="admin-field-row">
-          <div class="admin-field">
-            <label>Card Category *</label>
-            <select id="f-type" onchange="adminTypeChanged()">
-              <option value="Trading Card Game">Trading Card Game</option>
-              <option value="Trading Card">Trading Card</option>
-            </select>
-          </div>
-          <div class="admin-field">
-            <label>Set</label>
-            <input type="text" id="f-set" placeholder="e.g. Heroes of Azeroth">
-          </div>
+        <div class="admin-field">
+          <label>Card Category *</label>
+          <select id="f-type" onchange="adminTypeChanged()">
+            <option value="Trading Card Game">Trading Card Game</option>
+            <option value="Trading Card">Trading Card</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label>Set</label>
+          <input type="text" id="f-set" placeholder="e.g. Heroes of Azeroth">
         </div>
 
         <!-- Trading Card fields -->
@@ -2782,36 +3326,32 @@
 
         <!-- Trading Card Game fields -->
         <div id="admin-tcg-fields" style="display:none">
-          <div class="admin-field-row">
-            <div class="admin-field">
-              <label>Rarity</label>
-              <select id="f-rarity">
-                <option value="Common">Common</option>
-                <option value="Uncommon">Uncommon</option>
-                <option value="Rare">Rare</option>
-                <option value="Epic">Epic</option>
-                <option value="Legendary">Legendary</option>
-              </select>
-            </div>
-            <div class="admin-field">
-              <label>Foil</label>
-              <select id="f-foil">
-                <option value="Non-Foil">Non-Foil</option>
-                <option value="Foil">Foil</option>
-              </select>
-            </div>
+          <div class="admin-field">
+            <label>Rarity</label>
+            <select id="f-rarity">
+              <option value="Common">Common</option>
+              <option value="Uncommon">Uncommon</option>
+              <option value="Rare">Rare</option>
+              <option value="Epic">Epic</option>
+              <option value="Legendary">Legendary</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>Foil</label>
+            <select id="f-foil">
+              <option value="Non-Foil">Non-Foil</option>
+              <option value="Foil">Foil</option>
+            </select>
           </div>
         </div>
 
-        <div class="admin-field-row">
-          <div class="admin-field">
-            <label>Card Number</label>
-            <input type="text" id="f-number" placeholder="e.g. 001/250">
-          </div>
-          <div class="admin-field">
-            <label>Manufacturer</label>
-            <input type="text" id="f-manufacturer" placeholder="e.g. Upper Deck">
-          </div>
+        <div class="admin-field">
+          <label>Card Number</label>
+          <input type="text" id="f-number" placeholder="e.g. 001/250">
+        </div>
+        <div class="admin-field">
+          <label>Manufacturer</label>
+          <input type="text" id="f-manufacturer" placeholder="e.g. Upper Deck">
         </div>
         <div class="admin-field admin-forsale-row">
           <label class="forsale-label">
@@ -2827,18 +3367,93 @@
         </div>
         <button id="admin-save-btn" onclick="saveCard()">Add Card to Collection</button>
         <button id="admin-cancel-edit" onclick="cancelEdit()">Cancel Edit</button>
-      </div>
+        </div><!-- end admin-form-col -->
 
       <div id="admin-list-col">
         <h3>Collection <span id="admin-card-count"></span></h3>
+        <div id="admin-list-filters">
+          <select id="admin-filter-type" onchange="adminListTypeChanged()">
+            <option value="">All Types</option>
+            <option value="Trading Card">Trading Card</option>
+            <option value="Trading Card Game">Trading Card Game</option>
+          </select>
+          <select id="admin-filter-set" onchange="renderAdminList()">
+            <option value="">All Sets</option>
+          </select>
+          <!-- TC filters -->
+          <select id="admin-filter-subtype" onchange="adminListSubtypeChanged()" style="display:none">
+            <option value="">Base / Parallel / Insert</option>
+            <option value="Base">Base</option>
+            <option value="Parallel">Parallel</option>
+            <option value="Insert">Insert</option>
+          </select>
+          <select id="admin-filter-parallel" onchange="renderAdminList()" style="display:none">
+            <option value="">All Parallels</option>
+          </select>
+          <select id="admin-filter-insert" onchange="renderAdminList()" style="display:none">
+            <option value="">All Inserts</option>
+          </select>
+          <!-- TCG filters -->
+          <select id="admin-filter-rarity" onchange="renderAdminList()" style="display:none">
+            <option value="">All Rarities</option>
+            <option value="Common">Common</option>
+            <option value="Uncommon">Uncommon</option>
+            <option value="Rare">Rare</option>
+            <option value="Epic">Epic</option>
+            <option value="Legendary">Legendary</option>
+          </select>
+          <select id="admin-filter-foil" onchange="renderAdminList()" style="display:none">
+            <option value="">Foil / Non-Foil</option>
+            <option value="Foil">Foil</option>
+            <option value="Non-Foil">Non-Foil</option>
+          </select>
+          <input type="text" id="admin-filter-search" placeholder="Search…" oninput="renderAdminList()">
+        </div>
         <div id="admin-cards-list"></div>
+      </div>
+    </div><!-- end admin-body -->
+  </div><!-- end admin-tab-cards -->
+
+  <!-- POLLS TAB -->
+  <div id="admin-tab-polls" style="display:none">
+    <div id="admin-polls-body">
+      <!-- Create poll form -->
+      <div id="admin-poll-form-col">
+        <h3 id="admin-poll-form-title">Create New Poll</h3>
+        <input type="hidden" id="poll-edit-id">
+        <div class="admin-field">
+          <label>Poll Question *</label>
+          <input type="text" id="p-title" placeholder="e.g. What's your favourite set?">
+        </div>
+        <div class="admin-field">
+          <label>Options * <span style="color:var(--text-dim);font-weight:400;font-family:'Crimson Pro',serif;text-transform:none;letter-spacing:0">(one per line, min 2)</span></label>
+          <textarea id="p-options" rows="5" placeholder="Option 1&#10;Option 2&#10;Option 3&#10;Option 4"></textarea>
+        </div>
+        <div class="admin-field">
+          <label>Status</label>
+          <select id="p-active">
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label>Position (slot #) <span style="color:var(--text-dim);font-weight:400;font-family:'Crimson Pro',serif;text-transform:none;letter-spacing:0;font-size:11px">— poll appears after this many cards</span></label>
+          <input type="number" id="p-position" min="1" placeholder="e.g. 5">
+        </div>
+        <button id="admin-poll-save-btn" onclick="savePoll()">Create Poll</button>
+        <button id="admin-poll-cancel-btn" onclick="cancelEditPoll()" style="display:none">Cancel Edit</button>
+      </div>
+
+      <!-- Poll list -->
+      <div id="admin-poll-list-col">
+        <h3>Polls <span id="admin-poll-count"></span></h3>
+        <div id="admin-poll-list"></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- HIDDEN ADMIN LINK -->
-<button id="admin-secret-link" onclick="openAdminLogin()">admin</button>
+  </div><!-- end admin-panel -->
+</div><!-- end admin-overlay -->
 
 <!-- LIGHTBOX -->
 <div id="lightbox" onclick="closeLightbox()">
@@ -2846,103 +3461,287 @@
   <img id="lightbox-img" src="" alt="">
 </div>
 
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay" style="display:flex;position:fixed;inset:0;background:rgba(10,8,4,0.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;backdrop-filter:blur(4px);"><svg width="48" height="48" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:spin 2s linear infinite"><rect x="4" y="8" width="22" height="30" rx="2.5" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.35)" stroke-width="1.2" transform="rotate(-8 15 23)"/><rect x="7" y="7" width="22" height="30" rx="2.5" fill="rgba(201,168,76,0.1)" stroke="rgba(201,168,76,0.5)" stroke-width="1.2" transform="rotate(-2 18 22)"/><rect x="12" y="6" width="22" height="30" rx="2.5" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" stroke-width="1.4"/></svg><p style="font-family:Cinzel,serif;font-size:12px;letter-spacing:0.2em;color:rgba(201,168,76,0.6);text-transform:uppercase">Loading Collection...</p></div>
+<style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+
 <!-- TOAST -->
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ── DATA STORE ──
-let cards = JSON.parse(localStorage.getItem('wc_cards') || '[]');
-let ratings = JSON.parse(localStorage.getItem('wc_ratings') || '{}');
-let comments = JSON.parse(localStorage.getItem('wc_comments') || '{}');
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://oxfwumystnukawkhplbh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AAk38B1XJiHi322dQYUvjg_KaYOthU5';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-function save() {
-  localStorage.setItem('wc_cards', JSON.stringify(cards));
-  localStorage.setItem('wc_ratings', JSON.stringify(ratings));
-  localStorage.setItem('wc_comments', JSON.stringify(comments));
-  updateTopbarCount();
+// ── LOCAL STATE ──
+let cards = [];
+let ratings = {}; // { cardId: { avg, count } }
+let myVotes = JSON.parse(localStorage.getItem('wc_myvotes') || '{}');
+let comments = {};
+let polls = [];
+let pollVotesAll = {};
+let myPollVotes = JSON.parse(localStorage.getItem('wc_mypollvotes') || '{}');
+let minRatingsForFav = parseInt(localStorage.getItem('wc_minratings') || '3', 10);
+let popularLimit = parseInt(localStorage.getItem('wc_popularlimit') || '100', 10);
+
+// ── INIT — load everything from Supabase ──
+async function init() {
+  showLoading(true);
+  try {
+    await Promise.all([loadCards(), loadRatings(), loadPolls(), loadPollVotes()]);
+    renderGallery();
+    renderLeaderboard();
+    renderForSaleSection();
+    updateSetFilter();
+    updateTopbarCount();
+  } catch(e) {
+    console.error('Init error:', e);
+    toast('Connection error — please refresh.');
+  }
+  showLoading(false);
+  document.getElementById('admin-tcg-fields').style.display = 'block';
+  document.getElementById('admin-tc-fields').style.display  = 'none';
 }
 
-function updateTopbarCount() {
-  document.getElementById('topbar-count-num').textContent = cards.length;
+function showLoading(on) {
+  let el = document.getElementById('loading-overlay');
+  if (!el) return;
+  el.style.display = on ? 'flex' : 'none';
+}
+
+// ── LOAD DATA ──
+async function loadCards() {
+  const { data, error } = await sb.from('cards').select('*').order('added', { ascending: false });
+  if (error) throw error;
+  cards = (data || []).map(dbToCard);
+}
+
+async function loadRatings() {
+  const { data, error } = await sb.from('ratings').select('card_id, stars');
+  if (error) throw error;
+  ratings = {};
+  (data || []).forEach(r => {
+    if (!ratings[r.card_id]) ratings[r.card_id] = { total: 0, count: 0 };
+    ratings[r.card_id].total += r.stars;
+    ratings[r.card_id].count += 1;
+  });
+}
+
+async function loadPolls() {
+  const { data, error } = await sb.from('polls').select('*').order('position', { ascending: true });
+  if (error) throw error;
+  polls = (data || []).map(p => ({
+    id: p.id, title: p.title,
+    options: Array.isArray(p.options) ? p.options : JSON.parse(p.options),
+    active: p.active, position: p.position
+  }));
+}
+
+async function loadPollVotes() {
+  const { data, error } = await sb.from('poll_votes').select('poll_id, option_index');
+  if (error) throw error;
+  pollVotesAll = {};
+  (data || []).forEach(v => {
+    if (!pollVotesAll[v.poll_id]) pollVotesAll[v.poll_id] = {};
+    pollVotesAll[v.poll_id][v.option_index] = (pollVotesAll[v.poll_id][v.option_index] || 0) + 1;
+  });
+}
+
+async function loadComments(cardId) {
+  const { data, error } = await sb.from('comments').select('*').eq('card_id', cardId).order('created_at', { ascending: false });
+  if (error) { console.error(error); return []; }
+  return data || [];
+}
+
+// ── DB ↔ JS MAPPING ──
+function dbToCard(d) {
+  return {
+    id: d.id, name: d.name, image: d.image || '',
+    set: d.set_name || '', type: d.type || '',
+    cardSubtype: d.card_subtype || '', parallel: d.parallel || '',
+    insert: d.insert_type || '', rarity: d.rarity || '',
+    foil: d.foil || '', manufacturer: d.manufacturer || '',
+    number: d.number || '', forSale: d.for_sale || false,
+    price: d.price || 0, added: d.added || 0
+  };
+}
+
+function cardToDB(c) {
+  return {
+    id: c.id, name: c.name, image: c.image || '',
+    set_name: c.set || '', type: c.type || '',
+    card_subtype: c.cardSubtype || '', parallel: c.parallel || '',
+    insert_type: c.insert || '', rarity: c.rarity || '',
+    foil: c.foil || '', manufacturer: c.manufacturer || '',
+    number: c.number || '', for_sale: c.forSale || false,
+    price: c.price || 0, added: c.added || Date.now()
+  };
 }
 
 // ── RATINGS ──
-let myVotes = JSON.parse(localStorage.getItem('wc_myvotes') || '{}');
-
-function hasVoted(id) {
-  return !!myVotes[id];
-}
-
 function getRating(id) {
   const r = ratings[id];
   if (!r || r.count === 0) return { avg: 0, count: 0 };
   return { avg: +(r.total / r.count).toFixed(1), count: r.count };
 }
 
-function submitRating(id, stars) {
+function hasVoted(id) { return !!myVotes[id]; }
+
+async function submitRating(id, stars) {
   if (hasVoted(id)) { toast('You have already rated this card.'); return; }
+  const { error } = await sb.from('ratings').insert({ card_id: id, stars });
+  if (error) { toast('Could not save rating.'); return; }
   if (!ratings[id]) ratings[id] = { total: 0, count: 0 };
   ratings[id].total += stars;
   ratings[id].count += 1;
   myVotes[id] = stars;
   localStorage.setItem('wc_myvotes', JSON.stringify(myVotes));
-  save();
   renderGallery();
   renderLeaderboard();
   if (currentModalId === id) openModal(id);
 }
 
-// ── POLL ──
-const POLL = {
-  id: 'poll_race',
-  title: 'What race you choose?',
-  options: ['Human', 'Orc', 'Undead', 'Night Elf']
-};
-let pollVotes  = JSON.parse(localStorage.getItem('wc_pollvotes')  || '{}'); // { optionIndex: count }
-let myPollVote = localStorage.getItem('wc_mypollvote_' + POLL.id); // null or index string
-
-function pollTotalVotes() {
-  return POLL.options.reduce((s, _, i) => s + (pollVotes[i] || 0), 0);
+// ── POLLS ──
+function pollTotalVotes(pollId) {
+  return Object.values(pollVotesAll[pollId] || {}).reduce((s, n) => s + n, 0);
 }
 
-function pollHTML() {
-  const total = pollTotalVotes();
-  const voted = myPollVote !== null;
-
-  const optionsHtml = POLL.options.map((opt, i) => {
-    const count = pollVotes[i] || 0;
+function pollHTML(poll) {
+  const total  = pollTotalVotes(poll.id);
+  const myVote = myPollVotes[poll.id] !== undefined ? myPollVotes[poll.id] : null;
+  const voted  = myVote !== null;
+  const optionsHtml = poll.options.map((opt, i) => {
+    const count = (pollVotesAll[poll.id] || {})[i] || 0;
     const pct   = total > 0 ? Math.round((count / total) * 100) : 0;
-    const isMine = voted && parseInt(myPollVote) === i;
-    return `
-      <div class="poll-option ${isMine ? 'poll-mine' : ''}" onclick="${voted ? '' : `votePoll(${i})`}" style="${voted ? 'cursor:default' : 'cursor:pointer'}">
-        <div class="poll-option-top">
-          <span class="poll-option-label">${escHtml(opt)}</span>
-          <span class="poll-option-pct">${pct}%</span>
-        </div>
-        <div class="poll-bar-bg">
-          <div class="poll-bar-fill ${isMine ? 'poll-bar-mine' : ''}" style="width:${pct}%"></div>
-        </div>
+    const isMine = voted && myVote === i;
+    return `<div class="poll-option ${isMine ? 'poll-mine' : ''}" onclick="${voted ? '' : `votePoll('${poll.id}',${i})`}" style="${voted ? 'cursor:default' : 'cursor:pointer'}">
+        <div class="poll-option-top"><span class="poll-option-label">${escHtml(opt)}</span><span class="poll-option-pct">${pct}%</span></div>
+        <div class="poll-bar-bg"><div class="poll-bar-fill ${isMine ? 'poll-bar-mine' : ''}" style="width:${pct}%"></div></div>
         <div class="poll-option-count">${count} vote${count !== 1 ? 's' : ''}</div>
       </div>`;
   }).join('');
-
-  return `<div class="card-item poll-card" id="poll-widget">
-    <div class="poll-header">
-      <div class="poll-icon">⚔</div>
-      <h3 class="poll-title">${escHtml(POLL.title)}</h3>
-    </div>
+  return `<div class="card-item poll-card">
+    <div class="poll-header"><div class="poll-icon">⚔</div><h3 class="poll-title">${escHtml(poll.title)}</h3></div>
     <div class="poll-options">${optionsHtml}</div>
     <div class="poll-footer">${total} total vote${total !== 1 ? 's' : ''}${voted ? ' · <span class="poll-voted-label">You voted</span>' : ''}</div>
   </div>`;
 }
 
-function votePoll(index) {
-  if (myPollVote !== null) return;
-  pollVotes[index] = (pollVotes[index] || 0) + 1;
-  myPollVote = String(index);
-  localStorage.setItem('wc_pollvotes', JSON.stringify(pollVotes));
-  localStorage.setItem('wc_mypollvote_' + POLL.id, myPollVote);
+async function votePoll(pollId, index) {
+  if (myPollVotes[pollId] !== undefined) return;
+  const { error } = await sb.from('poll_votes').insert({ poll_id: pollId, option_index: index });
+  if (error) { toast('Could not save vote.'); return; }
+  if (!pollVotesAll[pollId]) pollVotesAll[pollId] = {};
+  pollVotesAll[pollId][index] = (pollVotesAll[pollId][index] || 0) + 1;
+  myPollVotes[pollId] = index;
+  localStorage.setItem('wc_mypollvotes', JSON.stringify(myPollVotes));
   renderGallery();
+}
+
+// ── ADMIN POLL MANAGEMENT ──
+function switchAdminTab(tab) {
+  document.getElementById('admin-tab-cards').style.display = tab === 'cards' ? '' : 'none';
+  document.getElementById('admin-tab-polls').style.display = tab === 'polls' ? '' : 'none';
+  document.getElementById('atab-cards').classList.toggle('active', tab === 'cards');
+  document.getElementById('atab-polls').classList.toggle('active', tab === 'polls');
+  if (tab === 'polls') renderAdminPollList();
+}
+
+async function savePoll() {
+  const title  = document.getElementById('p-title').value.trim();
+  const optRaw = document.getElementById('p-options').value.trim();
+  const active = document.getElementById('p-active').value === '1';
+  const pos    = parseInt(document.getElementById('p-position').value, 10) || 5;
+  const editId = document.getElementById('poll-edit-id').value;
+  if (!title) { toast('Poll question is required.'); return; }
+  const options = optRaw.split('\n').map(s => s.trim()).filter(Boolean);
+  if (options.length < 2) { toast('Please add at least 2 options.'); return; }
+
+  if (editId) {
+    const { error } = await sb.from('polls').update({ title, options, active, position: pos }).eq('id', editId);
+    if (error) { toast('Error updating poll.'); return; }
+    const idx = polls.findIndex(p => p.id === editId);
+    if (idx >= 0) polls[idx] = { ...polls[idx], title, options, active, position: pos };
+    toast('Poll updated!');
+  } else {
+    const newId = 'poll_' + Date.now();
+    const { error } = await sb.from('polls').insert({ id: newId, title, options, active, position: pos });
+    if (error) { toast('Error creating poll.'); return; }
+    polls.push({ id: newId, title, options, active, position: pos });
+    toast('Poll created!');
+  }
+  cancelEditPoll(); renderAdminPollList(); renderGallery();
+}
+
+function cancelEditPoll() {
+  document.getElementById('poll-edit-id').value = '';
+  document.getElementById('p-title').value = '';
+  document.getElementById('p-options').value = '';
+  document.getElementById('p-active').value = '1';
+  document.getElementById('p-position').value = '';
+  document.getElementById('admin-poll-form-title').textContent = 'Create New Poll';
+  document.getElementById('admin-poll-save-btn').textContent = 'Create Poll';
+  document.getElementById('admin-poll-cancel-btn').style.display = 'none';
+}
+
+function editPoll(id) {
+  const p = polls.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('poll-edit-id').value = id;
+  document.getElementById('p-title').value = p.title;
+  document.getElementById('p-options').value = p.options.join('\n');
+  document.getElementById('p-active').value = p.active ? '1' : '0';
+  document.getElementById('p-position').value = p.position || 5;
+  document.getElementById('admin-poll-form-title').textContent = 'Edit Poll';
+  document.getElementById('admin-poll-save-btn').textContent = 'Save Changes';
+  document.getElementById('admin-poll-cancel-btn').style.display = 'block';
+  document.getElementById('admin-poll-form-col').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function togglePollActive(id) {
+  const p = polls.find(x => x.id === id);
+  if (!p) return;
+  const newActive = !p.active;
+  const { error } = await sb.from('polls').update({ active: newActive }).eq('id', id);
+  if (error) { toast('Error updating poll.'); return; }
+  p.active = newActive;
+  renderAdminPollList(); renderGallery();
+  toast(newActive ? 'Poll activated.' : 'Poll deactivated.');
+}
+
+async function deletePoll(id) {
+  if (!confirm('Delete this poll? All votes will be lost.')) return;
+  const { error } = await sb.from('polls').delete().eq('id', id);
+  if (error) { toast('Error deleting poll.'); return; }
+  polls = polls.filter(p => p.id !== id);
+  delete pollVotesAll[id]; delete myPollVotes[id];
+  localStorage.setItem('wc_mypollvotes', JSON.stringify(myPollVotes));
+  renderAdminPollList(); renderGallery();
+  toast('Poll deleted.');
+}
+
+function renderAdminPollList() {
+  const list = document.getElementById('admin-poll-list');
+  document.getElementById('admin-poll-count').textContent = `— ${polls.length} poll${polls.length !== 1 ? 's' : ''}`;
+  if (polls.length === 0) { list.innerHTML = '<p style="color:var(--text-dim);font-size:13px;padding:12px 0;font-family:Crimson Pro,serif">No polls yet. Create your first one!</p>'; return; }
+  list.innerHTML = [...polls].sort((a,b)=>(a.position||5)-(b.position||5)).map(p => {
+    const total = pollTotalVotes(p.id);
+    return `<div class="admin-poll-row">
+      <div class="admin-poll-row-top">
+        <div class="admin-poll-question">${escHtml(p.title)}</div>
+        <span class="admin-poll-badge ${p.active?'poll-badge-active':'poll-badge-inactive'}">${p.active?'Active':'Inactive'}</span>
+      </div>
+      <div class="admin-poll-meta">Slot ${p.position||5} · ${p.options.length} options · ${total} vote${total!==1?'s':''}</div>
+      <div class="admin-poll-options-preview">${p.options.slice(0,3).map(o=>escHtml(o)).join(' · ')}${p.options.length>3?' …':''}</div>
+      <div class="admin-poll-actions">
+        <button class="poll-toggle-btn ${p.active?'deactivate':''}" onclick="togglePollActive('${p.id}')">${p.active?'Deactivate':'Activate'}</button>
+        <button class="poll-edit-btn" onclick="editPoll('${p.id}')">Edit</button>
+        <button class="poll-del-btn" onclick="deletePoll('${p.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── RENDER GALLERY ──
@@ -2951,105 +3750,69 @@ let _visibleCount = 11;
 function renderGallery() {
   const grid = document.getElementById('cards-grid');
   const filtered = getFiltered();
-
   document.getElementById('visible-count').textContent = filtered.length;
-
   if (filtered.length === 0) {
-    grid.innerHTML = `<div id="empty-state">
-      <div class="empty-icon">⚔</div>
-      <h3>${cards.length === 0 ? 'No cards yet' : 'No cards match'}</h3>
-      <p>${cards.length === 0 ? 'Open the Admin panel to add your first card.' : 'Try adjusting your filters.'}</p>
-    </div>`;
+    grid.innerHTML = `<div id="empty-state"><div class="empty-icon">⚔</div><h3>${cards.length === 0 ? 'No cards yet' : 'No cards match'}</h3><p>${cards.length === 0 ? 'Open the Admin panel to add your first card.' : 'Try adjusting your filters.'}</p></div>`;
     document.getElementById('show-more-wrap').style.display = 'none';
     return;
   }
-
-  // Clamp visible to actual filtered length
   const showing = Math.min(_visibleCount, filtered.length);
   const visible = filtered.slice(0, showing);
-
-  // Insert poll at index 4 (5th slot), or at end if fewer than 4 visible
-  const pollAt = Math.min(4, visible.length);
-  const before = visible.slice(0, pollAt);
-  const after  = visible.slice(pollAt);
-  grid.innerHTML = before.map(c => cardHTML(c)).join('') + pollHTML() + after.map(c => cardHTML(c)).join('');
+  const activePolls = [...polls].filter(p => p.active).sort((a,b)=>(a.position||5)-(b.position||5));
+  let items = visible.map(c => ({ type: 'card', c }));
+  let offset = 0;
+  activePolls.forEach(poll => {
+    const insertAt = Math.min((poll.position||5)-1+offset, items.length);
+    items.splice(insertAt, 0, { type: 'poll', poll });
+    offset++;
+  });
+  grid.innerHTML = items.map(item => item.type==='card' ? cardHTML(item.c) : pollHTML(item.poll)).join('');
   updateSetFilter();
-
-  // Show More button
   const wrap = document.getElementById('show-more-wrap');
   const remaining = filtered.length - showing;
-  if (remaining > 0) {
-    wrap.style.display = 'flex';
-    document.getElementById('show-more-btn').textContent = 'Show More';
-  } else {
-    wrap.style.display = 'none';
-  }
+  if (remaining > 0) { wrap.style.display = 'flex'; document.getElementById('show-more-btn').textContent = 'Show More'; }
+  else { wrap.style.display = 'none'; }
 }
 
-function showMore() {
-  _visibleCount += 12;
-  renderGallery();
-}
+function showMore() { _visibleCount += 12; renderGallery(); }
 
 function cardHTML(c) {
   const r = getRating(c.id);
   const voted = hasVoted(c.id);
   const myStars = myVotes[c.id] || 0;
   const isTC = c.type === 'Trading Card';
-  const badgeText = isTC ? (c.cardSubtype === 'Parallel' ? (c.parallel || 'Parallel') : c.cardSubtype === 'Insert' ? (c.insert || 'Insert') : '') : (c.rarity || '');
-  const badgeClass = isTC ? 'badge-parallel' : `rarity-${(c.rarity || 'common').toLowerCase()}`;
+  const badgeText = isTC ? (c.cardSubtype==='Parallel'?(c.parallel||'Parallel'):c.cardSubtype==='Insert'?(c.insert||'Insert'):'') : (c.rarity||'');
+  const badgeClass = isTC ? 'badge-parallel' : `rarity-${(c.rarity||'common').toLowerCase()}`;
   const badgeHTML = badgeText ? `<span class="card-rarity-badge ${badgeClass}">${escHtml(badgeText)}</span>` : '';
   const starsHtml = [1,2,3,4,5].map(i =>
-    `<span class="star ${voted ? (i <= myStars ? 'filled' : '') : (i <= Math.round(r.avg) ? 'filled' : '')}"
-      ${!voted ? `onmouseenter="hoverCardStar(this,${i})" onmouseleave="unhoverCardStar(this)" onclick="event.stopPropagation();submitRating('${c.id}',${i})"` : ''}
-      style="${voted ? 'cursor:default' : 'cursor:pointer'}">★</span>`
-  ).join('');
-
+    `<span class="star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
+      ${!voted?`onmouseenter="hoverCardStar(this,${i})" onmouseleave="unhoverCardStar(this)" onclick="event.stopPropagation();submitRating('${c.id}',${i})"`:''} style="${voted?'cursor:default':'cursor:pointer'}">★</span>`).join('');
   const imgContent = c.image
-    ? `<img src="${escHtml(c.image)}" alt="${escHtml(c.name)}" loading="lazy" class="${c.rotate ? 'img-rotated' : ''}" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><svg class=placeholder-icon viewBox=\\'0 0 48 48\\' fill=\\'none\\'><rect x=\\'4\\' y=\\'4\\' width=\\'40\\' height=\\'40\\' rx=\\'4\\' stroke=\\'%236B4F10\\' stroke-width=\\'2\\'/><line x1=\\'4\\' y1=\\'4\\' x2=\\'44\\' y2=\\'44\\' stroke=\\'%236B4F10\\' stroke-width=\\'1\\'/></svg><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
-    : `<div class="card-img-placeholder"><svg class="placeholder-icon" viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="40" height="40" rx="4" stroke="#6B4F10" stroke-width="2"/><path d="M16 32 L24 20 L32 32" stroke="#6B4F10" stroke-width="1.5" fill="none"/><circle cx="29" cy="22" r="3" stroke="#6B4F10" stroke-width="1.5" fill="none"/></svg><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
-
-  const forSaleBadge = c.forSale && c.price > 0
-    ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>`
-    : '';
-
+    ? `<img src="${escHtml(c.image)}" alt="${escHtml(c.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
+    : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
+  const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
   return `<div class="card-item" onclick="openModal('${c.id}')">
-    <div class="card-img-wrap">
-      ${imgContent}
-      ${badgeHTML}
-      ${forSaleBadge}
-    </div>
+    <div class="card-img-wrap">${imgContent}${badgeHTML}${forSaleBadge}</div>
     <div class="card-info">
       <div class="card-name">${escHtml(c.name)}</div>
       <div class="card-meta">
-        ${c.manufacturer ? `<div class="card-meta-row"><span class="meta-label">Manufacturer</span><span class="meta-value">${escHtml(c.manufacturer)}</span></div>` : ''}
-        ${c.set ? `<div class="card-meta-row"><span class="meta-label">Set</span><span class="meta-value">${escHtml(c.set)}</span></div>` : ''}
-        ${c.parallel ? `<div class="card-meta-row"><span class="meta-label">Parallel</span><span class="meta-value">${escHtml(c.parallel)}</span></div>` : ''}
-        ${c.number ? `<div class="card-meta-row"><span class="meta-label">Card #</span><span class="meta-value">#${parseInt(c.number.replace(/\/.*$/, '').trim(), 10)}</span></div>` : ''}
+        ${c.manufacturer?`<div class="card-meta-row"><span class="meta-label">Manufacturer</span><span class="meta-value">${escHtml(c.manufacturer)}</span></div>`:''}
+        ${c.set?`<div class="card-meta-row"><span class="meta-label">Set</span><span class="meta-value">${escHtml(c.set)}</span></div>`:''}
+        ${c.parallel?`<div class="card-meta-row"><span class="meta-label">Parallel</span><span class="meta-value">${escHtml(c.parallel)}</span></div>`:''}
+        ${c.number?`<div class="card-meta-row"><span class="meta-label">Card #</span><span class="meta-value">#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}</span></div>`:''}
       </div>
-      <div class="star-rating">
-        <div class="stars">${starsHtml}</div>
-        <span class="rating-info">
-          ${r.count > 0 ? `<span class="avg">${r.avg}</span> (${r.count})` : 'Rate'}
-        </span>
+      <div class="star-rating"><div class="stars">${starsHtml}</div>
+        <span class="rating-info">${r.count>0?`<span class="avg">${r.avg}</span> (${r.count})`:'Rate'}</span>
       </div>
     </div>
   </div>`;
 }
 
-function hoverCardStar(el, val) {
-  const stars = el.parentElement.querySelectorAll('.star');
-  stars.forEach((s, i) => {
-    s.classList.remove('hover');
-    if (i < val) s.classList.add('hover');
-  });
-}
-function unhoverCardStar(el) {
-  el.parentElement.querySelectorAll('.star').forEach(s => s.classList.remove('hover'));
-}
+function hoverCardStar(el,val){const stars=el.parentElement.querySelectorAll('.star');stars.forEach((s,i)=>{s.classList.remove('hover');if(i<val)s.classList.add('hover');});}
+function unhoverCardStar(el){el.parentElement.querySelectorAll('.star').forEach(s=>s.classList.remove('hover'));}
 
 // ── FILTERS ──
-let currentFilters = { type: '', set: '', cardSubtype: '', parallelName: '', insertName: '', rarity: '', foil: '', search: '' };
+let currentFilters = { type:'',set:'',cardSubtype:'',parallelName:'',insertName:'',rarity:'',foil:'',search:'' };
 
 function getFiltered() {
   return cards.filter(c => {
@@ -3062,11 +3825,10 @@ function getFiltered() {
     if (currentFilters.foil && c.foil !== currentFilters.foil) return false;
     if (currentFilters.search) {
       const q = currentFilters.search.toLowerCase();
-      const text = `${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert}`.toLowerCase();
-      if (!text.includes(q)) return false;
+      if (!`${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert}`.toLowerCase().includes(q)) return false;
     }
     return true;
-  });
+  }).sort((a,b) => (b.added||0)-(a.added||0));
 }
 
 function applyFilters() {
@@ -3075,722 +3837,352 @@ function applyFilters() {
   currentFilters.search = document.getElementById('filter-search').value;
   updateSetFilter();
   currentFilters.set = document.getElementById('filter-set').value;
-
   const isTC  = currentFilters.type === 'Trading Card';
   const isTCG = currentFilters.type === 'Trading Card Game';
-
-  document.querySelectorAll('.filter-tc').forEach(el => el.style.display = isTC  ? '' : 'none');
+  document.querySelectorAll('.filter-tc').forEach(el => el.style.display = isTC ? '' : 'none');
   document.querySelectorAll('.filter-tcg').forEach(el => el.style.display = isTCG ? '' : 'none');
-
   if (isTC) {
     const subtype = document.getElementById('filter-card-subtype').value;
     currentFilters.cardSubtype = subtype;
-    const showParallel = subtype === 'Parallel';
-    const showInsert   = subtype === 'Insert';
-    document.getElementById('filter-parallel-name').style.display = showParallel ? '' : 'none';
-    document.getElementById('filter-insert-name').style.display   = showInsert   ? '' : 'none';
-    if (showParallel) updateDynamicFilter('filter-parallel-name', cards.filter(c => c.type === 'Trading Card' && c.cardSubtype === 'Parallel').map(c => c.parallel), 'All Parallels');
-    if (showInsert)   updateDynamicFilter('filter-insert-name',   cards.filter(c => c.type === 'Trading Card' && c.cardSubtype === 'Insert').map(c => c.insert),   'All Inserts');
-    currentFilters.parallelName = showParallel ? document.getElementById('filter-parallel-name').value : '';
-    currentFilters.insertName   = showInsert   ? document.getElementById('filter-insert-name').value   : '';
-    currentFilters.rarity = ''; currentFilters.foil = '';
+    const showParallel = subtype==='Parallel', showInsert = subtype==='Insert';
+    document.getElementById('filter-parallel-name').style.display = showParallel?'':'none';
+    document.getElementById('filter-insert-name').style.display   = showInsert?'':'none';
+    if(showParallel) updateDynamicFilter('filter-parallel-name',cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Parallel').map(c=>c.parallel),'All Parallels');
+    if(showInsert)   updateDynamicFilter('filter-insert-name',cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Insert').map(c=>c.insert),'All Inserts');
+    currentFilters.parallelName = showParallel?document.getElementById('filter-parallel-name').value:'';
+    currentFilters.insertName   = showInsert?document.getElementById('filter-insert-name').value:'';
+    currentFilters.rarity=''; currentFilters.foil='';
   } else if (isTCG) {
     currentFilters.rarity = document.getElementById('filter-rarity').value;
     currentFilters.foil   = document.getElementById('filter-foil').value;
-    currentFilters.cardSubtype = ''; currentFilters.parallelName = ''; currentFilters.insertName = '';
+    currentFilters.cardSubtype=''; currentFilters.parallelName=''; currentFilters.insertName='';
   } else {
-    currentFilters.cardSubtype = ''; currentFilters.parallelName = ''; currentFilters.insertName = '';
-    currentFilters.rarity = ''; currentFilters.foil = '';
+    currentFilters.cardSubtype=''; currentFilters.parallelName=''; currentFilters.insertName='';
+    currentFilters.rarity=''; currentFilters.foil='';
   }
-
   renderGallery();
 }
 
-function updateDynamicFilter(id, values, allLabel) {
-  const unique = [...new Set(values.filter(Boolean))].sort();
-  const sel = document.getElementById(id);
-  const cur = sel.value;
-  sel.innerHTML = `<option value="">${allLabel}</option>` + unique.map(v => `<option value="${escHtml(v)}"${v === cur ? ' selected' : ''}>${escHtml(v)}</option>`).join('');
-  if (cur && !unique.includes(cur)) sel.value = '';
+function updateDynamicFilter(id,values,allLabel) {
+  const unique=[...new Set(values.filter(Boolean))].sort();
+  const sel=document.getElementById(id); const cur=sel.value;
+  sel.innerHTML=`<option value="">${allLabel}</option>`+unique.map(v=>`<option value="${escHtml(v)}"${v===cur?' selected':''}>${escHtml(v)}</option>`).join('');
+  if(cur&&!unique.includes(cur)) sel.value='';
 }
 
 function clearFilters() {
-  _visibleCount = 11;
-  currentFilters = { type: '', set: '', cardSubtype: '', parallelName: '', insertName: '', rarity: '', foil: '', search: '' };
-  ['filter-type','filter-set','filter-card-subtype','filter-parallel-name','filter-insert-name','filter-rarity','filter-foil','filter-search']
-    .forEach(id => document.getElementById(id).value = '');
-  document.querySelectorAll('.filter-tc, .filter-tcg').forEach(el => el.style.display = 'none');
+  currentFilters={type:'',set:'',cardSubtype:'',parallelName:'',insertName:'',rarity:'',foil:'',search:''};
+  ['filter-type','filter-set','filter-card-subtype','filter-parallel-name','filter-insert-name','filter-rarity','filter-foil','filter-search'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('.filter-tc,.filter-tcg').forEach(el=>el.style.display='none');
   renderGallery();
 }
 
 function updateSetFilter() {
   const typeFilter = currentFilters.type;
-  const sets = [...new Set(
-    cards.filter(c => !typeFilter || c.type === typeFilter).map(c => c.set).filter(Boolean)
-  )].sort();
-  const sel = document.getElementById('filter-set');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">All Sets</option>' + sets.map(s => `<option value="${escHtml(s)}"${s === cur ? ' selected' : ''}>${escHtml(s)}</option>`).join('');
-  if (cur && !sets.includes(cur)) { sel.value = ''; currentFilters.set = ''; }
+  const sets = [...new Set(cards.filter(c=>!typeFilter||c.type===typeFilter).map(c=>c.set).filter(Boolean))].sort();
+  const sel = document.getElementById('filter-set'); const cur = sel.value;
+  sel.innerHTML = '<option value="">All Sets</option>'+sets.map(s=>`<option value="${escHtml(s)}"${s===cur?' selected':''}>${escHtml(s)}</option>`).join('');
+  if(cur&&!sets.includes(cur)){sel.value='';currentFilters.set='';}
 }
+
+// ── FOR SALE SECTION ──
+let _forsaleVisible = 6;
+
+function renderForSaleSection() {
+  const forSaleCards = cards.filter(c => c.forSale && c.price > 0);
+  const section = document.getElementById('forsale-section');
+  const grid = document.getElementById('forsale-grid');
+  if (forSaleCards.length === 0) { section.classList.remove('visible'); return; }
+  section.classList.add('visible');
+  const showing = Math.min(_forsaleVisible, forSaleCards.length);
+  grid.innerHTML = forSaleCards.slice(0, showing).map(c => cardHTML(c)).join('');
+  document.getElementById('forsale-show-more-wrap').style.display = forSaleCards.length > showing ? 'flex' : 'none';
+}
+
+function forsaleShowMore() { _forsaleVisible += 6; renderForSaleSection(); }
 
 // ── LEADERBOARD ──
 function renderLeaderboard() {
   const lb = document.getElementById('leaderboard-list');
   if (cards.length === 0) { lb.innerHTML = ''; return; }
-
-  const ranked = [...cards]
-    .map(c => ({ c, r: getRating(c.id) }))
-    .filter(x => x.r.count > 0)
-    .sort((a, b) => b.r.avg - a.r.avg || b.r.count - a.r.count)
-    .slice(0, 6);
-
-  if (ranked.length === 0) { lb.innerHTML = '<p style="color:var(--text-dim);font-size:14px;padding:8px 0">Rate some cards to see favourites here.</p>'; return; }
-
-  const rankClass = i => i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
-  const starsStr = avg => '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
-
-  lb.innerHTML = ranked.map(({ c, r }, i) => `
-    <div class="lb-item" onclick="openModal('${c.id}')">
-      <div class="lb-rank ${rankClass(i)}">#${i + 1}</div>
-      ${c.image ? `<img class="lb-thumb" src="${escHtml(c.image)}" alt="${escHtml(c.name)}" onerror="this.style.display='none'">` : ''}
-      <div class="lb-info">
-        <div class="lb-name">${escHtml(c.name)}</div>
-        <div class="lb-stats">
-          <span class="lb-stars">${starsStr(r.avg)}</span>
-          <span>${r.avg} avg</span>
-          <span>${r.count} vote${r.count !== 1 ? 's' : ''}</span>
-        </div>
-      </div>
-    </div>`).join('');
+  const ranked = [...cards].map(c=>({c,r:getRating(c.id)})).filter(x=>x.r.count>=minRatingsForFav).sort((a,b)=>b.r.avg-a.r.avg||b.r.count-a.r.count).slice(0,8);
+  if (ranked.length === 0) { lb.innerHTML=`<p style="color:var(--text-dim);font-size:14px;padding:8px 0">Cards need at least ${minRatingsForFav} rating${minRatingsForFav!==1?'s':''} to appear here.</p>`; return; }
+  const rankClass = i => i===0?'top1':i===1?'top2':i===2?'top3':'';
+  const starsStr = avg => '★'.repeat(Math.round(avg))+'☆'.repeat(5-Math.round(avg));
+  lb.innerHTML = ranked.map(({c,r},i)=>`<div class="lb-item" onclick="openModal('${c.id}')">
+      <div class="lb-rank ${rankClass(i)}">#${i+1}</div>
+      ${c.image?`<img class="lb-thumb" src="${escHtml(c.image)}" alt="${escHtml(c.name)}" onerror="this.style.display='none'">` : ''}
+      <div class="lb-info"><div class="lb-name">${escHtml(c.name)}</div>
+        <div class="lb-stats"><span class="lb-stars">${starsStr(r.avg)}</span><span>${r.avg} avg</span><span>${r.count} vote${r.count!==1?'s':''}</span></div>
+      </div></div>`).join('');
 }
 
 // ── MODAL ──
 let currentModalId = null;
 
-function openModal(id) {
+async function openModal(id) {
   const c = cards.find(x => x.id === id);
   if (!c) return;
   currentModalId = id;
   const r = getRating(id);
-
   document.getElementById('modal-card-name').textContent = c.name;
-
-  // Format card number: strip /xxx part, prefix with #
-  const rawNum = (c.number || '').trim();
-  const cardNum = rawNum ? '#' + rawNum.replace(/\/.*$/, '').trim() : '';
+  const rawNum = (c.number||'').trim();
+  const cardNum = rawNum ? '#'+rawNum.replace(/\/.*$/,'').trim() : '';
   document.getElementById('modal-card-number').textContent = cardNum;
-
   const imgEl = document.getElementById('modal-img');
-  if (c.image) {
-    imgEl.src = c.image;
-    imgEl.className = c.rotate ? 'img-rotated' : '';
-    imgEl.style.display = 'block';
-    document.getElementById('modal-img-side').style.display = 'block';
-  } else {
-    document.getElementById('modal-img-side').style.display = 'none';
-  }
-
-  const fields = [
-    ['Manufacturer', c.manufacturer], ['Set', c.set], ['Rarity', c.rarity],
-    ['Parallel', c.parallel],
-    ['Insert', c.insert]
-  ].filter(([, v]) => v);
-
-  document.getElementById('modal-meta-grid').innerHTML = fields.map(([l, v]) =>
-    `<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value">${escHtml(v)}</div></div>`
-  ).join('');
-
+  if (c.image) { imgEl.src=c.image; imgEl.className=c.rotate?'img-rotated':''; imgEl.style.display='block'; document.getElementById('modal-img-side').style.display='block'; }
+  else { document.getElementById('modal-img-side').style.display='none'; }
+  const fields = [['Manufacturer',c.manufacturer],['Set',c.set],['Rarity',c.rarity],['Parallel',c.parallel],['Insert',c.insert]].filter(([,v])=>v);
+  document.getElementById('modal-meta-grid').innerHTML = fields.map(([l,v])=>`<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value">${escHtml(v)}</div></div>`).join('');
   const mStars = document.getElementById('modal-stars');
-  const voted = hasVoted(id);
-  const myStars = myVotes[id] || 0;
-  mStars.innerHTML = [1,2,3,4,5].map(i =>
-    `<span class="modal-star ${voted ? (i <= myStars ? 'filled' : '') : (i <= Math.round(r.avg) ? 'filled' : '')}"
-      ${!voted ? `onmouseenter="hoverModalStar(this,${i})" onmouseleave="unhoverModalStar(this)" onclick="submitRating('${id}',${i})"` : ''}
-      style="${voted ? 'cursor:default;opacity:0.7' : 'cursor:pointer'}">★</span>`
-  ).join('');
-
-  document.getElementById('modal-rating-text').innerHTML =
-    voted
-      ? `You rated <span class="avg">${myStars}</span> / 5 — ${r.count} vote${r.count !== 1 ? 's' : ''}, avg <span class="avg">${r.avg}</span>`
-      : r.count > 0
-        ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count !== 1 ? 's' : ''}`
-        : 'Be the first to rate this card!';
-
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-
-  // For Sale
+  const voted = hasVoted(id); const myStars = myVotes[id]||0;
+  mStars.innerHTML = [1,2,3,4,5].map(i=>`<span class="modal-star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
+      ${!voted?`onmouseenter="hoverModalStar(this,${i})" onmouseleave="unhoverModalStar(this)" onclick="submitRating('${id}',${i})"`:''} style="${voted?'cursor:default;opacity:0.7':'cursor:pointer'}">★</span>`).join('');
+  document.getElementById('modal-rating-text').innerHTML = voted
+    ? `You rated <span class="avg">${myStars}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}, avg <span class="avg">${r.avg}</span>`
+    : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate this card!';
   const fsSection = document.getElementById('modal-forsale-section');
   const fsDivider = document.getElementById('modal-forsale-divider');
   if (c.forSale && c.price > 0) {
-    fsSection.style.display = 'block';
-    fsDivider.style.display = 'block';
-    document.getElementById('modal-forsale-price').textContent = `€${parseFloat(c.price).toFixed(2)}`;
-    document.getElementById('modal-forsale-form').style.display = 'none';
-  } else {
-    fsSection.style.display = 'none';
-    fsDivider.style.display = 'none';
-  }
-
-  // Comments
-  renderComments(id);
-  document.getElementById('c-nickname').value = '';
-  document.getElementById('c-email').value = '';
-  document.getElementById('c-text').value = '';
-  document.getElementById('c-char-count').textContent = '500';
+    fsSection.style.display='block'; fsDivider.style.display='block';
+    document.getElementById('modal-forsale-price').textContent=`€${parseFloat(c.price).toFixed(2)}`;
+    document.getElementById('modal-forsale-form').style.display='none';
+  } else { fsSection.style.display='none'; fsDivider.style.display='none'; }
+  // Load comments from Supabase
+  const cardComments = await loadComments(id);
+  renderComments(id, cardComments);
+  document.getElementById('c-nickname').value='';
+  document.getElementById('c-email').value='';
+  document.getElementById('c-text').value='';
+  document.getElementById('c-char-count').textContent='500';
   generateCaptcha();
-  document.getElementById('c-text').oninput = function() {
-    document.getElementById('c-char-count').textContent = 500 - this.value.length;
-  };
+  document.getElementById('c-text').oninput = function() { document.getElementById('c-char-count').textContent = 500-this.value.length; };
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-  currentModalId = null;
-}
-
-function closeModalOutside(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-
-function hoverModalStar(el, val) {
-  document.querySelectorAll('.modal-star').forEach((s, i) => {
-    s.classList.remove('hover');
-    if (i < val) s.classList.add('hover');
-  });
-}
-function unhoverModalStar() {
-  document.querySelectorAll('.modal-star').forEach(s => s.classList.remove('hover'));
-}
-
-// ── ADMIN AUTH ──
-// Password is stored as SHA-256 hash only — plaintext never appears in code
-const _AH = '049889881d079e6a70324d7bcf510ac82d7429ae4da3979af52ddf455b8551b8';
-
-async function _hash(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-function openAdminLogin() {
-  document.getElementById('admin-password-input').value = '';
-  document.getElementById('admin-login-error').textContent = '';
-  document.getElementById('admin-login-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('admin-password-input').focus(), 50);
-}
-
-function closeAdminLogin() {
-  document.getElementById('admin-login-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function closeAdminLoginOutside(e) {
-  if (e.target === document.getElementById('admin-login-overlay')) closeAdminLogin();
-}
-
-async function verifyAdminPassword() {
-  const input = document.getElementById('admin-password-input').value;
-  const h = await _hash(input);
-  if (h === _AH) {
-    closeAdminLogin();
-    openAdmin();
-  } else {
-    document.getElementById('admin-login-error').textContent = 'Incorrect password.';
-    document.getElementById('admin-password-input').value = '';
-    document.getElementById('admin-password-input').focus();
-  }
-}
-
-function openAdmin() {
-  renderAdminList();
-  document.getElementById('admin-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeAdmin() {
-  document.getElementById('admin-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-  cancelEdit();
-}
-
-function previewImg() {
-  const url = document.getElementById('f-image').value.trim();
-  const wrap = document.getElementById('img-preview-wrap');
-  const img = document.getElementById('img-preview');
-  if (url) { img.src = url; wrap.style.display = 'block'; }
-  else { wrap.style.display = 'none'; }
-}
-
-// ── ADMIN TYPE SWITCHING ──
-function adminForSaleChanged() {
-  const checked = document.getElementById('f-forsale').checked;
-  document.getElementById('f-price-wrap').style.display = checked ? 'block' : 'none';
-}
-function adminTypeChanged() {
-  const type = document.getElementById('f-type').value;
-  document.getElementById('admin-tc-fields').style.display  = type === 'Trading Card' ? 'block' : 'none';
-  document.getElementById('admin-tcg-fields').style.display = type === 'Trading Card Game' ? 'block' : 'none';
-  // Reset sub-fields
-  if (type === 'Trading Card') {
-    document.getElementById('f-card-subtype').value = 'Base';
-    adminSubtypeChanged();
-  }
-}
-
-function adminSubtypeChanged() {
-  const sub = document.getElementById('f-card-subtype').value;
-  document.getElementById('admin-parallel-field').style.display = sub === 'Parallel' ? 'block' : 'none';
-  document.getElementById('admin-insert-field').style.display   = sub === 'Insert'   ? 'block' : 'none';
-}
-
-function saveCard() {
-  const name = document.getElementById('f-name').value.trim();
-  const image = document.getElementById('f-image').value.trim();
-  if (!name) { toast('Card name is required.'); return; }
-
-  const editId = document.getElementById('admin-edit-id').value;
-  const type = document.getElementById('f-type').value;
-  const isTC  = type === 'Trading Card';
-  const isTCG = type === 'Trading Card Game';
-  const cardSubtype = isTC ? document.getElementById('f-card-subtype').value : '';
-
-  const data = {
-    id: editId || 'c' + Date.now(),
-    name, image,
-    set: document.getElementById('f-set').value.trim(),
-    type,
-    cardSubtype,
-    parallel: (isTC && cardSubtype === 'Parallel') ? document.getElementById('f-parallel').value.trim() : '',
-    insert:   (isTC && cardSubtype === 'Insert')   ? document.getElementById('f-insert').value.trim()   : '',
-    rarity:   isTCG ? document.getElementById('f-rarity').value : '',
-    foil:     isTCG ? document.getElementById('f-foil').value   : '',
-    number: document.getElementById('f-number').value.trim(),
-    manufacturer: document.getElementById('f-manufacturer').value.trim(),
-    forSale: document.getElementById('f-forsale').checked,
-    price: document.getElementById('f-forsale').checked ? parseFloat(document.getElementById('f-price').value) || 0 : 0,
-    added: editId ? (cards.find(c => c.id === editId)?.added || Date.now()) : Date.now()
-  };
-
-  if (editId) {
-    const idx = cards.findIndex(c => c.id === editId);
-    if (idx >= 0) cards[idx] = data;
-    toast('Card updated!');
-  } else {
-    cards.unshift(data);
-    toast('Card added to collection!');
-  }
-
-  save();
-  clearAdminForm();
-  renderAdminList();
-  renderGallery();
-  renderLeaderboard();
-}
-
-function clearAdminForm() {
-  ['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('f-forsale').checked = false;
-  document.getElementById('f-price-wrap').style.display = 'none';
-  document.getElementById('f-type').value = 'Trading Card Game';
-  document.getElementById('f-rarity').value = 'Common';
-  document.getElementById('f-foil').value = 'Non-Foil';
-  document.getElementById('f-card-subtype').value = 'Base';
-  document.getElementById('img-preview-wrap').style.display = 'none';
-  document.getElementById('admin-tc-fields').style.display = 'none';
-  document.getElementById('admin-tcg-fields').style.display = 'block';
-  document.getElementById('admin-parallel-field').style.display = 'none';
-  document.getElementById('admin-insert-field').style.display = 'none';
-  cancelEdit();
-}
-
-function cancelEdit() {
-  document.getElementById('admin-edit-id').value = '';
-  document.getElementById('admin-form-title').textContent = 'Add New Card';
-  document.getElementById('edit-mode-note').style.display = 'none';
-  document.getElementById('admin-save-btn').textContent = 'Add Card to Collection';
-  document.getElementById('admin-cancel-edit').style.display = 'none';
-}
-
-function editCard(id) {
-  const c = cards.find(x => x.id === id);
-  if (!c) return;
-  document.getElementById('admin-edit-id').value = id;
-  document.getElementById('f-name').value  = c.name  || '';
-  document.getElementById('f-image').value = c.image || '';
-  document.getElementById('f-set').value   = c.set   || '';
-  document.getElementById('f-type').value  = c.type  || 'Trading Card Game';
-  document.getElementById('f-number').value = c.number || '';
-  document.getElementById('f-manufacturer').value = c.manufacturer || '';
-  document.getElementById('f-forsale').checked = !!c.forSale;
-  document.getElementById('f-price').value = c.price || '';
-  document.getElementById('f-price-wrap').style.display = c.forSale ? 'block' : 'none';
-
-  // Show correct fields based on type
-  const isTC  = c.type === 'Trading Card';
-  const isTCG = c.type === 'Trading Card Game';
-  document.getElementById('admin-tc-fields').style.display  = isTC  ? 'block' : 'none';
-  document.getElementById('admin-tcg-fields').style.display = isTCG ? 'block' : 'none';
-
-  if (isTC) {
-    document.getElementById('f-card-subtype').value = c.cardSubtype || 'Base';
-    adminSubtypeChanged();
-    document.getElementById('f-parallel').value = c.parallel || '';
-    document.getElementById('f-insert').value   = c.insert   || '';
-  }
-  if (isTCG) {
-    document.getElementById('f-rarity').value = c.rarity || 'Common';
-    document.getElementById('f-foil').value   = c.foil   || 'Non-Foil';
-  }
-
-  previewImg();
-  document.getElementById('admin-form-title').textContent = 'Edit Card';
-  document.getElementById('edit-mode-note').style.display = 'block';
-  document.getElementById('admin-save-btn').textContent = 'Save Changes';
-  document.getElementById('admin-cancel-edit').style.display = 'block';
-  document.getElementById('admin-form-col').scrollIntoView({ behavior: 'smooth' });
-}
-
-function deleteCard(id) {
-  if (!confirm('Remove this card from the collection?')) return;
-  cards = cards.filter(c => c.id !== id);
-  save();
-  renderAdminList();
-  renderGallery();
-  renderLeaderboard();
-  toast('Card removed.');
-}
-
-function renderAdminList() {
-  const list = document.getElementById('admin-cards-list');
-  document.getElementById('admin-card-count').textContent = `— ${cards.length} card${cards.length !== 1 ? 's' : ''}`;
-
-  if (cards.length === 0) {
-    list.innerHTML = '<p style="color:var(--text-dim);font-size:13px;padding:12px 0;font-family:Crimson Pro,serif">No cards yet. Add your first one!</p>';
-    return;
-  }
-
-  list.innerHTML = cards.map(c => `
-    <div class="admin-card-row">
-      ${c.image ? `<img class="admin-card-row-img" src="${escHtml(c.image)}" alt="" onerror="this.style.display='none'">` : ''}
-      <div class="admin-card-row-info">
-        <div class="admin-row-name">${escHtml(c.name)}</div>
-        <div class="admin-row-meta">${[c.set, c.rarity, c.type].filter(Boolean).join(' · ')}</div>
-      </div>
-      <div class="admin-card-actions">
-        <button class="admin-edit-btn" onclick="editCard('${c.id}')">Edit</button>
-        <button class="admin-del-btn" onclick="deleteCard('${c.id}')">Del</button>
-      </div>
-    </div>`).join('');
-}
-
-// ── FOR SALE ──
-let _fsCaptchaAnswer = 0;
-
-function generateFsCaptcha() {
-  const ops = [
-    () => { const a = Math.floor(Math.random()*9)+1, b = Math.floor(Math.random()*9)+1; return { q:`${a} + ${b} = ?`, a:a+b }; },
-    () => { const a = Math.floor(Math.random()*5)+5, b = Math.floor(Math.random()*5)+1; return { q:`${a} − ${b} = ?`, a:a-b }; },
-    () => { const a = Math.floor(Math.random()*5)+2, b = Math.floor(Math.random()*5)+2; return { q:`${a} × ${b} = ?`, a:a*b }; }
-  ];
-  const { q, a } = ops[Math.floor(Math.random()*ops.length)]();
-  _fsCaptchaAnswer = a;
-  document.getElementById('fs-captcha-question').textContent = q;
-  document.getElementById('fs-captcha-answer').value = '';
-}
-
-function toggleForSaleForm() {
-  const form = document.getElementById('modal-forsale-form');
-  const isOpen = form.style.display !== 'none';
-  form.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) {
-    generateFsCaptcha();
-    document.getElementById('fs-email').value = '';
-    document.getElementById('fs-message').value = '';
-  }
-}
-
-function submitForSale() {
-  if (document.getElementById('fs-trap').value) return;
-  const cardId = currentModalId;
-  const c = cards.find(x => x.id === cardId);
-  if (!c) return;
-
-  const email   = document.getElementById('fs-email').value.trim();
-  const message = document.getElementById('fs-message').value.trim();
-  const captcha = parseInt(document.getElementById('fs-captcha-answer').value.trim(), 10);
-
-  if (!email || !email.includes('@')) { toast('Please enter a valid email.'); return; }
-  if (isNaN(captcha) || captcha !== _fsCaptchaAnswer) { toast('Wrong answer — try again.'); generateFsCaptcha(); return; }
-
-  const subject = encodeURIComponent(`Purchase Inquiry — ${c.name}`);
-  const body = encodeURIComponent(`Hi,\n\nI am interested in purchasing "${c.name}" listed at €${c.price}.\n\nMy email: ${email}\n\n${message}`);
-  window.location.href = `mailto:warcraftcardscom@gmail.com?subject=${subject}&body=${body}`;
-  toast('Opening your email client…');
-  document.getElementById('modal-forsale-form').style.display = 'none';
-}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; currentModalId=null; }
+function closeModalOutside(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+function hoverModalStar(el,val){document.querySelectorAll('.modal-star').forEach((s,i)=>{s.classList.remove('hover');if(i<val)s.classList.add('hover');});}
+function unhoverModalStar(){document.querySelectorAll('.modal-star').forEach(s=>s.classList.remove('hover'));}
 
 // ── COMMENTS ──
 let _captchaAnswer = 0;
-
 function generateCaptcha() {
-  const ops = [
-    () => { const a = Math.floor(Math.random()*9)+1, b = Math.floor(Math.random()*9)+1; return { q: `${a} + ${b} = ?`, a: a+b }; },
-    () => { const a = Math.floor(Math.random()*5)+5, b = Math.floor(Math.random()*5)+1; return { q: `${a} − ${b} = ?`, a: a-b }; },
-    () => { const a = Math.floor(Math.random()*5)+2, b = Math.floor(Math.random()*5)+2; return { q: `${a} × ${b} = ?`, a: a*b }; }
-  ];
-  const { q, a } = ops[Math.floor(Math.random()*ops.length)]();
-  _captchaAnswer = a;
-  document.getElementById('c-captcha-question').textContent = q;
-  document.getElementById('c-captcha-answer').value = '';
+  const ops=[()=>{const a=Math.floor(Math.random()*9)+1,b=Math.floor(Math.random()*9)+1;return{q:`${a} + ${b} = ?`,a:a+b};},()=>{const a=Math.floor(Math.random()*5)+5,b=Math.floor(Math.random()*5)+1;return{q:`${a} − ${b} = ?`,a:a-b};},()=>{const a=Math.floor(Math.random()*5)+2,b=Math.floor(Math.random()*5)+2;return{q:`${a} × ${b} = ?`,a:a*b};}];
+  const {q,a}=ops[Math.floor(Math.random()*ops.length)]();
+  _captchaAnswer=a;
+  document.getElementById('c-captcha-question').textContent=q;
+  document.getElementById('c-captcha-answer').value='';
 }
-function renderComments(cardId) {
+
+function renderComments(cardId, cardComments) {
   const list = document.getElementById('modal-comments-list');
-  const cardComments = (comments[cardId] || []).slice().reverse();
-  if (cardComments.length === 0) {
-    list.innerHTML = '<p class="no-comments">No comments yet. Be the first!</p>';
-    return;
-  }
-  list.innerHTML = cardComments.map(c => `
-    <div class="comment-item">
-      <div class="comment-header">
-        <span class="comment-nickname">${escHtml(c.nickname)}</span>
-        <span class="comment-date">${escHtml(c.date)}</span>
-      </div>
-      <div class="comment-text">${escHtml(c.text)}</div>
-    </div>`).join('');
+  if (!cardComments || cardComments.length === 0) { list.innerHTML='<p class="no-comments">No comments yet. Be the first!</p>'; return; }
+  list.innerHTML = cardComments.map(c=>`<div class="comment-item">
+      <div class="comment-header"><span class="comment-nickname">${escHtml(c.nickname)}</span>
+        <span class="comment-date">${new Date(c.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</span>
+      </div><div class="comment-text">${escHtml(c.text)}</div></div>`).join('');
 }
 
-function submitComment() {
-  const cardId = currentModalId;
-  if (!cardId) return;
-
-  // Honeypot check
+async function submitComment() {
+  const cardId = currentModalId; if (!cardId) return;
   if (document.getElementById('c-trap').value) return;
-
   const nickname = document.getElementById('c-nickname').value.trim();
   const email    = document.getElementById('c-email').value.trim();
   const text     = document.getElementById('c-text').value.trim();
-  const captcha  = parseInt(document.getElementById('c-captcha-answer').value.trim(), 10);
-
+  const captcha  = parseInt(document.getElementById('c-captcha-answer').value.trim(),10);
   if (!nickname) { toast('Please enter a nickname.'); return; }
-  if (!email || !email.includes('@')) { toast('Please enter a valid email.'); return; }
+  if (!email||!email.includes('@')) { toast('Please enter a valid email.'); return; }
   if (!text) { toast('Please write a comment.'); return; }
-  if (isNaN(captcha) || captcha !== _captchaAnswer) {
-    toast('Wrong answer — please try again.');
-    generateCaptcha();
-    return;
-  }
-
-  if (!comments[cardId]) comments[cardId] = [];
-  comments[cardId].push({
-    nickname,
-    text,
-    date: new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
-  });
-  save();
-
-  document.getElementById('c-nickname').value = '';
-  document.getElementById('c-email').value = '';
-  document.getElementById('c-text').value = '';
-  document.getElementById('c-char-count').textContent = '500';
+  if (isNaN(captcha)||captcha!==_captchaAnswer) { toast('Wrong answer — please try again.'); generateCaptcha(); return; }
+  const { error } = await sb.from('comments').insert({ card_id: cardId, nickname, text });
+  if (error) { toast('Could not post comment.'); return; }
+  document.getElementById('c-nickname').value='';
+  document.getElementById('c-email').value='';
+  document.getElementById('c-text').value='';
+  document.getElementById('c-char-count').textContent='500';
   generateCaptcha();
-  renderComments(cardId);
+  const updated = await loadComments(cardId);
+  renderComments(cardId, updated);
   toast('Comment posted!');
 }
 
+// ── FOR SALE INQUIRY ──
+let _fsCaptchaAnswer = 0;
+function generateFsCaptcha() {
+  const ops=[()=>{const a=Math.floor(Math.random()*9)+1,b=Math.floor(Math.random()*9)+1;return{q:`${a} + ${b} = ?`,a:a+b};},()=>{const a=Math.floor(Math.random()*5)+5,b=Math.floor(Math.random()*5)+1;return{q:`${a} − ${b} = ?`,a:a-b};},()=>{const a=Math.floor(Math.random()*5)+2,b=Math.floor(Math.random()*5)+2;return{q:`${a} × ${b} = ?`,a:a*b};}];
+  const {q,a}=ops[Math.floor(Math.random()*ops.length)]();
+  _fsCaptchaAnswer=a;
+  document.getElementById('fs-captcha-question').textContent=q;
+  document.getElementById('fs-captcha-answer').value='';
+}
+function toggleForSaleForm() {
+  const form=document.getElementById('modal-forsale-form');
+  const isOpen=form.style.display!=='none';
+  form.style.display=isOpen?'none':'block';
+  if(!isOpen){generateFsCaptcha();document.getElementById('fs-email').value='';document.getElementById('fs-message').value='';}
+}
+function submitForSale() {
+  if(document.getElementById('fs-trap').value) return;
+  const cardId=currentModalId; const c=cards.find(x=>x.id===cardId); if(!c) return;
+  const email=document.getElementById('fs-email').value.trim();
+  const message=document.getElementById('fs-message').value.trim();
+  const captcha=parseInt(document.getElementById('fs-captcha-answer').value.trim(),10);
+  if(!email||!email.includes('@')){toast('Please enter a valid email.');return;}
+  if(isNaN(captcha)||captcha!==_fsCaptchaAnswer){toast('Wrong answer — try again.');generateFsCaptcha();return;}
+  const subject=encodeURIComponent(`Purchase Inquiry — ${c.name}`);
+  const body=encodeURIComponent(`Hi,\n\nI am interested in purchasing "${c.name}" listed at €${c.price}.\n\nMy email: ${email}\n\n${message}`);
+  window.location.href=`mailto:warcraftcardscom@gmail.com?subject=${subject}&body=${body}`;
+  toast('Opening your email client…');
+  document.getElementById('modal-forsale-form').style.display='none';
+}
+
 // ── POPULAR ──
+let _popularTab = 'votes';
 function openPopular() {
+  _popularTab='votes';
+  document.getElementById('tab-votes').classList.add('active');
+  document.getElementById('tab-fav').classList.remove('active');
   renderPopularList();
   document.getElementById('popular-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function closePopular() {
-  document.getElementById('popular-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closePopularOutside(e) {
-  if (e.target === document.getElementById('popular-overlay')) closePopular();
-}
-
+function closePopular(){document.getElementById('popular-overlay').classList.remove('open');document.body.style.overflow='';}
+function closePopularOutside(e){if(e.target===document.getElementById('popular-overlay'))closePopular();}
+function switchPopularTab(tab){_popularTab=tab;document.getElementById('tab-votes').classList.toggle('active',tab==='votes');document.getElementById('tab-fav').classList.toggle('active',tab==='fav');renderPopularList();}
 function renderPopularList() {
-  const list = document.getElementById('popular-list');
-  const ranked = [...cards]
-    .map(c => ({ c, r: getRating(c.id) }))
-    .filter(x => x.r.count > 0)
-    .sort((a, b) => b.r.count - a.r.count || b.r.avg - a.r.avg)
-    .slice(0, 100);
-
-  if (ranked.length === 0) {
-    list.innerHTML = '<p class="popular-empty">No rated cards yet — be the first to vote!</p>';
-    return;
-  }
-
-  const rankClass = i => i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : '';
-  const starsStr = avg => '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
-
-  list.innerHTML = ranked.map(({ c, r }, i) => `
-    <div class="popular-item" onclick="closePopular();openModal('${c.id}')">
-      <div class="popular-rank ${rankClass(i)}">#${i + 1}</div>
-      ${c.image
-        ? `<img class="popular-thumb" src="${escHtml(c.image)}" alt="${escHtml(c.name)}" onerror="this.style.display='none'">`
-        : ''}
-      <div class="popular-info">
-        <div class="popular-name">${escHtml(c.name)}</div>
-        <div class="popular-meta">${[c.set, c.type].filter(Boolean).join(' · ')}</div>
-      </div>
-      <div class="popular-stats">
-        <div class="popular-stars">${starsStr(r.avg)}</div>
-        <div class="popular-avg">${r.avg} / 5</div>
-        <div class="popular-vote-count">${r.count} vote${r.count !== 1 ? 's' : ''}</div>
-      </div>
+  const list=document.getElementById('popular-list');
+  const rankClass=i=>i===0?'r1':i===1?'r2':i===2?'r3':'';
+  const starsStr=avg=>'★'.repeat(Math.round(avg))+'☆'.repeat(5-Math.round(avg));
+  let ranked;
+  if(_popularTab==='votes'){ranked=[...cards].map(c=>({c,r:getRating(c.id)})).filter(x=>x.r.count>0).sort((a,b)=>b.r.count-a.r.count||b.r.avg-a.r.avg).slice(0,popularLimit);}
+  else{ranked=[...cards].map(c=>({c,r:getRating(c.id)})).filter(x=>x.r.count>=minRatingsForFav).sort((a,b)=>b.r.avg-a.r.avg||b.r.count-a.r.count).slice(0,popularLimit);}
+  if(ranked.length===0){list.innerHTML=`<p class="popular-empty">${_popularTab==='fav'?`No cards with ${minRatingsForFav}+ ratings yet.`:'No rated cards yet — be the first to vote!'}</p>`;return;}
+  list.innerHTML=ranked.map(({c,r},i)=>`<div class="popular-item" onclick="closePopular();openModal('${c.id}')">
+      <div class="popular-rank ${rankClass(i)}">#${i+1}</div>
+      ${c.image?`<img class="popular-thumb" src="${escHtml(c.image)}" alt="${escHtml(c.name)}" onerror="this.style.display='none'">` : ''}
+      <div class="popular-info"><div class="popular-name">${escHtml(c.name)}</div><div class="popular-meta">${[c.set,c.type].filter(Boolean).join(' · ')}</div></div>
+      <div class="popular-stats"><div class="popular-stars">${starsStr(r.avg)}</div><div class="popular-avg">${r.avg} / 5</div><div class="popular-vote-count">${r.count} vote${r.count!==1?'s':''}</div></div>
     </div>`).join('');
 }
 
 // ── DONATE ──
 let _donateCaptchaAnswer = 0;
-
-function generateDonateCaptcha() {
-  const ops = [
-    () => { const a = Math.floor(Math.random()*9)+1, b = Math.floor(Math.random()*9)+1; return { q: `${a} + ${b} = ?`, a: a+b }; },
-    () => { const a = Math.floor(Math.random()*5)+5, b = Math.floor(Math.random()*5)+1; return { q: `${a} − ${b} = ?`, a: a-b }; },
-    () => { const a = Math.floor(Math.random()*5)+2, b = Math.floor(Math.random()*5)+2; return { q: `${a} × ${b} = ?`, a: a*b }; }
-  ];
-  const { q, a } = ops[Math.floor(Math.random()*ops.length)]();
-  _donateCaptchaAnswer = a;
-  document.getElementById('d-captcha-question').textContent = q;
-  document.getElementById('d-captcha-answer').value = '';
-}
-
-function openDonate() {
-  document.getElementById('d-email').value = '';
-  document.getElementById('d-message').value = '';
-  document.getElementById('d-captcha-answer').value = '';
-  generateDonateCaptcha();
-  document.getElementById('donate-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeDonate() {
-  document.getElementById('donate-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closeDonateOutside(e) {
-  if (e.target === document.getElementById('donate-overlay')) closeDonate();
-}
-
-function submitDonate() {
-  // Honeypot
-  if (document.getElementById('d-trap').value) return;
-
-  const email   = document.getElementById('d-email').value.trim();
-  const message = document.getElementById('d-message').value.trim();
-  const captcha = parseInt(document.getElementById('d-captcha-answer').value.trim(), 10);
-
-  if (!email || !email.includes('@')) { toast('Please enter a valid email.'); return; }
-  if (!message) { toast('Please write a message.'); return; }
-  if (isNaN(captcha) || captcha !== _donateCaptchaAnswer) {
-    toast('Wrong answer — please try again.');
-    generateDonateCaptcha();
-    return;
-  }
-
-  const subject = encodeURIComponent('Card Donation — Warcraft Cards');
-  const body = encodeURIComponent(`From: ${email}\n\n${message}`);
-  window.location.href = `mailto:warcraftcardscom@gmail.com?subject=${subject}&body=${body}`;
-
-  toast('Opening your email client…');
-  setTimeout(() => closeDonate(), 1200);
-}
+function generateDonateCaptcha(){const ops=[()=>{const a=Math.floor(Math.random()*9)+1,b=Math.floor(Math.random()*9)+1;return{q:`${a} + ${b} = ?`,a:a+b};},()=>{const a=Math.floor(Math.random()*5)+5,b=Math.floor(Math.random()*5)+1;return{q:`${a} − ${b} = ?`,a:a-b};},()=>{const a=Math.floor(Math.random()*5)+2,b=Math.floor(Math.random()*5)+2;return{q:`${a} × ${b} = ?`,a:a*b};}];const{q,a}=ops[Math.floor(Math.random()*ops.length)]();_donateCaptchaAnswer=a;document.getElementById('d-captcha-question').textContent=q;document.getElementById('d-captcha-answer').value='';}
+function openDonate(){document.getElementById('d-email').value='';document.getElementById('d-message').value='';document.getElementById('d-captcha-answer').value='';generateDonateCaptcha();document.getElementById('donate-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeDonate(){document.getElementById('donate-overlay').classList.remove('open');document.body.style.overflow='';}
+function closeDonateOutside(e){if(e.target===document.getElementById('donate-overlay'))closeDonate();}
+function submitDonate(){if(document.getElementById('d-trap').value)return;const email=document.getElementById('d-email').value.trim();const message=document.getElementById('d-message').value.trim();const captcha=parseInt(document.getElementById('d-captcha-answer').value.trim(),10);if(!email||!email.includes('@')){toast('Please enter a valid email.');return;}if(!message){toast('Please write a message.');return;}if(isNaN(captcha)||captcha!==_donateCaptchaAnswer){toast('Wrong answer — please try again.');generateDonateCaptcha();return;}const subject=encodeURIComponent('Card Offer — Warcraft Cards');const body=encodeURIComponent(`From: ${email}\n\n${message}`);window.location.href=`mailto:warcraftcardscom@gmail.com?subject=${subject}&body=${body}`;toast('Opening your email client…');setTimeout(()=>closeDonate(),1200);}
 
 // ── SUPPORT ──
-function openSupport() {
-  document.getElementById('support-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeSupport() {
-  document.getElementById('support-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closeSupportOutside(e) {
-  if (e.target === document.getElementById('support-overlay')) closeSupport();
-}
+function openSupport(){document.getElementById('support-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeSupport(){document.getElementById('support-overlay').classList.remove('open');document.body.style.overflow='';}
+function closeSupportOutside(e){if(e.target===document.getElementById('support-overlay'))closeSupport();}
 
 // ── ABOUT ──
-function openAbout() {
-  document.getElementById('about-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeAbout() {
-  document.getElementById('about-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closeAboutOutside(e) {
-  if (e.target === document.getElementById('about-overlay')) closeAbout();
-}
+function openAbout(){document.getElementById('about-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeAbout(){document.getElementById('about-overlay').classList.remove('open');document.body.style.overflow='';}
+function closeAboutOutside(e){if(e.target===document.getElementById('about-overlay'))closeAbout();}
 
 // ── LIGHTBOX ──
-function openLightbox() {
-  const src = document.getElementById('modal-img').src;
-  if (!src) return;
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox').classList.add('open');
+function openLightbox(){const src=document.getElementById('modal-img').src;if(!src)return;document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+
+// ── ADMIN AUTH ──
+const _AH='049889881d079e6a70324d7bcf510ac82d7429ae4da3979af52ddf455b8551b8';
+async function _hash(str){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+function openAdminLogin(){document.getElementById('admin-password-input').value='';document.getElementById('admin-login-error').textContent='';document.getElementById('admin-login-overlay').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('admin-password-input').focus(),50);}
+function closeAdminLogin(){document.getElementById('admin-login-overlay').classList.remove('open');document.body.style.overflow='';}
+function closeAdminLoginOutside(e){if(e.target===document.getElementById('admin-login-overlay'))closeAdminLogin();}
+async function verifyAdminPassword(){const input=document.getElementById('admin-password-input').value;const h=await _hash(input);if(h===_AH){closeAdminLogin();openAdmin();}else{document.getElementById('admin-login-error').textContent='Incorrect password.';document.getElementById('admin-password-input').value='';document.getElementById('admin-password-input').focus();}}
+
+function openAdmin(){renderAdminList();document.getElementById('admin-minratings').value=minRatingsForFav;document.getElementById('admin-popularlimit').value=popularLimit;document.getElementById('admin-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeAdmin(){document.getElementById('admin-overlay').classList.remove('open');document.body.style.overflow='';cancelEdit();}
+
+function saveMinRatings(){const val=parseInt(document.getElementById('admin-minratings').value,10);if(!isNaN(val)&&val>=1){minRatingsForFav=val;localStorage.setItem('wc_minratings',val);renderLeaderboard();toast(`Fan Favourites now requires ${val} rating${val!==1?'s':''}.`);}}
+function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;localStorage.setItem('wc_popularlimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
+
+function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
+
+// ── ADMIN TYPE SWITCHING ──
+function adminForSaleChanged(){const checked=document.getElementById('f-forsale').checked;document.getElementById('f-price-wrap').style.display=checked?'block':'none';}
+function adminTypeChanged(){const type=document.getElementById('f-type').value;document.getElementById('admin-tc-fields').style.display=type==='Trading Card'?'block':'none';document.getElementById('admin-tcg-fields').style.display=type==='Trading Card Game'?'block':'none';if(type==='Trading Card'){document.getElementById('f-card-subtype').value='Base';adminSubtypeChanged();}}
+function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype').value;document.getElementById('admin-parallel-field').style.display=sub==='Parallel'?'block':'none';document.getElementById('admin-insert-field').style.display=sub==='Insert'?'block':'none';}
+
+// ── SAVE CARD ──
+async function saveCard() {
+  const name = document.getElementById('f-name').value.trim();
+  const image = document.getElementById('f-image').value.trim();
+  if (!name) { toast('Card name is required.'); return; }
+  const editId = document.getElementById('admin-edit-id').value;
+  const type = document.getElementById('f-type').value;
+  const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
+  const cardSubtype = isTC?document.getElementById('f-card-subtype').value:'';
+  const data = {
+    id: editId || 'c'+Date.now(), name, image,
+    set: document.getElementById('f-set').value.trim(), type, cardSubtype,
+    parallel: (isTC&&cardSubtype==='Parallel')?document.getElementById('f-parallel').value.trim():'',
+    insert:   (isTC&&cardSubtype==='Insert')  ?document.getElementById('f-insert').value.trim():'',
+    rarity:   isTCG?document.getElementById('f-rarity').value:'',
+    foil:     isTCG?document.getElementById('f-foil').value:'',
+    number: document.getElementById('f-number').value.trim(),
+    manufacturer: document.getElementById('f-manufacturer').value.trim(),
+    forSale: document.getElementById('f-forsale').checked,
+    price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
+    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now()
+  };
+  if (editId) {
+    const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
+    if (error) { toast('Error saving card.'); return; }
+    const idx = cards.findIndex(c=>c.id===editId);
+    if(idx>=0) cards[idx]=data;
+    toast('Card updated!');
+  } else {
+    const { error } = await sb.from('cards').insert(cardToDB(data));
+    if (error) { toast('Error adding card.'); return; }
+    cards.unshift(data);
+    toast('Card added to collection!');
+  }
+  updateTopbarCount();
+  clearAdminForm(); renderAdminList(); renderGallery(); renderLeaderboard(); renderForSaleSection();
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
+
+function clearAdminForm(){['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-type').value='Trading Card Game';document.getElementById('f-rarity').value='Common';document.getElementById('f-foil').value='Non-Foil';document.getElementById('f-card-subtype').value='Base';document.getElementById('f-forsale').checked=false;document.getElementById('f-price-wrap').style.display='none';document.getElementById('img-preview-wrap').style.display='none';document.getElementById('admin-tc-fields').style.display='none';document.getElementById('admin-tcg-fields').style.display='block';document.getElementById('admin-parallel-field').style.display='none';document.getElementById('admin-insert-field').style.display='none';cancelEdit();}
+
+function cancelEdit(){document.getElementById('admin-edit-id').value='';document.getElementById('admin-form-title').textContent='Add New Card';document.getElementById('edit-mode-note').style.display='none';document.getElementById('admin-save-btn').textContent='Add Card to Collection';document.getElementById('admin-cancel-edit').style.display='none';}
+
+function editCard(id){const c=cards.find(x=>x.id===id);if(!c)return;document.getElementById('admin-edit-id').value=id;document.getElementById('f-name').value=c.name||'';document.getElementById('f-image').value=c.image||'';document.getElementById('f-set').value=c.set||'';document.getElementById('f-type').value=c.type||'Trading Card Game';document.getElementById('f-number').value=c.number||'';document.getElementById('f-manufacturer').value=c.manufacturer||'';document.getElementById('f-forsale').checked=!!c.forSale;document.getElementById('f-price').value=c.price||'';document.getElementById('f-price-wrap').style.display=c.forSale?'block':'none';const isTC=c.type==='Trading Card';const isTCG=c.type==='Trading Card Game';document.getElementById('admin-tc-fields').style.display=isTC?'block':'none';document.getElementById('admin-tcg-fields').style.display=isTCG?'block':'none';if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}previewImg();document.getElementById('admin-form-title').textContent='Edit Card';document.getElementById('edit-mode-note').style.display='block';document.getElementById('admin-save-btn').textContent='Save Changes';document.getElementById('admin-cancel-edit').style.display='block';document.getElementById('admin-form-col').scrollIntoView({behavior:'smooth'});}
+
+async function deleteCard(id){if(!confirm('Remove this card from the collection?'))return;const{error}=await sb.from('cards').delete().eq('id',id);if(error){toast('Error deleting card.');return;}cards=cards.filter(c=>c.id!==id);updateTopbarCount();renderAdminList();renderGallery();renderLeaderboard();renderForSaleSection();toast('Card removed.');}
+
+// ── ADMIN LIST ──
+function adminListTypeChanged(){const type=document.getElementById('admin-filter-type').value;const isTC=type==='Trading Card';const isTCG=type==='Trading Card Game';document.getElementById('admin-filter-subtype').style.display=isTC?'':'none';document.getElementById('admin-filter-rarity').style.display=isTCG?'':'none';document.getElementById('admin-filter-foil').style.display=isTCG?'':'none';document.getElementById('admin-filter-parallel').style.display='none';document.getElementById('admin-filter-insert').style.display='none';document.getElementById('admin-filter-subtype').value='';document.getElementById('admin-filter-parallel').value='';document.getElementById('admin-filter-insert').value='';document.getElementById('admin-filter-rarity').value='';document.getElementById('admin-filter-foil').value='';renderAdminList();}
+function adminListSubtypeChanged(){const sub=document.getElementById('admin-filter-subtype').value;const showParallel=sub==='Parallel';const showInsert=sub==='Insert';document.getElementById('admin-filter-parallel').style.display=showParallel?'':'none';document.getElementById('admin-filter-insert').style.display=showInsert?'':'none';document.getElementById('admin-filter-parallel').value='';document.getElementById('admin-filter-insert').value='';if(showParallel){const parallels=[...new Set(cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Parallel').map(c=>c.parallel).filter(Boolean))].sort();const sel=document.getElementById('admin-filter-parallel');sel.innerHTML='<option value="">All Parallels</option>'+parallels.map(p=>`<option value="${escHtml(p)}">${escHtml(p)}</option>`).join('');}if(showInsert){const inserts=[...new Set(cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Insert').map(c=>c.insert).filter(Boolean))].sort();const sel=document.getElementById('admin-filter-insert');sel.innerHTML='<option value="">All Inserts</option>'+inserts.map(i=>`<option value="${escHtml(i)}">${escHtml(i)}</option>`).join('');}renderAdminList();}
+
+function renderAdminList(){const list=document.getElementById('admin-cards-list');const typeFilter=document.getElementById('admin-filter-type')?.value||'';const setFilter=document.getElementById('admin-filter-set')?.value||'';const subtypeFilter=document.getElementById('admin-filter-subtype')?.value||'';const parallelFilter=document.getElementById('admin-filter-parallel')?.value||'';const insertFilter=document.getElementById('admin-filter-insert')?.value||'';const rarityFilter=document.getElementById('admin-filter-rarity')?.value||'';const foilFilter=document.getElementById('admin-filter-foil')?.value||'';const searchFilter=(document.getElementById('admin-filter-search')?.value||'').toLowerCase();const setEl=document.getElementById('admin-filter-set');if(setEl){const currentSet=setEl.value;const sets=[...new Set(cards.filter(c=>!typeFilter||c.type===typeFilter).map(c=>c.set).filter(Boolean))].sort();setEl.innerHTML='<option value="">All Sets</option>'+sets.map(s=>`<option value="${escHtml(s)}"${s===currentSet?' selected':''}>${escHtml(s)}</option>`).join('');if(currentSet&&!sets.includes(currentSet))setEl.value='';}const filtered=cards.filter(c=>{if(typeFilter&&c.type!==typeFilter)return false;if(setFilter&&c.set!==setFilter)return false;if(subtypeFilter&&c.cardSubtype!==subtypeFilter)return false;if(parallelFilter&&c.parallel!==parallelFilter)return false;if(insertFilter&&c.insert!==insertFilter)return false;if(rarityFilter&&c.rarity!==rarityFilter)return false;if(foilFilter&&c.foil!==foilFilter)return false;if(searchFilter){const text=`${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert} ${c.type}`.toLowerCase();if(!text.includes(searchFilter))return false;}return true;});document.getElementById('admin-card-count').textContent=`— ${filtered.length} / ${cards.length} card${cards.length!==1?'s':''}`;if(filtered.length===0){list.innerHTML='<p style="color:var(--text-dim);font-size:13px;padding:12px 0;font-family:Crimson Pro,serif">No cards match.</p>';return;}list.innerHTML=filtered.map(c=>`<div class="admin-card-row">${c.image?`<img class="admin-card-row-img" src="${escHtml(c.image)}" alt="" onerror="this.style.display='none'">`:''}<div class="admin-card-row-info"><div class="admin-row-name">${escHtml(c.name)}</div><div class="admin-row-meta">${[c.set,c.rarity,c.parallel,c.type].filter(Boolean).join(' · ')}</div></div><div class="admin-card-actions"><button class="admin-edit-btn" onclick="editCard('${c.id}')">Edit</button><button class="admin-del-btn" onclick="deleteCard('${c.id}')">Del</button></div></div>`).join('');}
+
+function updateTopbarCount(){document.getElementById('topbar-count-num').textContent=cards.length;}
+
+// ── FILTER HIDE ON SCROLL ──
+(function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
 
 // ── MOBILE NAV ──
-function toggleMobileNav() {
-  document.getElementById('topbar-nav').classList.toggle('open');
-}
-function closeMobileNav() {
-  document.getElementById('topbar-nav').classList.remove('open');
-}
-// Close nav when any nav link is tapped on mobile
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('#topbar-nav a, #topbar-nav button').forEach(el => {
-    el.addEventListener('click', closeMobileNav);
-  });
-});
+function toggleMobileNav(){document.getElementById('topbar-nav').classList.toggle('open');}
+function closeMobileNav(){document.getElementById('topbar-nav').classList.remove('open');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('#topbar-nav a, #topbar-nav button').forEach(el=>{el.addEventListener('click',closeMobileNav);});});
 
 // ── TOAST ──
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
 
 // ── UTILS ──
-function escHtml(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ── KEYBOARD ──
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    if (document.getElementById('lightbox').classList.contains('open')) { closeLightbox(); return; }
-    if (document.getElementById('popular-overlay').classList.contains('open')) { closePopular(); return; }
-    if (document.getElementById('donate-overlay').classList.contains('open')) { closeDonate(); return; }
-    if (document.getElementById('support-overlay').classList.contains('open')) { closeSupport(); return; }
-    if (document.getElementById('about-overlay').classList.contains('open')) { closeAbout(); return; }
-    if (document.getElementById('admin-login-overlay').classList.contains('open')) { closeAdminLogin(); return; }
-    if (document.getElementById('modal-overlay').classList.contains('open')) closeModal();
-    if (document.getElementById('admin-overlay').classList.contains('open')) closeAdmin();
-  }
-});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lightbox').classList.contains('open')){closeLightbox();return;}if(document.getElementById('popular-overlay').classList.contains('open')){closePopular();return;}if(document.getElementById('donate-overlay').classList.contains('open')){closeDonate();return;}if(document.getElementById('support-overlay').classList.contains('open')){closeSupport();return;}if(document.getElementById('about-overlay').classList.contains('open')){closeAbout();return;}if(document.getElementById('admin-login-overlay').classList.contains('open')){closeAdminLogin();return;}if(document.getElementById('modal-overlay').classList.contains('open'))closeModal();if(document.getElementById('admin-overlay').classList.contains('open'))closeAdmin();}});
 
-// ── INIT ──
-renderGallery();
-renderLeaderboard();
-updateSetFilter();
-updateTopbarCount();
-// Set admin form to default state (TCG visible)
-document.getElementById('admin-tcg-fields').style.display = 'block';
-document.getElementById('admin-tc-fields').style.display  = 'none';
+// ── START ──
+init();
 </script>
 </body>
 </html>
