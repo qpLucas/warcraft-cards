@@ -3377,13 +3377,14 @@
         <div class="admin-field">
           <label>Card Category *</label>
           <select id="f-type" onchange="adminTypeChanged()">
-            <option value="Trading Card Game">Trading Card Game</option>
             <option value="Trading Card">Trading Card</option>
+            <option value="Trading Card Game">Trading Card Game</option>
           </select>
         </div>
         <div class="admin-field">
           <label>Set</label>
-          <input type="text" id="f-set" placeholder="e.g. Heroes of Azeroth">
+          <input type="text" id="f-set" placeholder="e.g. Heroes of Azeroth" list="f-set-list" autocomplete="off">
+          <datalist id="f-set-list"></datalist>
         </div>
 
         <!-- Trading Card fields -->
@@ -3433,7 +3434,8 @@
         </div>
         <div class="admin-field">
           <label>Manufacturer</label>
-          <input type="text" id="f-manufacturer" placeholder="e.g. Upper Deck">
+          <input type="text" id="f-manufacturer" placeholder="e.g. Upper Deck" list="f-manufacturer-list" autocomplete="off">
+          <datalist id="f-manufacturer-list"></datalist>
         </div>
         <div class="admin-field admin-forsale-row">
           <label class="forsale-label">
@@ -3583,8 +3585,8 @@ async function init() {
     toast('Connection error — please refresh.');
   }
   showLoading(false);
-  document.getElementById('admin-tcg-fields').style.display = 'block';
-  document.getElementById('admin-tc-fields').style.display  = 'none';
+  document.getElementById('admin-tcg-fields').style.display = 'none';
+  document.getElementById('admin-tc-fields').style.display  = 'block';
 }
 
 function showLoading(on) {
@@ -3913,7 +3915,7 @@ function getFiltered() {
       if (!`${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert}`.toLowerCase().includes(q)) return false;
     }
     return true;
-  }).sort((a,b) => (b.added||0)-(a.added||0));
+  }).sort(() => Math.random() - 0.5);
 }
 
 function applyFilters() {
@@ -4190,7 +4192,7 @@ function closeAdminLogin(){document.getElementById('admin-login-overlay').classL
 function closeAdminLoginOutside(e){if(e.target===document.getElementById('admin-login-overlay'))closeAdminLogin();}
 async function verifyAdminPassword(){const input=document.getElementById('admin-password-input').value;const h=await _hash(input);if(h===_AH){closeAdminLogin();openAdmin();}else{document.getElementById('admin-login-error').textContent='Incorrect password.';document.getElementById('admin-password-input').value='';document.getElementById('admin-password-input').focus();}}
 
-function openAdmin(){renderAdminList();document.getElementById('admin-minratings').value=minRatingsForFav;document.getElementById('admin-popularlimit').value=popularLimit;document.getElementById('admin-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function openAdmin(){renderAdminList();populateAdminDataLists();document.getElementById('admin-minratings').value=minRatingsForFav;document.getElementById('admin-popularlimit').value=popularLimit;document.getElementById('admin-overlay').classList.add('open');document.body.style.overflow='hidden';}
 function closeAdmin(){document.getElementById('admin-overlay').classList.remove('open');document.body.style.overflow='';cancelEdit();}
 
 function saveMinRatings(){const val=parseInt(document.getElementById('admin-minratings').value,10);if(!isNaN(val)&&val>=1){minRatingsForFav=val;localStorage.setItem('wc_minratings',val);renderLeaderboard();toast(`Fan Favourites now requires ${val} rating${val!==1?'s':''}.`);}}
@@ -4294,7 +4296,14 @@ async function saveCard() {
   clearAdminForm(); renderAdminList(); renderGallery(); renderLeaderboard(); renderForSaleSection();
 }
 
-function clearAdminForm(){['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-type').value='Trading Card Game';document.getElementById('f-rarity').value='Common';document.getElementById('f-foil').value='Non-Foil';document.getElementById('f-card-subtype').value='Base';document.getElementById('f-forsale').checked=false;document.getElementById('f-price-wrap').style.display='none';document.getElementById('img-preview-wrap').style.display='none';document.getElementById('admin-tc-fields').style.display='none';document.getElementById('admin-tcg-fields').style.display='block';document.getElementById('admin-parallel-field').style.display='none';document.getElementById('admin-insert-field').style.display='none';cancelEdit();}
+function clearAdminForm(){['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-type').value='Trading Card';document.getElementById('f-rarity').value='Common';document.getElementById('f-foil').value='Non-Foil';document.getElementById('f-card-subtype').value='Base';document.getElementById('f-forsale').checked=false;document.getElementById('f-price-wrap').style.display='none';document.getElementById('img-preview-wrap').style.display='none';document.getElementById('admin-tc-fields').style.display='block';document.getElementById('admin-tcg-fields').style.display='none';document.getElementById('admin-parallel-field').style.display='none';document.getElementById('admin-insert-field').style.display='none';populateAdminDataLists();cancelEdit();}
+
+function populateAdminDataLists() {
+  const sets = [...new Set(cards.map(c => c.set).filter(Boolean))].sort();
+  document.getElementById('f-set-list').innerHTML = sets.map(s => `<option value="${escHtml(s)}">`).join('');
+  const manufacturers = [...new Set(cards.map(c => c.manufacturer).filter(Boolean))].sort();
+  document.getElementById('f-manufacturer-list').innerHTML = manufacturers.map(m => `<option value="${escHtml(m)}">`).join('');
+}
 
 function cancelEdit(){document.getElementById('admin-edit-id').value='';document.getElementById('admin-form-title').textContent='Add New Card';document.getElementById('edit-mode-note').style.display='none';document.getElementById('admin-save-btn').textContent='Add Card to Collection';document.getElementById('admin-cancel-edit').style.display='none';}
 
