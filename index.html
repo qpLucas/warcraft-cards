@@ -1045,29 +1045,6 @@
     transition: all 0.2s;
     font-family: 'Cinzel', serif;
   }
-  #modal-back-btn {
-    display: none;
-    align-items: center;
-    gap: 6px;
-    font-family: 'Cinzel', serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    background: var(--bg-panel);
-    border: none;
-    border-bottom: 1px solid var(--border-gold);
-    padding: 14px 16px;
-    height: 48px;
-    width: 100%;
-    cursor: pointer;
-    text-align: left;
-    flex-shrink: 0;
-  }
-  #modal-back-btn:hover { color: var(--gold); }
-  #modal-back-btn::before { content: '←'; font-size: 14px; }
-
   #modal-close:hover { color: var(--gold); border-color: var(--gold); }
 
   #modal-inner {
@@ -1121,7 +1098,7 @@
     flex-direction: column;
     gap: 16px;
     overflow-y: auto;
-    min-height: 0;
+    max-height: 90vh;
   }
   #modal-info-side::-webkit-scrollbar { width: 4px; }
   #modal-info-side::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
@@ -2818,7 +2795,7 @@
   #lightbox-close:hover { color: var(--gold); border-color: var(--gold); }
 
   @media (min-width: 769px) and (max-width: 1100px) {
-    #cards-grid, #forsale-grid { grid-template-columns: repeat(3, 1fr); }
+    #cards-grid, #forsale-grid { grid-template-columns: repeat(4, 1fr); }
   }
 
   @media (max-width: 768px) {
@@ -2881,10 +2858,6 @@
       padding: 10px 14px;
       gap: 8px;
       top: 60px;
-      transform: translateY(0) !important;
-      opacity: 1 !important;
-      pointer-events: auto !important;
-    }
     }
     .filter-select, .filter-search { font-size: 13px; }
     .filter-label { display: none; }
@@ -2900,63 +2873,35 @@
     .meta-label, .meta-value { font-size: 10px; }
 
     /* ── MODAL ── */
-    #modal-overlay {
-      padding: 80px 12px 48px;
-      align-items: flex-start;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
     #modal {
-      max-height: none;
-      height: auto;
-      border-radius: 12px;
-      margin: 0 auto;
-      overflow: visible;
-      display: flex;
-      flex-direction: column;
-    }
-    #modal-close { display: none; }
-    #modal-back-btn {
-      display: flex;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      border-radius: 0;
-      z-index: 1001;
-      background: rgba(13,9,3,0.97);
-      border-bottom: 1px solid var(--border-gold);
-      backdrop-filter: blur(8px);
+      max-height: 95vh;
+      border-radius: 6px;
+      margin: 0;
     }
     #modal-inner {
       flex-direction: column;
-      overflow-y: visible;
-      overflow-x: hidden;
-      flex: 1;
+      overflow-y: auto;
     }
     #modal-img-side {
       width: 100%;
       position: relative;
       align-self: auto;
       cursor: zoom-in;
-      flex-shrink: 0;
     }
     #modal-img-side img {
       min-height: unset;
-      height: 45vw;
-      max-height: 45vw;
-      width: 100%;
+      max-height: 40vw;
+      height: 40vw;
       object-fit: contain;
       background: #0c0904;
-      border-radius: 12px 12px 0 0;
+      border-radius: 6px 6px 0 0;
     }
     #modal-info-side {
       max-height: none;
-      overflow-y: visible;
-      padding: 16px 16px 32px;
+      padding: 18px 16px 20px;
       gap: 12px;
     }
-    #modal-card-name { font-size: 16px; }
+    #modal-card-name { font-size: 17px; }
     .modal-meta-grid { grid-template-columns: 1fr 1fr; }
     .comment-form-row { grid-template-columns: 1fr; }
 
@@ -3189,7 +3134,6 @@
 <!-- CARD MODAL -->
 <div id="modal-overlay" onclick="closeModalOutside(event)">
   <div id="modal">
-    <button id="modal-back-btn" onclick="closeModal()">Back to Collection</button>
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side" onclick="openLightbox()">
@@ -3971,7 +3915,7 @@ function getFiltered() {
       if (!`${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert}`.toLowerCase().includes(q)) return false;
     }
     return true;
-  }).sort(() => Math.random() - 0.5);
+  }).sort((a,b) => (b.added||0)-(a.added||0));
 }
 
 function applyFilters() {
@@ -4109,7 +4053,6 @@ async function openModal(id) {
   generateCaptcha();
   document.getElementById('c-text').oninput = function() { document.getElementById('c-char-count').textContent = 500-this.value.length; };
   document.getElementById('modal-overlay').classList.add('open');
-  // Lock body scroll on all devices
   document.body.style.overflow='hidden';
 }
 
@@ -4376,8 +4319,8 @@ function renderAdminList(){const list=document.getElementById('admin-cards-list'
 
 function updateTopbarCount(){document.getElementById('topbar-count-num').textContent=cards.length;}
 
-// ── FILTER HIDE ON SCROLL (desktop only) ──
-(function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{if(window.innerWidth<=768){filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';return;}const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
+// ── FILTER HIDE ON SCROLL ──
+(function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
 
 // ── MOBILE NAV ──
 function toggleMobileNav(){document.getElementById('topbar-nav').classList.toggle('open');}
