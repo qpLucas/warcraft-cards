@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230A0804'/%3E%3Crect x='3' y='5' width='16' height='22' rx='2' fill='%23271A08' stroke='%23C9A84C' stroke-width='1' transform='rotate(-8 11 16)'/%3E%3Crect x='6' y='4' width='16' height='22' rx='2' fill='%231C1206' stroke='%23C9A84C' stroke-width='1' transform='rotate(-2 14 15)'/%3E%3Crect x='10' y='4' width='16' height='22' rx='2' fill='%23221608' stroke='%23C9A84C' stroke-width='1.5'/%3E%3Ctext x='18' y='20' font-family='Georgia,serif' font-size='13' font-weight='700' fill='%23C9A84C' text-anchor='middle'>W%3C/text%3E%3C/svg%3E">
 <title>Warcraft Cards — May my ancestors watch over my collection!</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
@@ -1429,6 +1430,71 @@
   }
   .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }
 
+  /* ── IMAGE UPLOAD ── */
+  #img-upload-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #img-upload-btn-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #img-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    background: rgba(201,168,76,0.07);
+    border: 1px solid var(--border-gold);
+    padding: 8px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  #img-upload-label:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.12);
+  }
+
+  #img-upload-status {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  #img-upload-status.success { color: #2ecc71; font-style: normal; }
+  #img-upload-status.error   { color: #e05555; font-style: normal; }
+  #img-upload-status.loading { color: var(--gold-dim); }
+
+  #img-url-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .img-url-or {
+    font-family: 'Crimson Pro', serif;
+    font-size: 12px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    font-style: italic;
+  }
+
+  #img-url-row input {
+    flex: 1;
+  }
+
   /* ── ADMIN PANEL ── */
   #admin-overlay {
     display: none;
@@ -2820,10 +2886,14 @@
       width: 100%;
       position: relative;
       align-self: auto;
+      cursor: zoom-in;
     }
     #modal-img-side img {
-      min-height: 240px;
-      max-height: 55vw;
+      min-height: unset;
+      max-height: 40vw;
+      height: 40vw;
+      object-fit: contain;
+      background: #0c0904;
       border-radius: 6px 6px 0 0;
     }
     #modal-info-side {
@@ -3288,8 +3358,20 @@
           <input type="text" id="f-name" placeholder="e.g. Thrall, Son of Durotan">
         </div>
         <div class="admin-field">
-          <label>Image URL *</label>
-          <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+          <label>Card Image</label>
+          <div id="img-upload-area">
+            <div id="img-upload-btn-row">
+              <label id="img-upload-label" for="f-image-file">
+                <span id="img-upload-btn-text">📁 Upload Photo</span>
+                <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="uploadCardImage(this)">
+              </label>
+              <span id="img-upload-status"></span>
+            </div>
+            <div id="img-url-row">
+              <span class="img-url-or">or paste URL</span>
+              <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+            </div>
+          </div>
           <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
         </div>
         <div class="admin-field">
@@ -3781,7 +3863,7 @@ function cardHTML(c) {
   const voted = hasVoted(c.id);
   const myStars = myVotes[c.id] || 0;
   const isTC = c.type === 'Trading Card';
-  const badgeText = isTC ? (c.cardSubtype==='Parallel'?(c.parallel||'Parallel'):c.cardSubtype==='Insert'?(c.insert||'Insert'):'') : (c.rarity||'');
+  const badgeText = isTC ? (c.cardSubtype==='Parallel'?(c.parallel||'Parallel'):c.cardSubtype==='Insert'?(c.insert||'Insert'):c.cardSubtype==='Base'?'Base':'') : (c.rarity||'');
   const badgeClass = isTC ? 'badge-parallel' : `rarity-${(c.rarity||'common').toLowerCase()}`;
   const badgeHTML = badgeText ? `<span class="card-rarity-badge ${badgeClass}">${escHtml(badgeText)}</span>` : '';
   const starsHtml = [1,2,3,4,5].map(i =>
@@ -3798,7 +3880,10 @@ function cardHTML(c) {
       <div class="card-meta">
         ${c.manufacturer?`<div class="card-meta-row"><span class="meta-label">Manufacturer</span><span class="meta-value">${escHtml(c.manufacturer)}</span></div>`:''}
         ${c.set?`<div class="card-meta-row"><span class="meta-label">Set</span><span class="meta-value">${escHtml(c.set)}</span></div>`:''}
-        ${c.parallel?`<div class="card-meta-row"><span class="meta-label">Parallel</span><span class="meta-value">${escHtml(c.parallel)}</span></div>`:''}
+        ${isTC && c.cardSubtype==='Base'?`<div class="card-meta-row"><span class="meta-label">Type</span><span class="meta-value">Base</span></div>`:''}
+        ${isTC && c.cardSubtype==='Parallel' && c.parallel?`<div class="card-meta-row"><span class="meta-label">Parallel</span><span class="meta-value">${escHtml(c.parallel)}</span></div>`:''}
+        ${isTC && c.cardSubtype==='Insert' && c.insert?`<div class="card-meta-row"><span class="meta-label">Insert</span><span class="meta-value">${escHtml(c.insert)}</span></div>`:''}
+        ${!isTC && c.rarity?`<div class="card-meta-row"><span class="meta-label">Rarity</span><span class="meta-value">${escHtml(c.rarity)}</span></div>`:''}
         ${c.number?`<div class="card-meta-row"><span class="meta-label">Card #</span><span class="meta-value">#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}</span></div>`:''}
       </div>
       <div class="star-rating"><div class="stars">${starsHtml}</div>
@@ -3932,7 +4017,15 @@ async function openModal(id) {
   const imgEl = document.getElementById('modal-img');
   if (c.image) { imgEl.src=c.image; imgEl.className=c.rotate?'img-rotated':''; imgEl.style.display='block'; document.getElementById('modal-img-side').style.display='block'; }
   else { document.getElementById('modal-img-side').style.display='none'; }
-  const fields = [['Manufacturer',c.manufacturer],['Set',c.set],['Rarity',c.rarity],['Parallel',c.parallel],['Insert',c.insert]].filter(([,v])=>v);
+  const isTC = c.type === 'Trading Card';
+  const fields = [
+    ['Manufacturer', c.manufacturer],
+    ['Set', c.set],
+    ['Rarity', c.rarity],
+    ['Type', isTC && c.cardSubtype === 'Base' ? 'Base' : null],
+    ['Parallel', isTC && c.cardSubtype === 'Parallel' ? c.parallel : null],
+    ['Insert', isTC && c.cardSubtype === 'Insert' ? c.insert : null],
+  ].filter(([,v]) => v);
   document.getElementById('modal-meta-grid').innerHTML = fields.map(([l,v])=>`<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value">${escHtml(v)}</div></div>`).join('');
   const mStars = document.getElementById('modal-stars');
   const voted = hasVoted(id); const myStars = myVotes[id]||0;
@@ -4104,6 +4197,59 @@ function saveMinRatings(){const val=parseInt(document.getElementById('admin-minr
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;localStorage.setItem('wc_popularlimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
 function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
+
+async function uploadCardImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const status = document.getElementById('img-upload-status');
+  const btnText = document.getElementById('img-upload-btn-text');
+
+  // Validate file type and size (max 5MB)
+  if (!file.type.startsWith('image/')) { status.textContent = 'Please select an image file.'; status.className = 'error'; return; }
+  if (file.size > 5 * 1024 * 1024) { status.textContent = 'Image must be under 5MB.'; status.className = 'error'; return; }
+
+  status.textContent = 'Uploading…';
+  status.className = 'loading';
+  btnText.textContent = '⏳ Uploading…';
+
+  // Generate unique filename
+  const ext = file.name.split('.').pop().toLowerCase();
+  const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+
+  const { data, error } = await sb.storage.from('card-images').upload(filename, file, {
+    cacheControl: '3600',
+    upsert: false,
+    contentType: file.type
+  });
+
+  if (error) {
+    status.textContent = 'Upload failed — try again.';
+    status.className = 'error';
+    btnText.textContent = '📁 Upload Photo';
+    console.error('Upload error:', error);
+    return;
+  }
+
+  // Get public URL
+  const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
+  const publicUrl = urlData.publicUrl;
+
+  // Fill in the URL field and preview
+  document.getElementById('f-image').value = publicUrl;
+  const wrap = document.getElementById('img-preview-wrap');
+  const img = document.getElementById('img-preview');
+  img.src = publicUrl;
+  wrap.style.display = 'block';
+
+  status.textContent = '✓ Uploaded!';
+  status.className = 'success';
+  btnText.textContent = '📁 Upload Photo';
+
+  // Reset file input
+  input.value = '';
+  setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
+}
 
 // ── ADMIN TYPE SWITCHING ──
 function adminForSaleChanged(){const checked=document.getElementById('f-forsale').checked;document.getElementById('f-price-wrap').style.display=checked?'block':'none';}
