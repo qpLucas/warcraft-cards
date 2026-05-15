@@ -1045,6 +1045,31 @@
     transition: all 0.2s;
     font-family: 'Cinzel', serif;
   }
+  #modal-back-btn {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg-panel);
+    border: none;
+    border-bottom: 1px solid var(--border-gold);
+    padding: 12px 16px;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    flex-shrink: 0;
+  }
+  #modal-back-btn:hover { color: var(--gold); }
+  #modal-back-btn::before { content: '←'; font-size: 14px; }
+
   #modal-close:hover { color: var(--gold); border-color: var(--gold); }
 
   #modal-inner {
@@ -2875,14 +2900,16 @@
     /* ── MODAL ── */
     #modal-overlay { padding: 0; align-items: flex-end; }
     #modal {
-      max-height: 96vh;
-      height: 96vh;
-      border-radius: 12px 12px 0 0;
+      max-height: 92vh;
+      height: 92vh;
+      border-radius: 16px 16px 0 0;
       margin: 0;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
+    #modal-close { display: none; }
+    #modal-back-btn { display: flex; }
     #modal-inner {
       flex-direction: column;
       overflow-y: auto;
@@ -2899,17 +2926,17 @@
     }
     #modal-img-side img {
       min-height: unset;
-      max-height: 38vw;
-      height: 38vw;
+      max-height: 50vw;
+      height: 50vw;
       width: 100%;
       object-fit: contain;
       background: #0c0904;
-      border-radius: 12px 12px 0 0;
+      border-radius: 0;
     }
     #modal-info-side {
       max-height: none;
       overflow-y: visible;
-      padding: 16px 16px 40px;
+      padding: 16px 16px 60px;
       gap: 12px;
     }
     #modal-card-name { font-size: 16px; }
@@ -3145,6 +3172,7 @@
 <!-- CARD MODAL -->
 <div id="modal-overlay" onclick="closeModalOutside(event)">
   <div id="modal">
+    <button id="modal-back-btn" onclick="closeModal()">Back to Collection</button>
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side" onclick="openLightbox()">
