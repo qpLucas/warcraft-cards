@@ -1098,7 +1098,7 @@
     flex-direction: column;
     gap: 16px;
     overflow-y: auto;
-    max-height: 90vh;
+    min-height: 0;
   }
   #modal-info-side::-webkit-scrollbar { width: 4px; }
   #modal-info-side::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
@@ -2873,35 +2873,46 @@
     .meta-label, .meta-value { font-size: 10px; }
 
     /* ── MODAL ── */
+    #modal-overlay { padding: 0; align-items: flex-end; }
     #modal {
-      max-height: 95vh;
-      border-radius: 6px;
+      max-height: 96vh;
+      height: 96vh;
+      border-radius: 12px 12px 0 0;
       margin: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     #modal-inner {
       flex-direction: column;
       overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
     }
     #modal-img-side {
       width: 100%;
       position: relative;
       align-self: auto;
       cursor: zoom-in;
+      flex-shrink: 0;
     }
     #modal-img-side img {
       min-height: unset;
-      max-height: 40vw;
-      height: 40vw;
+      max-height: 38vw;
+      height: 38vw;
+      width: 100%;
       object-fit: contain;
       background: #0c0904;
-      border-radius: 6px 6px 0 0;
+      border-radius: 12px 12px 0 0;
     }
     #modal-info-side {
       max-height: none;
-      padding: 18px 16px 20px;
+      overflow-y: visible;
+      padding: 16px 16px 40px;
       gap: 12px;
     }
-    #modal-card-name { font-size: 17px; }
+    #modal-card-name { font-size: 16px; }
     .modal-meta-grid { grid-template-columns: 1fr 1fr; }
     .comment-form-row { grid-template-columns: 1fr; }
 
