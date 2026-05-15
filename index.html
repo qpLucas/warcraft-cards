@@ -1003,14 +1003,12 @@
     display: none;
     position: fixed;
     inset: 0;
-    top: 68px;
     background: rgba(0,0,0,0.92);
     z-index: 1000;
     backdrop-filter: blur(6px);
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     padding: 20px;
-    overflow-y: auto;
   }
   #modal-overlay.open { display: flex; }
 
@@ -2906,6 +2904,7 @@
       padding: 80px 12px 48px;
       align-items: flex-start;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     #modal {
       max-height: none;
@@ -4110,8 +4109,8 @@ async function openModal(id) {
   generateCaptcha();
   document.getElementById('c-text').oninput = function() { document.getElementById('c-char-count').textContent = 500-this.value.length; };
   document.getElementById('modal-overlay').classList.add('open');
-  // On mobile, let the overlay scroll instead of locking body
-  if (window.innerWidth > 768) document.body.style.overflow='hidden';
+  // Lock body scroll on all devices
+  document.body.style.overflow='hidden';
 }
 
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; currentModalId=null; }
