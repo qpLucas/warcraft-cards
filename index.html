@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230A0804'/%3E%3Crect x='3' y='5' width='16' height='22' rx='2' fill='%23271A08' stroke='%23C9A84C' stroke-width='1' transform='rotate(-8 11 16)'/%3E%3Crect x='6' y='4' width='16' height='22' rx='2' fill='%231C1206' stroke='%23C9A84C' stroke-width='1' transform='rotate(-2 14 15)'/%3E%3Crect x='10' y='4' width='16' height='22' rx='2' fill='%23221608' stroke='%23C9A84C' stroke-width='1.5'/%3E%3Ctext x='18' y='20' font-family='Georgia,serif' font-size='13' font-weight='700' fill='%23C9A84C' text-anchor='middle'>W%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='5' width='16' height='22' rx='2' fill='%23271A08' stroke='%23C9A84C' stroke-width='1' transform='rotate(-8 11 16)'/%3E%3Crect x='6' y='4' width='16' height='22' rx='2' fill='%231C1206' stroke='%23C9A84C' stroke-width='1' transform='rotate(-2 14 15)'/%3E%3Crect x='10' y='4' width='16' height='22' rx='2' fill='%23221608' stroke='%23C9A84C' stroke-width='1.5'/%3E%3Ctext x='18' y='20' font-family='Georgia,serif' font-size='13' font-weight='700' fill='%23C9A84C' text-anchor='middle'>W%3C/text%3E%3C/svg%3E">
 <title>Warcraft Cards — May my ancestors watch over my collection!</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
@@ -3006,7 +3006,7 @@
       <text x="23" y="28" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="rgba(201,168,76,0.85)" text-anchor="middle">W</text>
     </svg>
     <div id="topbar-title">
-      <span class="site-name">Warcraft Cards</span>
+      <span class="site-name">WarcraftCards.com</span>
       <span class="site-tagline">May my ancestors watch over my collection!</span>
     </div>
   </a>
@@ -3567,14 +3567,28 @@ let comments = {};
 let polls = [];
 let pollVotesAll = {};
 let myPollVotes = JSON.parse(localStorage.getItem('wc_mypollvotes') || '{}');
-let minRatingsForFav = parseInt(localStorage.getItem('wc_minratings') || '3', 10);
-let popularLimit = parseInt(localStorage.getItem('wc_popularlimit') || '100', 10);
+let minRatingsForFav = 1;
+let popularLimit = 100;
+
+async function loadSettings() {
+  const { data, error } = await sb.from('settings').select('*');
+  if (error) { console.error('Settings load error:', error); return; }
+  (data || []).forEach(row => {
+    if (row.key === 'minRatingsForFav') minRatingsForFav = parseInt(row.value, 10);
+    if (row.key === 'popularLimit') popularLimit = parseInt(row.value, 10);
+  });
+}
+
+async function saveSetting(key, value) {
+  const { error } = await sb.from('settings').update({ value: String(value) }).eq('key', key);
+  if (error) console.error('Settings save error:', error);
+}
 
 // ── INIT — load everything from Supabase ──
 async function init() {
   showLoading(true);
   try {
-    await Promise.all([loadCards(), loadRatings(), loadPolls(), loadPollVotes()]);
+    await Promise.all([loadCards(), loadRatings(), loadPolls(), loadPollVotes(), loadSettings()]);
     renderGallery();
     renderLeaderboard();
     renderForSaleSection();
@@ -4195,8 +4209,8 @@ async function verifyAdminPassword(){const input=document.getElementById('admin-
 function openAdmin(){renderAdminList();populateAdminDataLists();document.getElementById('admin-minratings').value=minRatingsForFav;document.getElementById('admin-popularlimit').value=popularLimit;document.getElementById('admin-overlay').classList.add('open');document.body.style.overflow='hidden';}
 function closeAdmin(){document.getElementById('admin-overlay').classList.remove('open');document.body.style.overflow='';cancelEdit();}
 
-function saveMinRatings(){const val=parseInt(document.getElementById('admin-minratings').value,10);if(!isNaN(val)&&val>=1){minRatingsForFav=val;localStorage.setItem('wc_minratings',val);renderLeaderboard();toast(`Fan Favourites now requires ${val} rating${val!==1?'s':''}.`);}}
-function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;localStorage.setItem('wc_popularlimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
+function saveMinRatings(){const val=parseInt(document.getElementById('admin-minratings').value,10);if(!isNaN(val)&&val>=1){minRatingsForFav=val;saveSetting('minRatingsForFav',val);renderLeaderboard();toast(`Fan Favourites now requires ${val} rating${val!==1?'s':''}.`);}}
+function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
 function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
 
