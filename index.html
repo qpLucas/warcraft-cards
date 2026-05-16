@@ -1500,6 +1500,105 @@
     flex: 1;
   }
 
+  /* ── COMMENTS ADMIN TAB ── */
+  #admin-comments-body {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+  }
+
+  #admin-comments-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #admin-comments-search {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-cream);
+    background: rgba(201,168,76,0.05);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 8px 12px;
+    flex: 1;
+    transition: border-color 0.2s;
+  }
+  #admin-comments-search:focus { outline: none; border-color: var(--gold); }
+  #admin-comments-search::placeholder { color: var(--text-dim); }
+
+  #admin-comments-count {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  #admin-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .admin-comment-row {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .admin-comment-row:hover { border-color: rgba(201,168,76,0.5); }
+
+  .admin-comment-info { flex: 1; min-width: 0; }
+
+  .admin-comment-card {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--gold);
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-comment-meta {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+  }
+
+  .admin-comment-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .admin-comment-del-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid #4a1515;
+    background: transparent;
+    color: #7a2222;
+    transition: all 0.18s;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .admin-comment-del-btn:hover { color: #e05555; border-color: #8b1a1a; }
+
   /* ── ADMIN PANEL ── */
   #admin-overlay {
     display: none;
@@ -3418,6 +3517,7 @@
         <div id="admin-tabs">
           <button class="admin-tab-btn active" id="atab-cards" onclick="switchAdminTab('cards')">Cards</button>
           <button class="admin-tab-btn" id="atab-polls" onclick="switchAdminTab('polls')">Polls</button>
+          <button class="admin-tab-btn" id="atab-comments" onclick="switchAdminTab('comments')">Comments</button>
         </div>
       </div>
       <div id="admin-header-right">
@@ -3626,6 +3726,17 @@
     </div>
   </div>
 
+  <!-- COMMENTS TAB -->
+  <div id="admin-tab-comments" style="display:none">
+    <div id="admin-comments-body">
+      <div id="admin-comments-filters">
+        <input type="text" id="admin-comments-search" placeholder="Search by card name or nickname…" oninput="renderAdminComments()">
+        <span id="admin-comments-count"></span>
+      </div>
+      <div id="admin-comments-list"></div>
+    </div>
+  </div>
+
   </div><!-- end admin-panel -->
 </div><!-- end admin-overlay -->
 
@@ -3830,11 +3941,58 @@ async function votePoll(pollId, index) {
 
 // ── ADMIN POLL MANAGEMENT ──
 function switchAdminTab(tab) {
-  document.getElementById('admin-tab-cards').style.display = tab === 'cards' ? '' : 'none';
-  document.getElementById('admin-tab-polls').style.display = tab === 'polls' ? '' : 'none';
-  document.getElementById('atab-cards').classList.toggle('active', tab === 'cards');
-  document.getElementById('atab-polls').classList.toggle('active', tab === 'polls');
-  if (tab === 'polls') renderAdminPollList();
+  document.getElementById('admin-tab-cards').style.display    = tab === 'cards'    ? '' : 'none';
+  document.getElementById('admin-tab-polls').style.display    = tab === 'polls'    ? '' : 'none';
+  document.getElementById('admin-tab-comments').style.display = tab === 'comments' ? '' : 'none';
+  document.getElementById('atab-cards').classList.toggle('active',    tab === 'cards');
+  document.getElementById('atab-polls').classList.toggle('active',    tab === 'polls');
+  document.getElementById('atab-comments').classList.toggle('active', tab === 'comments');
+  if (tab === 'polls')    renderAdminPollList();
+  if (tab === 'comments') renderAdminComments();
+}
+
+// ── ADMIN COMMENTS ──
+let allAdminComments = [];
+
+async function loadAllComments() {
+  const { data, error } = await sb.from('comments').select('*, cards(name)').order('created_at', { ascending: false });
+  if (error) { console.error(error); return; }
+  allAdminComments = data || [];
+}
+
+async function renderAdminComments() {
+  const search = (document.getElementById('admin-comments-search')?.value || '').toLowerCase();
+  if (allAdminComments.length === 0) await loadAllComments();
+  const filtered = allAdminComments.filter(c => {
+    if (!search) return true;
+    const cardName = (c.cards?.name || '').toLowerCase();
+    return cardName.includes(search) || c.nickname.toLowerCase().includes(search) || c.text.toLowerCase().includes(search);
+  });
+  const list = document.getElementById('admin-comments-list');
+  const count = document.getElementById('admin-comments-count');
+  count.textContent = `${filtered.length} comment${filtered.length !== 1 ? 's' : ''}`;
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-dim);font-size:13px;font-family:Crimson Pro,serif;padding:12px 0">No comments found.</p>';
+    return;
+  }
+  list.innerHTML = filtered.map(c => `
+    <div class="admin-comment-row">
+      <div class="admin-comment-info">
+        <div class="admin-comment-card">${escHtml(c.cards?.name || c.card_id)}</div>
+        <div class="admin-comment-meta">${escHtml(c.nickname)} · ${new Date(c.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</div>
+        <div class="admin-comment-text">${escHtml(c.text)}</div>
+      </div>
+      <button class="admin-comment-del-btn" onclick="deleteComment('${c.id}')">Del</button>
+    </div>`).join('');
+}
+
+async function deleteComment(id) {
+  if (!confirm('Delete this comment?')) return;
+  const { error } = await sb.from('comments').delete().eq('id', id);
+  if (error) { toast('Error deleting comment.'); return; }
+  allAdminComments = allAdminComments.filter(c => c.id !== id);
+  renderAdminComments();
+  toast('Comment deleted.');
 }
 
 async function savePoll() {
