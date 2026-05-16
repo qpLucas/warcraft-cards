@@ -273,7 +273,7 @@
     font-family: 'Crimson Pro', serif;
     font-size: 15px;
     font-weight: 600;
-    color: var(--text-cream);
+    color: var(--text-muted);
     background: rgba(201,168,76,0.06);
     border: 1px solid var(--border-gold);
     padding: 5px 26px 5px 10px;
@@ -287,7 +287,7 @@
   }
   .filter-select option {
     background: #1C1509;
-    color: var(--text-cream);
+    color: var(--text-muted);
     font-size: 15px;
     font-weight: 600;
   }
@@ -297,7 +297,7 @@
   .filter-search {
     font-family: 'Crimson Pro', serif;
     font-size: 13px;
-    color: var(--text-cream);
+    color: var(--text-muted);
     background: rgba(201,168,76,0.06);
     border: 1px solid var(--border-gold);
     padding: 5px 10px;
@@ -3128,7 +3128,7 @@
       </svg>
     </a>
   </div>
-  <div id="footer-right">Since 2026 · All rights reserved</div>
+  <div id="footer-right"><span id="footer-year"></span> · All rights reserved</div>
 </footer>
 
 <!-- CARD MODAL -->
@@ -4340,6 +4340,9 @@ function updateTopbarCount(){document.getElementById('topbar-count-num').textCon
 function toggleMobileNav(){document.getElementById('topbar-nav').classList.toggle('open');}
 function closeMobileNav(){document.getElementById('topbar-nav').classList.remove('open');}
 document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('#topbar-nav a, #topbar-nav button').forEach(el=>{el.addEventListener('click',closeMobileNav);});});
+
+// ── FOOTER YEAR ──
+document.getElementById('footer-year').textContent = new Date().getFullYear();
 
 // ── TOAST ──
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
