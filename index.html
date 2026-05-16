@@ -2857,8 +2857,15 @@
     #filters {
       padding: 10px 14px;
       gap: 8px;
-      top: 0;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      z-index: 95;
       transition: none;
+      transform: none !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
     }
     .filter-select, .filter-search { font-size: 13px; }
     .filter-label { display: none; }
@@ -2866,6 +2873,7 @@
 
     /* ── GALLERY ── */
     #gallery, #leaderboard, #forsale-section { padding: 12px 14px; }
+    #gallery { padding-top: 58px; }
     #cards-grid, #forsale-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
