@@ -4019,7 +4019,7 @@ function getFiltered() {
       if (!`${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert}`.toLowerCase().includes(q)) return false;
     }
     return true;
-  }).sort((a,b) => (b.added||0)-(a.added||0));
+  }).sort(() => Math.random() - 0.5);
 }
 
 function applyFilters() {
