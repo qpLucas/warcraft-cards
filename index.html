@@ -2936,14 +2936,24 @@
     .meta-label, .meta-value { font-size: 10px; }
 
     /* ── MODAL ── */
+    #modal-overlay {
+      align-items: flex-start;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0;
+    }
     #modal {
-      max-height: 95vh;
-      border-radius: 6px;
+      max-height: none;
+      height: auto;
+      border-radius: 0;
       margin: 0;
+      overflow: visible;
+      min-height: 100vh;
     }
     #modal-inner {
       flex-direction: column;
-      overflow-y: auto;
+      overflow-y: visible;
+      overflow-x: hidden;
     }
     #modal-img-side {
       width: 100%;
@@ -2951,23 +2961,30 @@
       align-self: auto;
       cursor: zoom-in;
       background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
     }
     #modal-img-side img {
-      min-height: unset;
-      width: 100%;
+      width: auto;
       height: auto;
-      max-height: 55vw;
+      max-width: 100%;
+      max-height: 50vh;
       object-fit: contain;
       background: #000;
-      border-radius: 6px 6px 0 0;
+      border-radius: 4px;
+      min-height: unset;
       display: block;
     }
     #modal-info-side {
       max-height: none;
-      padding: 18px 16px 20px;
+      overflow-y: visible;
+      padding: 16px 14px 60px;
       gap: 12px;
     }
-    #modal-card-name { font-size: 17px; }
+    #modal-card-name { font-size: 16px; }
     .modal-meta-grid { grid-template-columns: 1fr 1fr; }
     .comment-form-row { grid-template-columns: 1fr; }
 
@@ -4139,7 +4156,8 @@ async function openModal(id) {
   generateCaptcha();
   document.getElementById('c-text').oninput = function() { document.getElementById('c-char-count').textContent = 500-this.value.length; };
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
+  if (window.innerWidth > 768) document.body.style.overflow='hidden';
+  else { document.body.style.overflow=''; window.scrollTo(0,0); }
 }
 
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; currentModalId=null; }
