@@ -335,6 +335,10 @@
     font-weight: 600;
   }
 
+  /* Mobile filter toggle - hidden on desktop */
+  #filter-mobile-toggle { display: none; }
+  #filter-content { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1; }
+
   /* ── CARD GRID ── */
   #gallery {
     padding: 32px;
@@ -2855,14 +2859,45 @@
 
     /* ── FILTERS ── */
     #filters {
-      padding: 10px 14px;
-      gap: 8px;
+      padding: 0;
+      gap: 0;
       position: static;
       transition: none;
       transform: none !important;
       opacity: 1 !important;
+      flex-direction: column;
+      align-items: stretch;
     }
-    .filter-select, .filter-search { font-size: 13px; }
+    #filter-mobile-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 14px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    #filter-mobile-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    #filter-mobile-arrow.open { transform: rotate(90deg); }
+    #filter-content {
+      display: none;
+      flex-direction: column;
+      padding: 10px 14px;
+      gap: 8px;
+      border-top: 1px solid var(--border-gold);
+    }
+    #filter-content.open { display: flex; }
+    .filter-select, .filter-search { font-size: 13px; width: 100%; }
     .filter-label { display: none; }
     .filter-count { font-size: 11px; }
 
@@ -3040,6 +3075,11 @@
 
 <!-- FILTERS -->
 <div id="filters">
+  <button id="filter-mobile-toggle" onclick="toggleMobileFilters()">
+    <span>Filters</span>
+    <span id="filter-mobile-arrow">›</span>
+  </button>
+  <div id="filter-content">
   <span class="filter-label">Filter</span>
   <select class="filter-select" id="filter-type" onchange="applyFilters()">
     <option value="">All Types</option>
@@ -3079,6 +3119,7 @@
   <input class="filter-search" type="text" id="filter-search" placeholder="Search cards…" oninput="applyFilters()">
   <span class="filter-count" id="filter-count"><span id="visible-count">0</span> cards</span>
   <button class="filter-clear" onclick="clearFilters()">Clear All</button>
+  </div>
 </div>
 
 <!-- GALLERY -->
@@ -4338,6 +4379,14 @@ function updateTopbarCount(){document.getElementById('topbar-count-num').textCon
 
 // ── FILTER HIDE ON SCROLL ──
 (function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{if(window.innerWidth<=768) return;const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
+
+// ── MOBILE FILTER TOGGLE ──
+function toggleMobileFilters() {
+  const content = document.getElementById('filter-content');
+  const arrow = document.getElementById('filter-mobile-arrow');
+  content.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
 
 // ── MOBILE NAV ──
 function toggleMobileNav(){document.getElementById('topbar-nav').classList.toggle('open');}
