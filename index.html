@@ -2802,6 +2802,11 @@
     #cards-grid, #forsale-grid { grid-template-columns: repeat(4, 1fr); }
   }
 
+  /* Phone landscape — 6 columns like desktop */
+  @media (max-width: 768px) and (orientation: landscape) {
+    #cards-grid, #forsale-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  }
+
   @media (max-width: 768px) {
     /* ── TOPBAR ── */
     #topbar {
