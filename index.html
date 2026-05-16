@@ -337,7 +337,6 @@
 
   /* Mobile filter toggle - hidden on desktop */
   #filter-mobile-toggle { display: none; }
-  #filter-mobile-count { display: none; }
   #filter-content { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1; }
 
   /* ── CARD GRID ── */
@@ -2896,23 +2895,6 @@
       border: none;
       cursor: pointer;
     }
-    #filter-mobile-count {
-      display: block;
-      font-family: 'Crimson Pro', serif;
-      font-size: 13px;
-      font-weight: 300;
-      font-style: italic;
-      letter-spacing: 0.04em;
-      text-transform: none;
-      color: var(--text-muted);
-      flex: 1;
-      text-align: center;
-    }
-    #filter-mobile-num {
-      font-weight: 700;
-      color: var(--gold-light);
-      font-style: normal;
-    }
     #filter-mobile-arrow {
       font-size: 16px;
       transition: transform 0.2s;
@@ -2936,38 +2918,53 @@
     .meta-label, .meta-value { font-size: 10px; }
 
     /* ── MODAL ── */
+    #modal-overlay {
+      padding: 12px;
+      align-items: center;
+    }
     #modal {
-      max-height: 95vh;
-      border-radius: 6px;
-      margin: 0;
+      max-height: 92vh;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     #modal-inner {
       flex-direction: column;
       overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
     }
     #modal-img-side {
       width: 100%;
       position: relative;
       align-self: auto;
       cursor: zoom-in;
+      flex-shrink: 0;
       background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
     }
     #modal-img-side img {
-      min-height: unset;
-      width: 100%;
-      height: auto;
-      max-height: 55vw;
+      width: auto;
+      height: 100%;
+      max-width: 100%;
       object-fit: contain;
       background: #000;
-      border-radius: 6px 6px 0 0;
-      display: block;
+      border-radius: 0;
+      min-height: unset;
     }
     #modal-info-side {
       max-height: none;
-      padding: 18px 16px 20px;
+      overflow-y: visible;
+      padding: 16px 14px 32px;
       gap: 12px;
     }
-    #modal-card-name { font-size: 17px; }
+    #modal-card-name { font-size: 16px; }
     .modal-meta-grid { grid-template-columns: 1fr 1fr; }
     .comment-form-row { grid-template-columns: 1fr; }
 
@@ -3104,7 +3101,6 @@
 <div id="filters">
   <button id="filter-mobile-toggle" onclick="toggleMobileFilters()">
     <span>Filters</span>
-    <span id="filter-mobile-count"><strong id="filter-mobile-num">0</strong> cards and counting…</span>
     <span id="filter-mobile-arrow">›</span>
   </button>
   <div id="filter-content">
@@ -4403,12 +4399,7 @@ function adminListSubtypeChanged(){const sub=document.getElementById('admin-filt
 
 function renderAdminList(){const list=document.getElementById('admin-cards-list');const typeFilter=document.getElementById('admin-filter-type')?.value||'';const setFilter=document.getElementById('admin-filter-set')?.value||'';const subtypeFilter=document.getElementById('admin-filter-subtype')?.value||'';const parallelFilter=document.getElementById('admin-filter-parallel')?.value||'';const insertFilter=document.getElementById('admin-filter-insert')?.value||'';const rarityFilter=document.getElementById('admin-filter-rarity')?.value||'';const foilFilter=document.getElementById('admin-filter-foil')?.value||'';const searchFilter=(document.getElementById('admin-filter-search')?.value||'').toLowerCase();const setEl=document.getElementById('admin-filter-set');if(setEl){const currentSet=setEl.value;const sets=[...new Set(cards.filter(c=>!typeFilter||c.type===typeFilter).map(c=>c.set).filter(Boolean))].sort();setEl.innerHTML='<option value="">All Sets</option>'+sets.map(s=>`<option value="${escHtml(s)}"${s===currentSet?' selected':''}>${escHtml(s)}</option>`).join('');if(currentSet&&!sets.includes(currentSet))setEl.value='';}const filtered=cards.filter(c=>{if(typeFilter&&c.type!==typeFilter)return false;if(setFilter&&c.set!==setFilter)return false;if(subtypeFilter&&c.cardSubtype!==subtypeFilter)return false;if(parallelFilter&&c.parallel!==parallelFilter)return false;if(insertFilter&&c.insert!==insertFilter)return false;if(rarityFilter&&c.rarity!==rarityFilter)return false;if(foilFilter&&c.foil!==foilFilter)return false;if(searchFilter){const text=`${c.name} ${c.set} ${c.rarity} ${c.parallel} ${c.insert} ${c.type}`.toLowerCase();if(!text.includes(searchFilter))return false;}return true;});document.getElementById('admin-card-count').textContent=`— ${filtered.length} / ${cards.length} card${cards.length!==1?'s':''}`;if(filtered.length===0){list.innerHTML='<p style="color:var(--text-dim);font-size:13px;padding:12px 0;font-family:Crimson Pro,serif">No cards match.</p>';return;}list.innerHTML=filtered.map(c=>`<div class="admin-card-row">${c.image?`<img class="admin-card-row-img" src="${escHtml(c.image)}" alt="" onerror="this.style.display='none'">`:''}<div class="admin-card-row-info"><div class="admin-row-name">${escHtml(c.name)}</div><div class="admin-row-meta">${[c.set,c.rarity,c.parallel,c.type].filter(Boolean).join(' · ')}</div></div><div class="admin-card-actions"><button class="admin-edit-btn" onclick="editCard('${c.id}')">Edit</button><button class="admin-del-btn" onclick="deleteCard('${c.id}')">Del</button></div></div>`).join('');}
 
-function updateTopbarCount(){
-  const n = cards.length;
-  document.getElementById('topbar-count-num').textContent = n;
-  const mobileNum = document.getElementById('filter-mobile-num');
-  if (mobileNum) mobileNum.textContent = n;
-}
+function updateTopbarCount(){document.getElementById('topbar-count-num').textContent=cards.length;}
 
 // ── FILTER HIDE ON SCROLL ──
 (function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{if(window.innerWidth<=768) return;const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
