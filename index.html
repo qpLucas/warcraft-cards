@@ -2859,12 +2859,10 @@
     #filters {
       padding: 10px 14px;
       gap: 8px;
-      position: sticky;
-      top: 60px;
+      top: 0;
       transition: none;
       transform: none !important;
       opacity: 1 !important;
-      pointer-events: auto !important;
     }
     .filter-select, .filter-search { font-size: 13px; }
     .filter-label { display: none; }
@@ -2872,7 +2870,6 @@
 
     /* ── GALLERY ── */
     #gallery, #leaderboard, #forsale-section { padding: 12px 14px; }
-    #gallery { padding-top: 12px; }
     #cards-grid, #forsale-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
@@ -4342,7 +4339,7 @@ function renderAdminList(){const list=document.getElementById('admin-cards-list'
 function updateTopbarCount(){document.getElementById('topbar-count-num').textContent=cards.length;}
 
 // ── FILTER HIDE ON SCROLL ──
-(function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
+(function(){let lastY=0;const filterEl=document.getElementById('filters');window.addEventListener('scroll',()=>{if(window.innerWidth<=768) return;const currentY=window.scrollY;if(currentY>lastY&&currentY>80){filterEl.style.transform='translateY(-100%)';filterEl.style.opacity='0';filterEl.style.pointerEvents='none';}else{filterEl.style.transform='translateY(0)';filterEl.style.opacity='1';filterEl.style.pointerEvents='';}lastY=currentY;},{passive:true});})();
 
 // ── MOBILE NAV ──
 function toggleMobileNav(){document.getElementById('topbar-nav').classList.toggle('open');}
