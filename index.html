@@ -1657,7 +1657,23 @@
     flex: 1;
   }
 
-  /* ── COMMENTS ADMIN TAB ── */
+  #img-url-add-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  #img-url-add-btn:hover { color: var(--gold-light); border-color: var(--gold); background: rgba(201,168,76,0.08); }
   #admin-comments-body {
     padding: 24px 28px;
     display: flex;
@@ -3743,6 +3759,7 @@
             <div id="img-url-row">
               <span class="img-url-or">or paste URL</span>
               <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+              <button type="button" id="img-url-add-btn" onclick="addMediaFromUrl()" title="Add this URL as extra media">+ Add</button>
             </div>
           </div>
           <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
@@ -4781,6 +4798,23 @@ async function uploadCardMedia(input) {
   btnText.textContent = '📁 Upload Photo / Video';
   input.value = '';
   setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
+}
+
+function addMediaFromUrl() {
+  const url = document.getElementById('f-image').value.trim();
+  if (!url) { toast('Please enter a URL first.'); return; }
+  // Detect if video by extension
+  const videoExts = ['mp4','webm','mov','avi','mkv'];
+  const ext = url.split('.').pop().toLowerCase().split('?')[0];
+  const mediaType = videoExts.includes(ext) ? 'video' : 'image';
+  // First item becomes main image preview
+  if (_editingCardMedia.length === 0) {
+    const wrap = document.getElementById('img-preview-wrap');
+    if (mediaType === 'image') { document.getElementById('img-preview').src = url; wrap.style.display = 'block'; }
+  }
+  _editingCardMedia.push({ url, type: mediaType });
+  renderAdminMediaGallery();
+  toast('Media added!');
 }
 
 function renderAdminMediaGallery() {
