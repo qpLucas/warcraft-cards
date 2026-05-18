@@ -3559,7 +3559,7 @@
         </svg>
         Support via PayPal
       </a>
-      <img id="support-gif" src="https://oxfwumystnukawkhplbh.supabase.co/storage/v1/object/public/card-images/thankyou.gif" alt="Thank you!">
+      <img id="support-gif" src="https://oxfwumystnukawkhplbh.supabase.co/storage/v1/object/public/card-images/tipjar-thankyou-arthas.gif" alt="Thank you!">
     </div>
   </div>
 </div>
@@ -4587,7 +4587,11 @@ function submitDonate(){if(document.getElementById('d-trap').value)return;const 
 // ── SUPPORT ──
 function openSupport(){
   const gif = document.getElementById('support-gif');
-  if (gif && gif.dataset.src && !gif.src) gif.src = gif.dataset.src;
+  if (gif) {
+    const src = gif.src;
+    gif.src = '';
+    setTimeout(() => gif.src = src, 50);
+  }
   document.getElementById('support-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
