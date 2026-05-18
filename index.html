@@ -1674,6 +1674,14 @@
     flex-shrink: 0;
   }
   #img-url-add-btn:hover { color: var(--gold-light); border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+  #img-extra-url-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  #img-extra-url-row input { flex: 1; }
   #admin-comments-body {
     padding: 24px 28px;
     display: flex;
@@ -3757,9 +3765,13 @@
               <span id="img-upload-status"></span>
             </div>
             <div id="img-url-row">
-              <span class="img-url-or">or paste URL</span>
+              <span class="img-url-or">Main URL</span>
               <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
-              <button type="button" id="img-url-add-btn" onclick="addMediaFromUrl()" title="Add this URL as extra media">+ Add</button>
+            </div>
+            <div id="img-extra-url-row">
+              <span class="img-url-or">Extra media</span>
+              <input type="url" id="f-extra-url" placeholder="https://... (photo or video)">
+              <button type="button" id="img-url-add-btn" onclick="addMediaFromUrl()">+ Add</button>
             </div>
           </div>
           <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
@@ -4801,19 +4813,15 @@ async function uploadCardMedia(input) {
 }
 
 function addMediaFromUrl() {
-  const url = document.getElementById('f-image').value.trim();
-  if (!url) { toast('Please enter a URL first.'); return; }
-  // Detect if video by extension
+  const input = document.getElementById('f-extra-url');
+  const url = input.value.trim();
+  if (!url) { toast('Please enter an extra media URL first.'); return; }
   const videoExts = ['mp4','webm','mov','avi','mkv'];
   const ext = url.split('.').pop().toLowerCase().split('?')[0];
   const mediaType = videoExts.includes(ext) ? 'video' : 'image';
-  // First item becomes main image preview
-  if (_editingCardMedia.length === 0) {
-    const wrap = document.getElementById('img-preview-wrap');
-    if (mediaType === 'image') { document.getElementById('img-preview').src = url; wrap.style.display = 'block'; }
-  }
   _editingCardMedia.push({ url, type: mediaType });
   renderAdminMediaGallery();
+  input.value = '';
   toast('Media added!');
 }
 
@@ -4890,7 +4898,7 @@ async function saveCard() {
   clearAdminForm(); renderAdminList(); renderGallery(); renderLeaderboard(); renderForSaleSection();
 }
 
-function clearAdminForm(){_editingCardMedia=[];document.getElementById('admin-media-gallery').innerHTML='';['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-type').value='Trading Card';document.getElementById('f-rarity').value='Common';document.getElementById('f-foil').value='Non-Foil';document.getElementById('f-card-subtype').value='Base';document.getElementById('f-forsale').checked=false;document.getElementById('f-price-wrap').style.display='none';document.getElementById('img-preview-wrap').style.display='none';document.getElementById('admin-tc-fields').style.display='block';document.getElementById('admin-tcg-fields').style.display='none';document.getElementById('admin-parallel-field').style.display='none';document.getElementById('admin-insert-field').style.display='none';populateAdminDataLists();cancelEdit();}
+function clearAdminForm(){_editingCardMedia=[];document.getElementById('admin-media-gallery').innerHTML='';['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-type').value='Trading Card';document.getElementById('f-rarity').value='Common';document.getElementById('f-foil').value='Non-Foil';document.getElementById('f-card-subtype').value='Base';document.getElementById('f-forsale').checked=false;document.getElementById('f-price-wrap').style.display='none';document.getElementById('img-preview-wrap').style.display='none';document.getElementById('admin-tc-fields').style.display='block';document.getElementById('admin-tcg-fields').style.display='none';document.getElementById('admin-parallel-field').style.display='none';document.getElementById('admin-insert-field').style.display='none';populateAdminDataLists();cancelEdit();}
 
 function populateAdminDataLists() {
   const sets = [...new Set(cards.map(c => c.set).filter(Boolean))].sort();
