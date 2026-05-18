@@ -1226,28 +1226,40 @@
     margin-bottom: 10px;
   }
 
+  #modal-rating-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #modal-rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
   .modal-stars {
     display: flex;
-    gap: 4px;
-    margin-bottom: 8px;
+    gap: 6px;
   }
 
   .modal-star {
-    font-size: 24px;
+    font-size: 32px;
     color: var(--text-dim);
     cursor: pointer;
     transition: color 0.15s, transform 0.1s;
     user-select: none;
   }
   .modal-star.filled { color: var(--gold); }
-  .modal-star.hover { color: var(--gold-light); transform: scale(1.2); }
+  .modal-star.hover { color: var(--gold-light); transform: scale(1.15); }
 
   #modal-rating-text {
     font-family: 'Crimson Pro', serif;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
+    text-align: right;
   }
-  #modal-rating-text .avg { color: var(--gold); font-weight: 600; }
+  #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 16px; }
 
   /* ── ADMIN TABS ── */
   #admin-header-left {
@@ -3411,8 +3423,10 @@
         <div class="modal-divider"></div>
         <div id="modal-rating-section">
           <h4>Community Rating</h4>
-          <div class="modal-stars" id="modal-stars"></div>
-          <div id="modal-rating-text"></div>
+          <div id="modal-rating-row">
+            <div class="modal-stars" id="modal-stars"></div>
+            <div id="modal-rating-text"></div>
+          </div>
         </div>
         <div class="modal-divider"></div>
         <div id="modal-forsale-section" style="display:none">
