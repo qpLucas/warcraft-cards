@@ -1262,27 +1262,29 @@
   #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
 
   /* ── MODAL GALLERY THUMBNAILS ── */
-  #modal-img { width: 100%; cursor: zoom-in; }
+  #modal-img { width: 100%; cursor: zoom-in; display: block; }
   #modal-gallery-thumbs {
-    display: flex;
+    display: none;
+    flex-direction: row;
     gap: 6px;
     flex-wrap: wrap;
-    padding: 8px 12px;
-    background: rgba(0,0,0,0.3);
+    padding: 8px 10px;
+    background: rgba(0,0,0,0.4);
     border-top: 1px solid var(--border-gold);
   }
   .gallery-thumb {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     object-fit: cover;
     border-radius: 3px;
-    border: 2px solid transparent;
+    border: 2px solid rgba(201,168,76,0.2);
     cursor: pointer;
-    opacity: 0.65;
+    opacity: 0.6;
     transition: all 0.2s;
+    flex-shrink: 0;
   }
   .gallery-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
-  .gallery-thumb.active { border-color: var(--gold); opacity: 1; }
+  .gallery-thumb.active { border-color: var(--gold); opacity: 1; box-shadow: 0 0 6px rgba(201,168,76,0.4); }
 
   /* ── ADMIN TABS ── */
   #admin-header-left {
@@ -3229,15 +3231,12 @@
       width: 100%;
       position: relative;
       align-self: auto;
-      cursor: zoom-in;
       background: #000;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 16px;
-      box-sizing: border-box;
     }
-    #modal-img-side img {
+    #modal-img-side img#modal-img {
       width: auto;
       height: auto;
       max-width: 60%;
@@ -3247,7 +3246,17 @@
       border-radius: 4px;
       min-height: unset;
       display: block;
-      margin: 0 auto;
+      margin: 16px auto;
+      cursor: zoom-in;
+    }
+    #modal-gallery-thumbs {
+      width: 100%;
+      padding: 6px 10px;
+      gap: 5px;
+    }
+    .gallery-thumb {
+      width: 44px;
+      height: 44px;
     }
     #modal-info-side {
       max-height: none;
@@ -4542,10 +4551,15 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
-  // Render gallery thumbnails
-  const photos = Array.isArray(c.media) && c.media.length > 1
-    ? c.media.map(m => typeof m === 'string' ? m : m.url).filter(Boolean)
-    : [];
+  // Build photos array from media - handle both string and object formats
+  let photos = [];
+  if (Array.isArray(c.media) && c.media.length > 0) {
+    photos = c.media.map(m => typeof m === 'string' ? m : (m && m.url ? m.url : null)).filter(Boolean);
+  }
+  // Always include main image, dedupe
+  if (c.image && !photos.includes(c.image)) photos.unshift(c.image);
+  if (photos.length === 0 && c.image) photos = [c.image];
+
   const thumbsEl = document.getElementById('modal-gallery-thumbs');
   if (photos.length > 1) {
     thumbsEl.innerHTML = photos.map((url, i) =>
