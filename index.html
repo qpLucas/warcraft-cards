@@ -1121,17 +1121,24 @@
     flex-direction: column;
   }
 
+  #modal-img-main-wrap {
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+    border-radius: 7px 0 0 0;
+    cursor: zoom-in;
+    background: #000;
+    flex-shrink: 0;
+  }
+
   #modal-img-side img#modal-img {
     width: 100%;
-    object-fit: cover;
-    border-radius: 7px 0 0 0;
+    height: 100%;
+    object-fit: contain;
     display: block;
-    min-height: 320px;
-    max-height: calc(90vh - 80px);
     transition: filter 0.2s;
-    cursor: zoom-in;
   }
-  #modal-img-side:hover img#modal-img { filter: brightness(1.08); }
+  #modal-img-main-wrap:hover img#modal-img { filter: brightness(1.08); }
 
   #modal-img-zoom-hint {
     position: absolute;
@@ -1148,7 +1155,7 @@
     pointer-events: none;
     transition: opacity 0.2s;
   }
-  #modal-img-side:hover #modal-img-zoom-hint { color: var(--gold); }
+  #modal-img-main-wrap:hover #modal-img-zoom-hint { color: var(--gold); }
 
   #modal-info-side {
     flex: 1;
@@ -3531,7 +3538,9 @@
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side">
-        <img id="modal-img" src="" alt="" onclick="openLightbox()">
+        <div id="modal-img-main-wrap" onclick="openLightbox()">
+          <img id="modal-img" src="" alt="">
+        </div>
         <div id="modal-gallery-thumbs"></div>
       </div>
       <div id="modal-info-side">
