@@ -4265,28 +4265,68 @@ function getFiltered() {
 
 function applyFilters() {
   _visibleCount = 11;
-  currentFilters.type = document.getElementById('filter-type').value;
+  currentFilters.type   = document.getElementById('filter-type').value;
   currentFilters.search = document.getElementById('filter-search').value;
   updateSetFilter();
   currentFilters.set = document.getElementById('filter-set').value;
+
   const isTC  = currentFilters.type === 'Trading Card';
   const isTCG = currentFilters.type === 'Trading Card Game';
+  const setFilter = currentFilters.set;
+
+  // Base pool filtered by type + set
+  const pool = cards.filter(c =>
+    (!currentFilters.type || c.type === currentFilters.type) &&
+    (!setFilter || c.set === setFilter)
+  );
+
   document.querySelectorAll('.filter-tc').forEach(el => el.style.display = isTC ? '' : 'none');
   document.querySelectorAll('.filter-tcg').forEach(el => el.style.display = isTCG ? '' : 'none');
+
   if (isTC) {
-    const subtype = document.getElementById('filter-card-subtype').value;
+    // Only show subtypes that exist in pool
+    const availableSubtypes = new Set(pool.map(c => c.cardSubtype).filter(Boolean));
+    const subtypeSel = document.getElementById('filter-card-subtype');
+    const curSubtype = subtypeSel.value;
+    subtypeSel.innerHTML = '<option value="">Base / Parallel / Insert</option>' +
+      ['Base','Parallel','Insert'].filter(s => availableSubtypes.has(s))
+        .map(s => `<option value="${s}"${s===curSubtype?' selected':''}>${s}</option>`).join('');
+    if (curSubtype && !availableSubtypes.has(curSubtype)) subtypeSel.value = '';
+
+    const subtype = subtypeSel.value;
     currentFilters.cardSubtype = subtype;
-    const showParallel = subtype==='Parallel', showInsert = subtype==='Insert';
-    document.getElementById('filter-parallel-name').style.display = showParallel?'':'none';
-    document.getElementById('filter-insert-name').style.display   = showInsert?'':'none';
-    if(showParallel) updateDynamicFilter('filter-parallel-name',cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Parallel').map(c=>c.parallel),'All Parallels');
-    if(showInsert)   updateDynamicFilter('filter-insert-name',cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Insert').map(c=>c.insert),'All Inserts');
-    currentFilters.parallelName = showParallel?document.getElementById('filter-parallel-name').value:'';
-    currentFilters.insertName   = showInsert?document.getElementById('filter-insert-name').value:'';
-    currentFilters.rarity=''; currentFilters.foil='';
+    const showParallel = subtype === 'Parallel';
+    const showInsert   = subtype === 'Insert';
+
+    document.getElementById('filter-parallel-name').style.display = showParallel ? '' : 'none';
+    document.getElementById('filter-insert-name').style.display   = showInsert   ? '' : 'none';
+
+    if (showParallel) updateDynamicFilter('filter-parallel-name', pool.filter(c=>c.cardSubtype==='Parallel').map(c=>c.parallel), 'All Parallels');
+    if (showInsert)   updateDynamicFilter('filter-insert-name',   pool.filter(c=>c.cardSubtype==='Insert').map(c=>c.insert),     'All Inserts');
+
+    currentFilters.parallelName = showParallel ? document.getElementById('filter-parallel-name').value : '';
+    currentFilters.insertName   = showInsert   ? document.getElementById('filter-insert-name').value   : '';
+    currentFilters.rarity = ''; currentFilters.foil = '';
   } else if (isTCG) {
-    currentFilters.rarity = document.getElementById('filter-rarity').value;
-    currentFilters.foil   = document.getElementById('filter-foil').value;
+    // Only show rarities that exist in pool
+    const availableRarities = [...new Set(pool.map(c=>c.rarity).filter(Boolean))].sort();
+    const raritySel = document.getElementById('filter-rarity');
+    const curRarity = raritySel.value;
+    raritySel.innerHTML = '<option value="">All Rarities</option>' +
+      availableRarities.map(r => `<option value="${escHtml(r)}"${r===curRarity?' selected':''}>${escHtml(r)}</option>`).join('');
+    if (curRarity && !availableRarities.includes(curRarity)) raritySel.value = '';
+
+    // Only show foil options that exist in pool
+    const availableFoils = [...new Set(pool.map(c=>c.foil).filter(Boolean))];
+    const foilSel = document.getElementById('filter-foil');
+    const curFoil = foilSel.value;
+    foilSel.innerHTML = '<option value="">Foil / Non-Foil</option>' +
+      ['Foil','Non-Foil'].filter(f => availableFoils.includes(f))
+        .map(f => `<option value="${f}"${f===curFoil?' selected':''}>${f}</option>`).join('');
+    if (curFoil && !availableFoils.includes(curFoil)) foilSel.value = '';
+
+    currentFilters.rarity = raritySel.value;
+    currentFilters.foil   = foilSel.value;
     currentFilters.cardSubtype=''; currentFilters.parallelName=''; currentFilters.insertName='';
   } else {
     currentFilters.cardSubtype=''; currentFilters.parallelName=''; currentFilters.insertName='';
