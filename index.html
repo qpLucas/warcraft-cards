@@ -29,7 +29,7 @@
 <meta name="twitter:image" content="https://warcraftcards.com/og-image.jpg">
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='5' width='16' height='22' rx='2' fill='%23271A08' stroke='%23C9A84C' stroke-width='1' transform='rotate(-8 11 16)'/%3E%3Crect x='6' y='4' width='16' height='22' rx='2' fill='%231C1206' stroke='%23C9A84C' stroke-width='1' transform='rotate(-2 14 15)'/%3E%3Crect x='10' y='4' width='16' height='22' rx='2' fill='%23221608' stroke='%23C9A84C' stroke-width='1.5'/%3E%3Ctext x='18' y='20' font-family='Georgia,serif' font-size='13' font-weight='700' fill='%23C9A84C' text-anchor='middle'>W%3C/text%3E%3C/svg%3E">
-<title>WarcraftCards.com — Warcraft Card Collection | May my ancestors watch over my collection!</title>
+<title>WarcraftCards.com | May my ancestors watch over my collection!</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -4158,8 +4158,16 @@ function cardHTML(c) {
   const starsHtml = [1,2,3,4,5].map(i =>
     `<span class="star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
       ${!voted?`onmouseenter="hoverCardStar(this,${i})" onmouseleave="unhoverCardStar(this)" onclick="event.stopPropagation();submitRating('${c.id}',${i})"`:''} style="${voted?'cursor:default':'cursor:pointer'}">★</span>`).join('');
+  // Build descriptive alt text for SEO
+  const cardNum = c.number ? `#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}` : '';
+  const cardTypeInfo = isTC
+    ? (c.cardSubtype==='Parallel' && c.parallel ? c.parallel : c.cardSubtype==='Insert' && c.insert ? c.insert : 'Base')
+    : (c.rarity || '');
+  const altParts = [c.name, cardNum, c.set, cardTypeInfo].filter(Boolean);
+  const altText = altParts.join(' - ');
+
   const imgContent = c.image
-    ? `<img src="${escHtml(c.image)}" alt="${escHtml(c.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
+    ? `<img src="${escHtml(c.image)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
   const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
   return `<div class="card-item" onclick="openModal('${c.id}')">
@@ -4304,8 +4312,16 @@ async function openModal(id) {
   const cardNum = rawNum ? '#'+rawNum.replace(/\/.*$/,'').trim() : '';
   document.getElementById('modal-card-number').textContent = cardNum;
   const imgEl = document.getElementById('modal-img');
-  if (c.image) { imgEl.src=c.image; imgEl.className=c.rotate?'img-rotated':''; imgEl.style.display='block'; document.getElementById('modal-img-side').style.display='block'; }
-  else { document.getElementById('modal-img-side').style.display='none'; }
+  if (c.image) {
+    imgEl.src = c.image;
+    imgEl.className = c.rotate ? 'img-rotated' : '';
+    imgEl.style.display = 'block';
+    const isTC_alt = c.type === 'Trading Card';
+    const cardNum_alt = c.number ? `#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}` : '';
+    const typeInfo_alt = isTC_alt ? (c.cardSubtype==='Parallel'&&c.parallel?c.parallel:c.cardSubtype==='Insert'&&c.insert?c.insert:'Base') : (c.rarity||'');
+    imgEl.alt = [c.name, cardNum_alt, c.set, typeInfo_alt].filter(Boolean).join(' - ');
+    document.getElementById('modal-img-side').style.display='block';
+  } else { document.getElementById('modal-img-side').style.display='none'; }
   const isTC = c.type === 'Trading Card';
   const fields = [
     ['Manufacturer', c.manufacturer],
