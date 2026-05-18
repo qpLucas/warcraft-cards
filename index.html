@@ -451,11 +451,11 @@
     backdrop-filter: blur(4px);
   }
 
-  .rarity-common { background: rgba(120,120,120,0.8); color: #ddd; }
-  .rarity-uncommon { background: rgba(30,100,30,0.85); color: #8fe88f; }
-  .rarity-rare { background: rgba(20,50,140,0.85); color: #8ab4f8; }
-  .rarity-epic { background: rgba(100,20,140,0.85); color: #d9a8f8; }
-  .rarity-legendary { background: rgba(180,100,0,0.85); color: #ffd700; border: 1px solid rgba(255,215,0,0.4); }
+  .rarity-common, .rarity-uncommon, .rarity-rare, .rarity-epic, .rarity-legendary {
+    background: rgba(107,79,16,0.85);
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.4);
+  }
   .badge-parallel { background: rgba(107,79,16,0.85); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.4); }
 
   .card-foil-badge {
@@ -3170,7 +3170,8 @@
     .popular-stats {
       flex-direction: row;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
       flex-shrink: unset;
       border-top: 1px solid var(--border-gold);
@@ -3179,7 +3180,7 @@
     }
     .popular-stars { font-size: 11px; }
     .popular-avg { font-size: 11px; }
-    .popular-vote-count { font-size: 11px; margin-left: auto; }
+    .popular-vote-count { font-size: 11px; margin-left: 0; }
   }
 
   /* ── FOOTER ── */
