@@ -458,6 +458,23 @@
   .rarity-legendary { background: rgba(180,100,0,0.85); color: #ffd700; border: 1px solid rgba(255,215,0,0.4); }
   .badge-parallel { background: rgba(107,79,16,0.85); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.4); }
 
+  .card-foil-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    backdrop-filter: blur(4px);
+    background: rgba(180,220,255,0.2);
+    color: #a8d8ff;
+    border: 1px solid rgba(168,216,255,0.5);
+  }
+
   .card-forsale-badge {
     position: absolute;
     bottom: 8px;
@@ -4170,8 +4187,9 @@ function cardHTML(c) {
     ? `<img src="${escHtml(c.image)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
   const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
+  const foilBadge = !isTC && c.foil === 'Foil' ? `<span class="card-foil-badge">✨ Foil</span>` : '';
   return `<div class="card-item" onclick="openModal('${c.id}')">
-    <div class="card-img-wrap">${imgContent}${badgeHTML}${forSaleBadge}</div>
+    <div class="card-img-wrap">${imgContent}${badgeHTML}${foilBadge}${forSaleBadge}</div>
     <div class="card-info">
       <div class="card-name">${escHtml(c.name)}</div>
       <div class="card-meta">
@@ -4181,6 +4199,7 @@ function cardHTML(c) {
         ${isTC && c.cardSubtype==='Parallel' && c.parallel?`<div class="card-meta-row"><span class="meta-label">Parallel</span><span class="meta-value">${escHtml(c.parallel)}</span></div>`:''}
         ${isTC && c.cardSubtype==='Insert' && c.insert?`<div class="card-meta-row"><span class="meta-label">Insert</span><span class="meta-value">${escHtml(c.insert)}</span></div>`:''}
         ${!isTC && c.rarity?`<div class="card-meta-row"><span class="meta-label">Rarity</span><span class="meta-value">${escHtml(c.rarity)}</span></div>`:''}
+        ${!isTC && c.foil?`<div class="card-meta-row"><span class="meta-label">Foil</span><span class="meta-value">${escHtml(c.foil)}</span></div>`:''}
         ${c.number?`<div class="card-meta-row"><span class="meta-label">Card #</span><span class="meta-value">#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}</span></div>`:''}
       </div>
       <div class="star-rating"><div class="stars">${starsHtml}</div>
@@ -4327,6 +4346,7 @@ async function openModal(id) {
     ['Manufacturer', c.manufacturer],
     ['Set', c.set],
     ['Rarity', c.rarity],
+    ['Foil', !isTC && c.foil ? c.foil : null],
     ['Type', isTC && c.cardSubtype === 'Base' ? 'Base' : null],
     ['Parallel', isTC && c.cardSubtype === 'Parallel' ? c.parallel : null],
     ['Insert', isTC && c.cardSubtype === 'Insert' ? c.insert : null],
