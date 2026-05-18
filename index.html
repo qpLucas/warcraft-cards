@@ -1592,6 +1592,26 @@
     border-radius: 2px;
   }
 
+  .admin-media-set-main {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(20,20,20,0.85);
+    color: var(--gold-dim);
+    border: 1px solid var(--gold-dim);
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.2s;
+  }
+  .admin-media-set-main:hover { background: rgba(201,168,76,0.85); color: #0A0804; border-color: var(--gold); }
+
   /* ── IMAGE UPLOAD ── */
   #img-upload-area {
     display: flex;
@@ -4833,9 +4853,25 @@ function renderAdminMediaGallery() {
       ${m.type === 'video'
         ? `<div class="admin-media-thumb-video">🎬</div>`
         : `<img src="${escHtml(m.url)}" alt="Media ${i+1}">`}
-      ${i === 0 ? '<span class="admin-media-main-badge">Main</span>' : ''}
+      ${i === 0 ? '<span class="admin-media-main-badge">Main</span>' : `<button class="admin-media-set-main" onclick="setMainMedia(${i})" title="Set as main">★</button>`}
       <button class="admin-media-del" onclick="deleteAdminMedia(${i})" title="Remove">✕</button>
     </div>`).join('');
+}
+
+function setMainMedia(index) {
+  if (index === 0) return;
+  const main = _editingCardMedia.splice(index, 1)[0];
+  _editingCardMedia.unshift(main);
+  // Update main image field and preview
+  document.getElementById('f-image').value = main.url;
+  if (main.type === 'image') {
+    document.getElementById('img-preview').src = main.url;
+    document.getElementById('img-preview-wrap').style.display = 'block';
+  } else {
+    document.getElementById('img-preview-wrap').style.display = 'none';
+  }
+  renderAdminMediaGallery();
+  toast('Main photo updated!');
 }
 
 function deleteAdminMedia(index) {
@@ -4848,7 +4884,10 @@ function deleteAdminMedia(index) {
     if (next && next.type === 'image') { document.getElementById('img-preview').src = next.url; wrap.style.display = 'block'; }
     else { wrap.style.display = 'none'; }
     previewImg();
-  _editingCardMedia = Array.isArray(c.media) ? [...c.media] : [];
+  // Build full media list: main image + extra media, deduped
+  const mainImg = c.image ? [{ url: c.image, type: 'image' }] : [];
+  const extras = (Array.isArray(c.media) ? c.media : []).filter(m => m.url !== c.image);
+  _editingCardMedia = [...mainImg, ...extras];
   renderAdminMediaGallery();
   }
   renderAdminMediaGallery();
@@ -4880,7 +4919,12 @@ async function saveCard() {
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
     added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
-    media: _editingCardMedia.slice()
+    media: (function() {
+      const mainUrl = document.getElementById('f-image').value.trim();
+      const extras = _editingCardMedia.filter(m => m.url !== mainUrl);
+      const all = mainUrl ? [{ url: mainUrl, type: 'image' }, ...extras] : extras;
+      return all;
+    })()
   };
   if (editId) {
     const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
