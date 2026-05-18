@@ -3559,7 +3559,7 @@
         </svg>
         Support via PayPal
       </a>
-      <img id="support-gif" src="https://oxfwumystnukawkhplbh.supabase.co/storage/v1/object/public/card-images/thankyou.gif" alt="Thank you!">
+      <img id="support-gif" src="" data-src="https://oxfwumystnukawkhplbh.supabase.co/storage/v1/object/public/card-images/thankyou.gif" alt="Thank you!">
     </div>
   </div>
 </div>
@@ -4585,7 +4585,12 @@ function closeDonateOutside(e){if(e.target===document.getElementById('donate-ove
 function submitDonate(){if(document.getElementById('d-trap').value)return;const email=document.getElementById('d-email').value.trim();const message=document.getElementById('d-message').value.trim();const captcha=parseInt(document.getElementById('d-captcha-answer').value.trim(),10);if(!email||!email.includes('@')){toast('Please enter a valid email.');return;}if(!message){toast('Please write a message.');return;}if(isNaN(captcha)||captcha!==_donateCaptchaAnswer){toast('Wrong answer — please try again.');generateDonateCaptcha();return;}const subject=encodeURIComponent('Card Offer — Warcraft Cards');const body=encodeURIComponent(`From: ${email}\n\n${message}`);window.location.href=`mailto:warcraftcardscom@gmail.com?subject=${subject}&body=${body}`;toast('Opening your email client…');setTimeout(()=>closeDonate(),1200);}
 
 // ── SUPPORT ──
-function openSupport(){document.getElementById('support-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function openSupport(){
+  const gif = document.getElementById('support-gif');
+  if (gif && gif.dataset.src && !gif.src) gif.src = gif.dataset.src;
+  document.getElementById('support-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 function closeSupport(){document.getElementById('support-overlay').classList.remove('open');document.body.style.overflow='';}
 function closeSupportOutside(e){if(e.target===document.getElementById('support-overlay'))closeSupport();}
 
