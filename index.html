@@ -1117,18 +1117,21 @@
     position: sticky;
     top: 0;
     align-self: flex-start;
-    cursor: zoom-in;
+    display: flex;
+    flex-direction: column;
   }
 
-  #modal-img-side img {
+  #modal-img-side img#modal-img {
     width: 100%;
     object-fit: cover;
-    border-radius: 7px 0 0 7px;
+    border-radius: 7px 0 0 0;
     display: block;
-    min-height: 380px;
+    min-height: 320px;
+    max-height: calc(90vh - 80px);
     transition: filter 0.2s;
+    cursor: zoom-in;
   }
-  #modal-img-side:hover img { filter: brightness(1.08); }
+  #modal-img-side:hover img#modal-img { filter: brightness(1.08); }
 
   #modal-img-zoom-hint {
     position: absolute;
