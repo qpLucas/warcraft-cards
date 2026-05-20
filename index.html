@@ -1534,13 +1534,6 @@
   .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }
 
   /* ── ADMIN MEDIA GALLERY ── */
-  #admin-media-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-    min-height: 20px;
-  }
   .admin-media-thumb {
     position: relative;
     width: 72px;
@@ -1604,24 +1597,6 @@
     transition: background 0.15s;
   }
   .admin-media-del:hover { background: #e05555; }
-
-  #img-url-add-btn {
-    font-family: 'Cinzel', serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    background: transparent;
-    border: 1px solid var(--gold-dim);
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-  #img-url-add-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.08); }
 
   /* ── IMAGE UPLOAD ── */
   #img-upload-area {
@@ -3766,25 +3741,21 @@
           <input type="text" id="f-name" placeholder="e.g. Thrall, Son of Durotan">
         </div>
         <div class="admin-field">
-          <label>Card Photos</label>
-          <!-- Upload button -->
-          <div id="img-upload-btn-row">
-            <label id="img-upload-label" for="f-image-file">
-              <span id="img-upload-btn-text">📁 Upload Photo</span>
-              <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="adminUploadPhoto(this)">
-            </label>
-            <span id="img-upload-status"></span>
+          <label>Card Image</label>
+          <div id="img-upload-area">
+            <div id="img-upload-btn-row">
+              <label id="img-upload-label" for="f-image-file">
+                <span id="img-upload-btn-text">📁 Upload Photo</span>
+                <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="uploadCardImage(this)">
+              </label>
+              <span id="img-upload-status"></span>
+            </div>
+            <div id="img-url-row">
+              <span class="img-url-or">or paste URL</span>
+              <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+            </div>
           </div>
-          <!-- URL input -->
-          <div id="img-url-row">
-            <span class="img-url-or">or URL</span>
-            <input type="url" id="f-image-url-input" placeholder="https://...">
-            <button type="button" id="img-url-add-btn" onclick="adminAddPhotoUrl()">+ Add</button>
-          </div>
-          <!-- Hidden main image field (used internally) -->
-          <input type="hidden" id="f-image">
-          <!-- Gallery thumbnails -->
-          <div id="admin-media-gallery"></div>
+          <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
         </div>
         <div class="admin-field">
           <label>Card Category *</label>
@@ -4085,8 +4056,7 @@ function dbToCard(d) {
     insert: d.insert_type || '', rarity: d.rarity || '',
     foil: d.foil || '', manufacturer: d.manufacturer || '',
     number: d.number || '', forSale: d.for_sale || false,
-    price: d.price || 0, added: d.added || 0,
-    media: Array.isArray(d.media) ? d.media : []
+    price: d.price || 0, added: d.added || 0
   };
 }
 
@@ -4098,8 +4068,7 @@ function cardToDB(c) {
     insert_type: c.insert || '', rarity: c.rarity || '',
     foil: c.foil || '', manufacturer: c.manufacturer || '',
     number: c.number || '', for_sale: c.forSale || false,
-    price: c.price || 0, added: c.added || Date.now(),
-    media: c.media || []
+    price: c.price || 0, added: c.added || Date.now()
   };
 }
 
@@ -4779,72 +4748,26 @@ function saveMinRatings(){const val=parseInt(document.getElementById('admin-minr
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
 // ── ADMIN PHOTO GALLERY ──
-let _cardPhotos = []; // array of URLs, index 0 = main
+function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
 
-function renderAdminGallery() {
-  const gallery = document.getElementById('admin-media-gallery');
-  if (!gallery) return;
-  if (_cardPhotos.length === 0) { gallery.innerHTML = ''; return; }
-  gallery.innerHTML = _cardPhotos.map((url, i) => `
-    <div class="admin-media-thumb ${i === 0 ? 'is-main' : ''}">
-      <img src="${escHtml(url)}" alt="Photo ${i+1}">
-      ${i === 0
-        ? `<span class="admin-media-main-badge">Main</span>`
-        : `<button class="admin-media-set-main" onclick="setMainPhoto(${i})">Main</button>`}
-      <button class="admin-media-del" onclick="deletePhoto(${i})">✕</button>
-    </div>`).join('');
-}
-
-function setMainPhoto(index) {
-  if (index === 0) return;
-  const photo = _cardPhotos.splice(index, 1)[0];
-  _cardPhotos.unshift(photo);
-  document.getElementById('f-image').value = photo;
-  renderAdminGallery();
-  toast('Main photo updated!');
-}
-
-function deletePhoto(index) {
-  _cardPhotos.splice(index, 1);
-  document.getElementById('f-image').value = _cardPhotos[0] || '';
-  renderAdminGallery();
-}
-
-async function adminUploadPhoto(input) {
-  const file = input.files[0];
-  if (!file) return;
+async function uploadCardImage(input) {
+  const file = input.files[0]; if (!file) return;
   const status = document.getElementById('img-upload-status');
   const btnText = document.getElementById('img-upload-btn-text');
   if (!file.type.startsWith('image/')) { status.textContent = 'Images only.'; status.className = 'error'; return; }
   if (file.size > 10 * 1024 * 1024) { status.textContent = 'Max 10MB.'; status.className = 'error'; return; }
-  status.textContent = 'Uploading…'; status.className = 'loading';
-  btnText.textContent = '⏳ Uploading…';
+  status.textContent = 'Uploading…'; status.className = 'loading'; btnText.textContent = '⏳ Uploading…';
   const ext = file.name.split('.').pop().toLowerCase();
   const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await sb.storage.from('card-images').upload(filename, file, { cacheControl:'3600', upsert:false, contentType:file.type });
   if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; return; }
   const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
-  _cardPhotos.push(urlData.publicUrl);
-  if (_cardPhotos.length === 1) document.getElementById('f-image').value = urlData.publicUrl;
-  renderAdminGallery();
-  status.textContent = '✓ Uploaded!'; status.className = 'success';
-  btnText.textContent = '📁 Upload Photo';
-  input.value = '';
-  setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
+  document.getElementById('f-image').value = urlData.publicUrl;
+  document.getElementById('img-preview').src = urlData.publicUrl;
+  document.getElementById('img-preview-wrap').style.display = 'block';
+  status.textContent = '✓ Uploaded!'; status.className = 'success'; btnText.textContent = '📁 Upload Photo';
+  input.value = ''; setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
 }
-
-function adminAddPhotoUrl() {
-  const input = document.getElementById('f-image-url-input');
-  const url = input.value.trim();
-  if (!url) { toast('Please enter a URL.'); return; }
-  _cardPhotos.push(url);
-  if (_cardPhotos.length === 1) document.getElementById('f-image').value = url;
-  renderAdminGallery();
-  input.value = '';
-  toast('Photo added!');
-}
-
-function previewImg(){} // kept for compatibility
 
 // ── ADMIN TYPE SWITCHING ──
 function adminForSaleChanged(){const checked=document.getElementById('f-forsale').checked;document.getElementById('f-price-wrap').style.display=checked?'block':'none';}
@@ -4855,7 +4778,7 @@ function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype
 async function saveCard() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { toast('Card name is required.'); return; }
-  const image = _cardPhotos[0] || document.getElementById('f-image').value.trim();
+  const image = document.getElementById('f-image').value.trim();
   const editId = document.getElementById('admin-edit-id').value;
   const type = document.getElementById('f-type').value;
   const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
@@ -4871,8 +4794,7 @@ async function saveCard() {
     manufacturer: document.getElementById('f-manufacturer').value.trim(),
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
-    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
-    media: _cardPhotos.slice()
+    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now()
   };
   if (editId) {
     const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
@@ -4891,15 +4813,14 @@ async function saveCard() {
 }
 
 function clearAdminForm(){
-  _cardPhotos = [];
-  ['f-name','f-image','f-image-url-input','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-type').value='Trading Card';
   document.getElementById('f-rarity').value='Common';
   document.getElementById('f-foil').value='Non-Foil';
   document.getElementById('f-card-subtype').value='Base';
   document.getElementById('f-forsale').checked=false;
   document.getElementById('f-price-wrap').style.display='none';
-  document.getElementById('admin-media-gallery').innerHTML='';
+  document.getElementById('img-preview-wrap').style.display='none';
   document.getElementById('admin-tc-fields').style.display='block';
   document.getElementById('admin-tcg-fields').style.display='none';
   document.getElementById('admin-parallel-field').style.display='none';
@@ -4934,11 +4855,7 @@ function editCard(id){
   document.getElementById('admin-tcg-fields').style.display=isTCG?'block':'none';
   if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}
   if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}
-  // Load photos — build from media array, fallback to main image
-  const mediaUrls = Array.isArray(c.media) && c.media.length > 0 ? c.media.map(m => typeof m === 'string' ? m : m.url) : (c.image ? [c.image] : []);
-  _cardPhotos = [...new Set(mediaUrls)]; // dedupe
-  if (_cardPhotos.length === 0 && c.image) _cardPhotos = [c.image];
-  renderAdminGallery();
+  previewImg();
   document.getElementById('admin-form-title').textContent='Edit Card';
   document.getElementById('edit-mode-note').style.display='block';
   document.getElementById('admin-save-btn').textContent='Save Changes';
