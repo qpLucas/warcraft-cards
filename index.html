@@ -1120,20 +1120,31 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    max-height: 90vh;
   }
 
   #modal-img-side > img {
     width: 100%;
+    flex: 1;
+    min-height: 0;
     object-fit: cover;
     border-radius: 7px 0 0 0;
     display: block;
-    flex: 1;
-    min-height: 0;
     cursor: zoom-in;
     transition: filter 0.2s;
   }
   #modal-img-side > img:hover { filter: brightness(1.08); }
+
+  /* Thumbs strip — fixed height at bottom */
+  #modal-thumbs {
+    display: none;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px;
+    border-top: 1px solid var(--border-gold);
+    background: rgba(0,0,0,0.3);
+    flex-shrink: 0;
+  }
 
   #modal-img-zoom-hint {
     position: absolute;
@@ -1335,16 +1346,6 @@
   }
   .admin-photo-del:hover { background: #e05555; }
 
-  /* Modal thumbnails */
-  #modal-thumbs {
-    display: none;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding: 8px;
-    border-top: 1px solid var(--border-gold);
-    background: rgba(0,0,0,0.3);
-  }
   .modal-thumb {
     width: 54px;
     height: 54px;
