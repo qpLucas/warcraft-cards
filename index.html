@@ -3231,11 +3231,14 @@
       align-self: auto;
       background: #000;
       display: flex;
-      flex-direction: row;
+      flex-direction: row !important;
       align-items: center;
       justify-content: center;
       padding: 12px 8px;
       gap: 8px;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
     }
     #modal-img-side > img {
       width: auto;
@@ -3250,7 +3253,8 @@
       cursor: zoom-in;
       flex-shrink: 0;
     }
-    #modal-thumbs {
+    #modal-thumbs, #modal-thumbs.thumbs-visible {
+      display: flex !important;
       flex-direction: column !important;
       justify-content: center !important;
       align-items: center !important;
@@ -3258,13 +3262,13 @@
       padding: 0 8px 0 0 !important;
       border-top: none !important;
       border-right: 1px solid var(--border-gold) !important;
-      border-left: none !important;
       background: transparent !important;
       height: auto !important;
       width: auto !important;
       flex-shrink: 0 !important;
-      order: -1;
+      order: -1 !important;
     }
+    #modal-thumbs:not(.thumbs-visible) { display: none !important; }
     .modal-thumb {
       width: 44px;
       height: 44px;
