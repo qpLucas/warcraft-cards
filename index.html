@@ -1074,8 +1074,7 @@
     border-radius: 8px;
     max-width: 960px;
     width: 100%;
-    height: 88vh;
-    max-height: 88vh;
+    max-height: 90vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1120,61 +1119,26 @@
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
-  /* No thumbs — image fills full height */
-  #modal-img-side.no-thumbs > img {
-    height: 100%;
-    border-radius: 7px 0 0 7px;
-  }
-
-  /* Has thumbs — image leaves room at bottom */
-  #modal-img-side.has-thumbs > img {
-    height: calc(100% - 74px);
-    border-radius: 7px 0 0 0;
-  }
-
-  #modal-img-side > img {
+  #modal-img-main-wrap {
     width: 100%;
-    object-fit: contain;
-    background: #000;
-    display: block;
-    cursor: zoom-in;
-    transition: filter 0.2s;
-    flex-shrink: 0;
-  }
-  #modal-img-side > img:hover { filter: brightness(1.08); }
-
-  /* Thumbs strip — fixed 66px at bottom on desktop */
-  #modal-thumbs {
-    display: none;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding: 6px 8px;
-    border-top: 1px solid var(--border-gold);
-    background: rgba(0,0,0,0.3);
-    flex-shrink: 0;
-    height: 66px;
-    align-items: center;
+    flex: 1;
     overflow: hidden;
-  }
-  #modal-thumbs.thumbs-visible { display: flex; }
-
-  .modal-thumb {
-    width: 54px;
-    height: 54px;
-    object-fit: cover;
-    border-radius: 3px;
-    border: 2px solid rgba(201,168,76,0.25);
-    cursor: pointer;
-    opacity: 0.6;
-    transition: all 0.2s;
+    border-radius: 7px 0 0 0;
+    cursor: zoom-in;
+    background: var(--bg-card);
     flex-shrink: 0;
   }
-  .modal-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
-  .modal-thumb.active { border-color: var(--gold); opacity: 1; }
+
+  #modal-img-side img#modal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: filter 0.2s;
+  }
+  #modal-img-main-wrap:hover img#modal-img { filter: brightness(1.08); }
 
   #modal-img-zoom-hint {
     position: absolute;
@@ -1191,8 +1155,7 @@
     pointer-events: none;
     transition: opacity 0.2s;
   }
-  #modal-img-side > img:hover + #modal-img-zoom-hint,
-  #modal-img-zoom-hint:hover { color: var(--gold); }
+  #modal-img-main-wrap:hover #modal-img-zoom-hint { color: var(--gold); }
 
   #modal-info-side {
     flex: 1;
@@ -1308,73 +1271,30 @@
   }
   #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
 
-  /* ── MULTI PHOTO ── */
-  #admin-photo-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
+  /* ── MODAL GALLERY THUMBNAILS ── */
+  #modal-img { width: 100%; cursor: zoom-in; display: block; }
+  #modal-gallery-thumbs {
+    display: none;
+    flex-direction: row;
+    gap: 4px;
+    flex-wrap: nowrap;
+    padding: 6px;
+    background: transparent;
+    border-top: 1px solid var(--border-gold);
   }
-  .admin-photo-item {
-    position: relative;
-    width: 68px;
-    height: 68px;
-    flex-shrink: 0;
-  }
-  .admin-photo-item img {
-    width: 68px;
-    height: 68px;
+  .gallery-thumb {
+    flex: 1;
+    height: 90px;
     object-fit: cover;
     border-radius: 3px;
-    border: 2px solid var(--border-gold);
-    display: block;
-  }
-  .admin-photo-item.is-main img { border-color: var(--gold); box-shadow: 0 0 6px rgba(201,168,76,0.5); }
-  .admin-photo-badge {
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
-    font-family: 'Cinzel', serif;
-    font-size: 7px;
-    background: rgba(201,168,76,0.9);
-    color: #0A0804;
-    padding: 1px 4px;
-    border-radius: 2px;
-    pointer-events: none;
-  }
-  .admin-photo-set-main {
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
-    font-family: 'Cinzel', serif;
-    font-size: 7px;
-    background: rgba(0,0,0,0.8);
-    color: var(--gold-dim);
-    border: 1px solid var(--gold-dim);
-    padding: 1px 4px;
-    border-radius: 2px;
+    border: 2px solid rgba(201,168,76,0.2);
     cursor: pointer;
-    transition: all 0.15s;
+    opacity: 0.65;
+    transition: all 0.2s;
+    min-width: 0;
   }
-  .admin-photo-set-main:hover { background: rgba(201,168,76,0.9); color: #0A0804; }
-  .admin-photo-del {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    background: #8b1a1a;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
-  }
-  .admin-photo-del:hover { background: #e05555; }
+  .gallery-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
+  .gallery-thumb.active { border-color: var(--gold); opacity: 1; box-shadow: 0 0 6px rgba(201,168,76,0.4); }
 
   /* ── ADMIN TABS ── */
   #admin-header-left {
@@ -1611,7 +1531,99 @@
     transition: all 0.18s;
     text-transform: uppercase;
   }
-  .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }  /* ── IMAGE UPLOAD ── */
+  .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }
+
+  /* ── ADMIN MEDIA GALLERY ── */
+  #admin-media-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    min-height: 20px;
+  }
+  .admin-media-thumb {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+  }
+  .admin-media-thumb img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 2px solid var(--border-gold);
+  }
+  .admin-media-thumb.is-main img {
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(201,168,76,0.5);
+  }
+  .admin-media-main-badge {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    letter-spacing: 0.05em;
+    background: rgba(201,168,76,0.9);
+    color: #0A0804;
+    padding: 1px 4px;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .admin-media-set-main {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    font-size: 10px;
+    background: rgba(0,0,0,0.75);
+    color: var(--gold-dim);
+    border: 1px solid var(--gold-dim);
+    border-radius: 2px;
+    padding: 1px 4px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    transition: all 0.15s;
+  }
+  .admin-media-set-main:hover { background: rgba(201,168,76,0.85); color: #0A0804; border-color: var(--gold); }
+  .admin-media-del {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #8b1a1a;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .admin-media-del:hover { background: #e05555; }
+
+  #img-url-add-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  #img-url-add-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+  /* ── IMAGE UPLOAD ── */
   #img-upload-area {
     display: flex;
     flex-direction: column;
@@ -3231,48 +3243,30 @@
       align-self: auto;
       background: #000;
       display: flex;
-      flex-direction: row !important;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 12px 8px;
-      gap: 8px;
-      height: auto !important;
-      max-height: none !important;
-      overflow: visible !important;
     }
-    #modal-img-side > img {
+    #modal-img-side img#modal-img {
       width: auto;
       height: auto;
-      max-width: 65%;
+      max-width: 60%;
       max-height: 35vh;
       object-fit: contain;
       background: #000;
       border-radius: 4px;
       min-height: unset;
       display: block;
+      margin: 16px auto;
       cursor: zoom-in;
-      flex-shrink: 0;
     }
-    #modal-thumbs, #modal-thumbs.thumbs-visible {
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-      align-items: center !important;
-      gap: 6px !important;
-      padding: 0 8px 0 0 !important;
-      border-top: none !important;
-      border-right: 1px solid var(--border-gold) !important;
-      background: transparent !important;
-      height: auto !important;
-      width: auto !important;
-      flex-shrink: 0 !important;
-      order: -1 !important;
+    #modal-gallery-thumbs {
+      width: 100%;
+      padding: 6px 10px;
+      gap: 5px;
     }
-    #modal-thumbs:not(.thumbs-visible) { display: none !important; }
-    .modal-thumb {
+    .gallery-thumb {
       width: 44px;
       height: 44px;
-      flex-shrink: 0;
     }
     #modal-info-side {
       max-height: none;
@@ -3544,8 +3538,10 @@
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side">
-        <img id="modal-img" src="" alt="" onclick="openLightbox()">
-        <div id="modal-thumbs"></div>
+        <div id="modal-img-main-wrap" onclick="openLightbox()">
+          <img id="modal-img" src="" alt="">
+        </div>
+        <div id="modal-gallery-thumbs"></div>
       </div>
       <div id="modal-info-side">
         <div id="modal-card-name-row">
@@ -3771,22 +3767,24 @@
         </div>
         <div class="admin-field">
           <label>Card Photos</label>
-          <div id="img-upload-area">
-            <div id="img-upload-btn-row">
-              <label id="img-upload-label" for="f-image-file">
-                <span id="img-upload-btn-text">📁 Upload Photo</span>
-                <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="uploadCardImage(this)">
-              </label>
-              <span id="img-upload-status"></span>
-            </div>
-            <div id="img-url-row">
-              <span class="img-url-or">or URL</span>
-              <input type="url" id="f-extra-url" placeholder="https://...">
-              <button type="button" class="admin-setting-confirm" onclick="addPhotoByUrl()">+ Add</button>
-            </div>
+          <!-- Upload button -->
+          <div id="img-upload-btn-row">
+            <label id="img-upload-label" for="f-image-file">
+              <span id="img-upload-btn-text">📁 Upload Photo</span>
+              <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="adminUploadPhoto(this)">
+            </label>
+            <span id="img-upload-status"></span>
           </div>
+          <!-- URL input -->
+          <div id="img-url-row">
+            <span class="img-url-or">or URL</span>
+            <input type="url" id="f-image-url-input" placeholder="https://...">
+            <button type="button" id="img-url-add-btn" onclick="adminAddPhotoUrl()">+ Add</button>
+          </div>
+          <!-- Hidden main image field (used internally) -->
           <input type="hidden" id="f-image">
-          <div id="admin-photo-list"></div>
+          <!-- Gallery thumbnails -->
+          <div id="admin-media-gallery"></div>
         </div>
         <div class="admin-field">
           <label>Card Category *</label>
@@ -4088,7 +4086,7 @@ function dbToCard(d) {
     foil: d.foil || '', manufacturer: d.manufacturer || '',
     number: d.number || '', forSale: d.for_sale || false,
     price: d.price || 0, added: d.added || 0,
-    media: Array.isArray(d.media) ? d.media.map(m => typeof m === 'string' ? m : m.url).filter(Boolean) : []
+    media: Array.isArray(d.media) ? d.media : []
   };
 }
 
@@ -4565,26 +4563,25 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
-  // Thumbnails — only show if more than 1 photo
-  const thumbsEl = document.getElementById('modal-thumbs');
-  const allPhotos = Array.isArray(c.media) && c.media.length > 1 ? c.media : [];
-  const imgSide = document.getElementById('modal-img-side');
-  if (allPhotos.length > 1) {
-    imgSide.classList.add('has-thumbs');
-    imgSide.classList.remove('no-thumbs');
-    thumbsEl.innerHTML = allPhotos.map((url, i) =>
-      `<img class="modal-thumb ${i===0?'active':''}" src="${escHtml(url)}" onclick="switchPhoto(event,'${escHtml(url)}')" alt="Photo ${i+1}">`
+  // Build photos array from media - handle both string and object formats
+  let photos = [];
+  if (Array.isArray(c.media) && c.media.length > 0) {
+    photos = c.media.map(m => typeof m === 'string' ? m : (m && m.url ? m.url : null)).filter(Boolean);
+  }
+  // Always include main image, dedupe
+  if (c.image && !photos.includes(c.image)) photos.unshift(c.image);
+  if (photos.length === 0 && c.image) photos = [c.image];
+
+  const thumbsEl = document.getElementById('modal-gallery-thumbs');
+  if (photos.length > 1) {
+    thumbsEl.innerHTML = photos.map((url, i) =>
+      `<img class="gallery-thumb ${i===0?'active':''}" src="${escHtml(url)}" alt="Photo ${i+1}" onclick="switchModalPhoto('${escHtml(url)}', this)">`
     ).join('');
-    thumbsEl.classList.add('thumbs-visible');
-    thumbsEl.style.display = '';
+    thumbsEl.style.display = 'flex';
   } else {
-    imgSide.classList.add('no-thumbs');
-    imgSide.classList.remove('has-thumbs');
     thumbsEl.innerHTML = '';
-    thumbsEl.classList.remove('thumbs-visible');
     thumbsEl.style.display = 'none';
   }
-
   const isTC = c.type === 'Trading Card';
   const fields = [
     ['Manufacturer', c.manufacturer],
@@ -4757,11 +4754,10 @@ function openAbout(){document.getElementById('about-overlay').classList.add('ope
 function closeAbout(){document.getElementById('about-overlay').classList.remove('open');document.body.style.overflow='';}
 function closeAboutOutside(e){if(e.target===document.getElementById('about-overlay'))closeAbout();}
 
-function switchPhoto(e, url) {
-  e.stopPropagation();
+function switchModalPhoto(url, thumbEl) {
   document.getElementById('modal-img').src = url;
-  document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
-  e.target.classList.add('active');
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  thumbEl.classList.add('active');
 }
 
 // ── LIGHTBOX ──
@@ -4782,68 +4778,73 @@ function closeAdmin(){document.getElementById('admin-overlay').classList.remove(
 function saveMinRatings(){const val=parseInt(document.getElementById('admin-minratings').value,10);if(!isNaN(val)&&val>=1){minRatingsForFav=val;saveSetting('minRatingsForFav',val);renderLeaderboard();toast(`Fan Favourites now requires ${val} rating${val!==1?'s':''}.`);}}
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
+// ── ADMIN PHOTO GALLERY ──
+let _cardPhotos = []; // array of URLs, index 0 = main
 
-// ── MULTI PHOTO SYSTEM ──
-let _photos = []; // array of URLs, index 0 = main
-
-function renderAdminPhotoList() {
-  const el = document.getElementById('admin-photo-list');
-  if (!el) return;
-  el.innerHTML = _photos.map((url, i) => `
-    <div class="admin-photo-item ${i===0?'is-main':''}">
+function renderAdminGallery() {
+  const gallery = document.getElementById('admin-media-gallery');
+  if (!gallery) return;
+  if (_cardPhotos.length === 0) { gallery.innerHTML = ''; return; }
+  gallery.innerHTML = _cardPhotos.map((url, i) => `
+    <div class="admin-media-thumb ${i === 0 ? 'is-main' : ''}">
       <img src="${escHtml(url)}" alt="Photo ${i+1}">
-      ${i===0
-        ? `<span class="admin-photo-badge">Main</span>`
-        : `<button class="admin-photo-set-main" onclick="setMainPhoto(${i})">Main</button>`}
-      <button class="admin-photo-del" onclick="removePhoto(${i})">✕</button>
+      ${i === 0
+        ? `<span class="admin-media-main-badge">Main</span>`
+        : `<button class="admin-media-set-main" onclick="setMainPhoto(${i})">Main</button>`}
+      <button class="admin-media-del" onclick="deletePhoto(${i})">✕</button>
     </div>`).join('');
 }
 
-function setMainPhoto(i) {
-  const url = _photos.splice(i, 1)[0];
-  _photos.unshift(url);
-  document.getElementById('f-image').value = _photos[0] || '';
-  renderAdminPhotoList();
-  toast('Main photo set!');
+function setMainPhoto(index) {
+  if (index === 0) return;
+  const photo = _cardPhotos.splice(index, 1)[0];
+  _cardPhotos.unshift(photo);
+  document.getElementById('f-image').value = photo;
+  renderAdminGallery();
+  toast('Main photo updated!');
 }
 
-function removePhoto(i) {
-  _photos.splice(i, 1);
-  document.getElementById('f-image').value = _photos[0] || '';
-  renderAdminPhotoList();
+function deletePhoto(index) {
+  _cardPhotos.splice(index, 1);
+  document.getElementById('f-image').value = _cardPhotos[0] || '';
+  renderAdminGallery();
 }
 
-function addPhotoByUrl() {
-  const input = document.getElementById('f-extra-url');
-  const url = input.value.trim();
-  if (!url) { toast('Enter a URL first.'); return; }
-  _photos.push(url);
-  if (_photos.length === 1) document.getElementById('f-image').value = url;
-  renderAdminPhotoList();
-  input.value = '';
-  toast('Photo added!');
-}
-
-function previewImg() {} // no-op, kept for compatibility
-
-async function uploadCardImage(input) {
-  const file = input.files[0]; if (!file) return;
+async function adminUploadPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
   const status = document.getElementById('img-upload-status');
   const btnText = document.getElementById('img-upload-btn-text');
   if (!file.type.startsWith('image/')) { status.textContent = 'Images only.'; status.className = 'error'; return; }
   if (file.size > 10 * 1024 * 1024) { status.textContent = 'Max 10MB.'; status.className = 'error'; return; }
-  status.textContent = 'Uploading…'; status.className = 'loading'; btnText.textContent = '⏳ Uploading…';
+  status.textContent = 'Uploading…'; status.className = 'loading';
+  btnText.textContent = '⏳ Uploading…';
   const ext = file.name.split('.').pop().toLowerCase();
   const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await sb.storage.from('card-images').upload(filename, file, { cacheControl:'3600', upsert:false, contentType:file.type });
-  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; console.error(error); return; }
+  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; return; }
   const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
-  _photos.push(urlData.publicUrl);
-  if (_photos.length === 1) document.getElementById('f-image').value = urlData.publicUrl;
-  renderAdminPhotoList();
-  status.textContent = '✓ Uploaded!'; status.className = 'success'; btnText.textContent = '📁 Upload Photo';
-  input.value = ''; setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
+  _cardPhotos.push(urlData.publicUrl);
+  if (_cardPhotos.length === 1) document.getElementById('f-image').value = urlData.publicUrl;
+  renderAdminGallery();
+  status.textContent = '✓ Uploaded!'; status.className = 'success';
+  btnText.textContent = '📁 Upload Photo';
+  input.value = '';
+  setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
 }
+
+function adminAddPhotoUrl() {
+  const input = document.getElementById('f-image-url-input');
+  const url = input.value.trim();
+  if (!url) { toast('Please enter a URL.'); return; }
+  _cardPhotos.push(url);
+  if (_cardPhotos.length === 1) document.getElementById('f-image').value = url;
+  renderAdminGallery();
+  input.value = '';
+  toast('Photo added!');
+}
+
+function previewImg(){} // kept for compatibility
 
 // ── ADMIN TYPE SWITCHING ──
 function adminForSaleChanged(){const checked=document.getElementById('f-forsale').checked;document.getElementById('f-price-wrap').style.display=checked?'block':'none';}
@@ -4854,8 +4855,7 @@ function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype
 async function saveCard() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { toast('Card name is required.'); return; }
-  if (_photos.length === 0) { toast('Please add at least one photo.'); return; }
-  const image = _photos[0];
+  const image = _cardPhotos[0] || document.getElementById('f-image').value.trim();
   const editId = document.getElementById('admin-edit-id').value;
   const type = document.getElementById('f-type').value;
   const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
@@ -4872,7 +4872,7 @@ async function saveCard() {
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
     added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
-    media: _photos.slice()
+    media: _cardPhotos.slice()
   };
   if (editId) {
     const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
@@ -4891,15 +4891,15 @@ async function saveCard() {
 }
 
 function clearAdminForm(){
-  _photos = [];
-  ['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('admin-photo-list').innerHTML='';
+  _cardPhotos = [];
+  ['f-name','f-image','f-image-url-input','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-type').value='Trading Card';
   document.getElementById('f-rarity').value='Common';
   document.getElementById('f-foil').value='Non-Foil';
   document.getElementById('f-card-subtype').value='Base';
   document.getElementById('f-forsale').checked=false;
   document.getElementById('f-price-wrap').style.display='none';
+  document.getElementById('admin-media-gallery').innerHTML='';
   document.getElementById('admin-tc-fields').style.display='block';
   document.getElementById('admin-tcg-fields').style.display='none';
   document.getElementById('admin-parallel-field').style.display='none';
@@ -4934,11 +4934,11 @@ function editCard(id){
   document.getElementById('admin-tcg-fields').style.display=isTCG?'block':'none';
   if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}
   if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}
-  previewImg();
-  // Load photos
-  _photos = Array.isArray(c.media) && c.media.length > 0 ? [...c.media] : (c.image ? [c.image] : []);
-  document.getElementById('f-image').value = _photos[0] || '';
-  renderAdminPhotoList();
+  // Load photos — build from media array, fallback to main image
+  const mediaUrls = Array.isArray(c.media) && c.media.length > 0 ? c.media.map(m => typeof m === 'string' ? m : m.url) : (c.image ? [c.image] : []);
+  _cardPhotos = [...new Set(mediaUrls)]; // dedupe
+  if (_cardPhotos.length === 0 && c.image) _cardPhotos = [c.image];
+  renderAdminGallery();
   document.getElementById('admin-form-title').textContent='Edit Card';
   document.getElementById('edit-mode-note').style.display='block';
   document.getElementById('admin-save-btn').textContent='Save Changes';
