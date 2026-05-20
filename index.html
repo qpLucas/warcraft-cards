@@ -1261,6 +1261,98 @@
   }
   #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
 
+  /* ── MULTI PHOTO ── */
+  #admin-photo-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .admin-photo-item {
+    position: relative;
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+  }
+  .admin-photo-item img {
+    width: 68px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 2px solid var(--border-gold);
+    display: block;
+  }
+  .admin-photo-item.is-main img { border-color: var(--gold); box-shadow: 0 0 6px rgba(201,168,76,0.5); }
+  .admin-photo-badge {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    background: rgba(201,168,76,0.9);
+    color: #0A0804;
+    padding: 1px 4px;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .admin-photo-set-main {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    background: rgba(0,0,0,0.8);
+    color: var(--gold-dim);
+    border: 1px solid var(--gold-dim);
+    padding: 1px 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .admin-photo-set-main:hover { background: rgba(201,168,76,0.9); color: #0A0804; }
+  .admin-photo-del {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #8b1a1a;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .admin-photo-del:hover { background: #e05555; }
+
+  /* Modal thumbnails */
+  #modal-thumbs {
+    display: none;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px;
+    border-top: 1px solid var(--border-gold);
+    background: rgba(0,0,0,0.3);
+  }
+  .modal-thumb {
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 2px solid rgba(201,168,76,0.25);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .modal-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
+  .modal-thumb.active { border-color: var(--gold); opacity: 1; }
+
   /* ── ADMIN TABS ── */
   #admin-header-left {
     display: flex;
@@ -3403,6 +3495,7 @@
     <div id="modal-inner">
       <div id="modal-img-side" onclick="openLightbox()">
         <img id="modal-img" src="" alt="">
+        <div id="modal-thumbs"></div>
       </div>
       <div id="modal-info-side">
         <div id="modal-card-name-row">
@@ -3627,7 +3720,7 @@
           <input type="text" id="f-name" placeholder="e.g. Thrall, Son of Durotan">
         </div>
         <div class="admin-field">
-          <label>Card Image</label>
+          <label>Card Photos</label>
           <div id="img-upload-area">
             <div id="img-upload-btn-row">
               <label id="img-upload-label" for="f-image-file">
@@ -3637,11 +3730,13 @@
               <span id="img-upload-status"></span>
             </div>
             <div id="img-url-row">
-              <span class="img-url-or">or paste URL</span>
-              <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+              <span class="img-url-or">or URL</span>
+              <input type="url" id="f-extra-url" placeholder="https://...">
+              <button type="button" class="admin-setting-confirm" onclick="addPhotoByUrl()">+ Add</button>
             </div>
           </div>
-          <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
+          <input type="hidden" id="f-image">
+          <div id="admin-photo-list"></div>
         </div>
         <div class="admin-field">
           <label>Card Category *</label>
@@ -3942,7 +4037,8 @@ function dbToCard(d) {
     insert: d.insert_type || '', rarity: d.rarity || '',
     foil: d.foil || '', manufacturer: d.manufacturer || '',
     number: d.number || '', forSale: d.for_sale || false,
-    price: d.price || 0, added: d.added || 0
+    price: d.price || 0, added: d.added || 0,
+    media: Array.isArray(d.media) ? d.media.map(m => typeof m === 'string' ? m : m.url).filter(Boolean) : []
   };
 }
 
@@ -3954,7 +4050,8 @@ function cardToDB(c) {
     insert_type: c.insert || '', rarity: c.rarity || '',
     foil: c.foil || '', manufacturer: c.manufacturer || '',
     number: c.number || '', for_sale: c.forSale || false,
-    price: c.price || 0, added: c.added || Date.now()
+    price: c.price || 0, added: c.added || Date.now(),
+    media: c.media || []
   };
 }
 
@@ -4418,6 +4515,19 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
+  // Thumbnails — only show if more than 1 photo
+  const thumbsEl = document.getElementById('modal-thumbs');
+  const allPhotos = Array.isArray(c.media) && c.media.length > 1 ? c.media : [];
+  if (allPhotos.length > 1) {
+    thumbsEl.innerHTML = allPhotos.map((url, i) =>
+      `<img class="modal-thumb ${i===0?'active':''}" src="${escHtml(url)}" onclick="switchPhoto(event,'${escHtml(url)}')" alt="Photo ${i+1}">`
+    ).join('');
+    thumbsEl.style.display = 'flex';
+  } else {
+    thumbsEl.innerHTML = '';
+    thumbsEl.style.display = 'none';
+  }
+
   const isTC = c.type === 'Trading Card';
   const fields = [
     ['Manufacturer', c.manufacturer],
@@ -4590,6 +4700,13 @@ function openAbout(){document.getElementById('about-overlay').classList.add('ope
 function closeAbout(){document.getElementById('about-overlay').classList.remove('open');document.body.style.overflow='';}
 function closeAboutOutside(e){if(e.target===document.getElementById('about-overlay'))closeAbout();}
 
+function switchPhoto(e, url) {
+  e.stopPropagation();
+  document.getElementById('modal-img').src = url;
+  document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+}
+
 // ── LIGHTBOX ──
 function openLightbox(){const src=document.getElementById('modal-img').src;if(!src)return;document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
@@ -4609,7 +4726,48 @@ function saveMinRatings(){const val=parseInt(document.getElementById('admin-minr
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
 
-function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
+// ── MULTI PHOTO SYSTEM ──
+let _photos = []; // array of URLs, index 0 = main
+
+function renderAdminPhotoList() {
+  const el = document.getElementById('admin-photo-list');
+  if (!el) return;
+  el.innerHTML = _photos.map((url, i) => `
+    <div class="admin-photo-item ${i===0?'is-main':''}">
+      <img src="${escHtml(url)}" alt="Photo ${i+1}">
+      ${i===0
+        ? `<span class="admin-photo-badge">Main</span>`
+        : `<button class="admin-photo-set-main" onclick="setMainPhoto(${i})">Main</button>`}
+      <button class="admin-photo-del" onclick="removePhoto(${i})">✕</button>
+    </div>`).join('');
+}
+
+function setMainPhoto(i) {
+  const url = _photos.splice(i, 1)[0];
+  _photos.unshift(url);
+  document.getElementById('f-image').value = _photos[0] || '';
+  renderAdminPhotoList();
+  toast('Main photo set!');
+}
+
+function removePhoto(i) {
+  _photos.splice(i, 1);
+  document.getElementById('f-image').value = _photos[0] || '';
+  renderAdminPhotoList();
+}
+
+function addPhotoByUrl() {
+  const input = document.getElementById('f-extra-url');
+  const url = input.value.trim();
+  if (!url) { toast('Enter a URL first.'); return; }
+  _photos.push(url);
+  if (_photos.length === 1) document.getElementById('f-image').value = url;
+  renderAdminPhotoList();
+  input.value = '';
+  toast('Photo added!');
+}
+
+function previewImg() {} // no-op, kept for compatibility
 
 async function uploadCardImage(input) {
   const file = input.files[0]; if (!file) return;
@@ -4621,11 +4779,11 @@ async function uploadCardImage(input) {
   const ext = file.name.split('.').pop().toLowerCase();
   const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
   const { error } = await sb.storage.from('card-images').upload(filename, file, { cacheControl:'3600', upsert:false, contentType:file.type });
-  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; return; }
+  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; console.error(error); return; }
   const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
-  document.getElementById('f-image').value = urlData.publicUrl;
-  document.getElementById('img-preview').src = urlData.publicUrl;
-  document.getElementById('img-preview-wrap').style.display = 'block';
+  _photos.push(urlData.publicUrl);
+  if (_photos.length === 1) document.getElementById('f-image').value = urlData.publicUrl;
+  renderAdminPhotoList();
   status.textContent = '✓ Uploaded!'; status.className = 'success'; btnText.textContent = '📁 Upload Photo';
   input.value = ''; setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
 }
@@ -4639,7 +4797,8 @@ function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype
 async function saveCard() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { toast('Card name is required.'); return; }
-  const image = document.getElementById('f-image').value.trim();
+  if (_photos.length === 0) { toast('Please add at least one photo.'); return; }
+  const image = _photos[0];
   const editId = document.getElementById('admin-edit-id').value;
   const type = document.getElementById('f-type').value;
   const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
@@ -4655,7 +4814,8 @@ async function saveCard() {
     manufacturer: document.getElementById('f-manufacturer').value.trim(),
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
-    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now()
+    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
+    media: _photos.slice()
   };
   if (editId) {
     const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
@@ -4674,14 +4834,15 @@ async function saveCard() {
 }
 
 function clearAdminForm(){
-  ['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  _photos = [];
+  ['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('admin-photo-list').innerHTML='';
   document.getElementById('f-type').value='Trading Card';
   document.getElementById('f-rarity').value='Common';
   document.getElementById('f-foil').value='Non-Foil';
   document.getElementById('f-card-subtype').value='Base';
   document.getElementById('f-forsale').checked=false;
   document.getElementById('f-price-wrap').style.display='none';
-  document.getElementById('img-preview-wrap').style.display='none';
   document.getElementById('admin-tc-fields').style.display='block';
   document.getElementById('admin-tcg-fields').style.display='none';
   document.getElementById('admin-parallel-field').style.display='none';
@@ -4717,6 +4878,10 @@ function editCard(id){
   if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}
   if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}
   previewImg();
+  // Load photos
+  _photos = Array.isArray(c.media) && c.media.length > 0 ? [...c.media] : (c.image ? [c.image] : []);
+  document.getElementById('f-image').value = _photos[0] || '';
+  renderAdminPhotoList();
   document.getElementById('admin-form-title').textContent='Edit Card';
   document.getElementById('edit-mode-note').style.display='block';
   document.getElementById('admin-save-btn').textContent='Save Changes';
