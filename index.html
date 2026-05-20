@@ -1122,28 +1122,41 @@
     overflow: hidden;
   }
 
+  /* No thumbs — image fills full height */
+  #modal-img-side.no-thumbs > img {
+    height: 100%;
+    border-radius: 7px 0 0 7px;
+  }
+
+  /* Has thumbs — image leaves room at bottom */
+  #modal-img-side.has-thumbs > img {
+    height: calc(100% - 74px);
+    border-radius: 7px 0 0 0;
+  }
+
   #modal-img-side > img {
     width: 100%;
-    flex: 1;
-    min-height: 0;
     object-fit: cover;
-    border-radius: 7px 0 0 0;
     display: block;
     cursor: zoom-in;
     transition: filter 0.2s;
+    flex-shrink: 0;
   }
   #modal-img-side > img:hover { filter: brightness(1.08); }
 
-  /* Thumbs strip — fixed height at bottom */
+  /* Thumbs strip — fixed 66px at bottom */
   #modal-thumbs {
     display: none;
     justify-content: center;
     gap: 6px;
     flex-wrap: wrap;
-    padding: 8px;
+    padding: 6px 8px;
     border-top: 1px solid var(--border-gold);
     background: rgba(0,0,0,0.3);
     flex-shrink: 0;
+    height: 66px;
+    align-items: center;
+    overflow: hidden;
   }
 
   #modal-img-zoom-hint {
@@ -4536,12 +4549,17 @@ async function openModal(id) {
   // Thumbnails — only show if more than 1 photo
   const thumbsEl = document.getElementById('modal-thumbs');
   const allPhotos = Array.isArray(c.media) && c.media.length > 1 ? c.media : [];
+  const imgSide = document.getElementById('modal-img-side');
   if (allPhotos.length > 1) {
+    imgSide.classList.add('has-thumbs');
+    imgSide.classList.remove('no-thumbs');
     thumbsEl.innerHTML = allPhotos.map((url, i) =>
       `<img class="modal-thumb ${i===0?'active':''}" src="${escHtml(url)}" onclick="switchPhoto(event,'${escHtml(url)}')" alt="Photo ${i+1}">`
     ).join('');
     thumbsEl.style.display = 'flex';
   } else {
+    imgSide.classList.add('no-thumbs');
+    imgSide.classList.remove('has-thumbs');
     thumbsEl.innerHTML = '';
     thumbsEl.style.display = 'none';
   }
