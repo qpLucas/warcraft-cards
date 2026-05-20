@@ -3,8 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO: Meta tags -->
+<meta name="description" content="WarcraftCards.com — A personal collection of Warcraft trading cards and TCG cards. Browse, rate and discover rare parallels, inserts and base cards from sets like Blizzard Legacy Collection, Heroes of Azeroth and more.">
+<meta name="keywords" content="Warcraft cards, Warcraft TCG, Warcraft trading cards, Blizzard Legacy Collection, Heroes of Azeroth, Upper Deck Warcraft, Warcraft card collection, WoW TCG, World of Warcraft cards, rare Warcraft cards, parallel cards, foil cards">
+<meta name="author" content="WarcraftCards.com">
+<meta name="robots" content="index, follow">
+
+<!-- SEO: Canonical URL -->
+<link rel="canonical" href="https://warcraftcards.com/">
+
+<!-- SEO: Open Graph (Facebook, Discord, WhatsApp previews) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://warcraftcards.com/">
+<meta property="og:title" content="WarcraftCards.com — Warcraft Card Collection">
+<meta property="og:description" content="A personal collection of Warcraft trading cards and TCG cards. Browse rare parallels, inserts and base cards from sets like Blizzard Legacy Collection and Heroes of Azeroth.">
+<meta property="og:image" content="https://warcraftcards.com/og-image.jpg">
+<meta property="og:site_name" content="WarcraftCards.com">
+<meta property="og:locale" content="en_US">
+
+<!-- SEO: Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WarcraftCards.com — Warcraft Card Collection">
+<meta name="twitter:description" content="A personal collection of Warcraft trading cards and TCG cards. Browse rare parallels, inserts and base cards.">
+<meta name="twitter:image" content="https://warcraftcards.com/og-image.jpg">
+
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='5' width='16' height='22' rx='2' fill='%23271A08' stroke='%23C9A84C' stroke-width='1' transform='rotate(-8 11 16)'/%3E%3Crect x='6' y='4' width='16' height='22' rx='2' fill='%231C1206' stroke='%23C9A84C' stroke-width='1' transform='rotate(-2 14 15)'/%3E%3Crect x='10' y='4' width='16' height='22' rx='2' fill='%23221608' stroke='%23C9A84C' stroke-width='1.5'/%3E%3Ctext x='18' y='20' font-family='Georgia,serif' font-size='13' font-weight='700' fill='%23C9A84C' text-anchor='middle'>W%3C/text%3E%3C/svg%3E">
-<title>Warcraft Cards — May my ancestors watch over my collection!</title>
+<title>WarcraftCards.com | May my ancestors watch over my collection!</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -426,12 +451,38 @@
     backdrop-filter: blur(4px);
   }
 
-  .rarity-common { background: rgba(120,120,120,0.8); color: #ddd; }
-  .rarity-uncommon { background: rgba(30,100,30,0.85); color: #8fe88f; }
-  .rarity-rare { background: rgba(20,50,140,0.85); color: #8ab4f8; }
-  .rarity-epic { background: rgba(100,20,140,0.85); color: #d9a8f8; }
-  .rarity-legendary { background: rgba(180,100,0,0.85); color: #ffd700; border: 1px solid rgba(255,215,0,0.4); }
+  .rarity-common, .rarity-uncommon, .rarity-rare, .rarity-epic, .rarity-legendary {
+    background: rgba(107,79,16,0.85);
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.4);
+  }
   .badge-parallel { background: rgba(107,79,16,0.85); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.4); }
+
+  .card-foil-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    backdrop-filter: blur(4px);
+    background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff, #ff6b6b);
+    background-size: 200% 200%;
+    animation: foil-shine 6s linear infinite;
+    color: #fff;
+    font-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    border: none;
+  }
+
+  @keyframes foil-shine {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
   .card-forsale-badge {
     position: absolute;
@@ -1175,28 +1226,40 @@
     margin-bottom: 10px;
   }
 
+  #modal-rating-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #modal-rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
   .modal-stars {
     display: flex;
-    gap: 4px;
-    margin-bottom: 8px;
+    gap: 6px;
   }
 
   .modal-star {
-    font-size: 24px;
+    font-size: 32px;
     color: var(--text-dim);
     cursor: pointer;
     transition: color 0.15s, transform 0.1s;
     user-select: none;
   }
   .modal-star.filled { color: var(--gold); }
-  .modal-star.hover { color: var(--gold-light); transform: scale(1.2); }
+  .modal-star.hover { color: var(--gold-light); transform: scale(1.15); }
 
   #modal-rating-text {
     font-family: 'Crimson Pro', serif;
-    font-size: 13px;
+    font-size: 17px;
     color: var(--text-muted);
+    text-align: right;
   }
-  #modal-rating-text .avg { color: var(--gold); font-weight: 600; }
+  #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
 
   /* ── ADMIN TABS ── */
   #admin-header-left {
@@ -1433,9 +1496,7 @@
     transition: all 0.18s;
     text-transform: uppercase;
   }
-  .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }
-
-  /* ── IMAGE UPLOAD ── */
+  .poll-del-btn:hover { color: #e05555; border-color: #8b1a1a; }  /* ── IMAGE UPLOAD ── */
   #img-upload-area {
     display: flex;
     flex-direction: column;
@@ -1485,20 +1546,10 @@
   #img-url-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    margin-top: 6px;
   }
-
-  .img-url-or {
-    font-family: 'Crimson Pro', serif;
-    font-size: 12px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    font-style: italic;
-  }
-
-  #img-url-row input {
-    flex: 1;
-  }
+  #img-url-row input { flex: 1; }
 
   /* ── COMMENTS ADMIN TAB ── */
   #admin-comments-body {
@@ -2682,7 +2733,12 @@
     background: rgba(201,168,76,0.08) !important;
   }
 
-  /* ── ABOUT MODAL ── */
+  #support-gif {
+    display: block;
+    margin: 16px auto 0;
+    max-width: 100%;
+    border-radius: 6px;
+  }
   #about-overlay {
     display: none;
     position: fixed;
@@ -3058,13 +3114,10 @@
       width: 100%;
       position: relative;
       align-self: auto;
-      cursor: zoom-in;
       background: #000;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 16px;
-      box-sizing: border-box;
     }
     #modal-img-side img {
       width: auto;
@@ -3076,7 +3129,8 @@
       border-radius: 4px;
       min-height: unset;
       display: block;
-      margin: 0 auto;
+      margin: 16px auto;
+      cursor: zoom-in;
     }
     #modal-info-side {
       max-height: none;
@@ -3108,6 +3162,28 @@
 
     /* ── SHOW MORE ── */
     #show-more-btn { padding: 10px 28px; font-size: 10px; }
+  }
+
+  @media (max-width: 768px) {
+    .popular-item {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .popular-info { width: 100%; min-width: 0; }
+    .popular-stats {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      flex-shrink: unset;
+      border-top: 1px solid var(--border-gold);
+      padding-top: 6px;
+      margin-top: 2px;
+    }
+    .popular-stars { font-size: 11px; }
+    .popular-avg { font-size: 11px; }
+    .popular-vote-count { font-size: 11px; margin-left: 0; }
   }
 
   /* ── FOOTER ── */
@@ -3338,8 +3414,10 @@
         <div class="modal-divider"></div>
         <div id="modal-rating-section">
           <h4>Community Rating</h4>
-          <div class="modal-stars" id="modal-stars"></div>
-          <div id="modal-rating-text"></div>
+          <div id="modal-rating-row">
+            <div class="modal-stars" id="modal-stars"></div>
+            <div id="modal-rating-text"></div>
+          </div>
         </div>
         <div class="modal-divider"></div>
         <div id="modal-forsale-section" style="display:none">
@@ -3467,6 +3545,7 @@
         </svg>
         Support via PayPal
       </a>
+      <img id="support-gif" src="https://oxfwumystnukawkhplbh.supabase.co/storage/v1/object/public/card-images/tipjar-thankyou-arthas.gif" alt="Thank you!">
     </div>
   </div>
 </div>
@@ -4133,12 +4212,21 @@ function cardHTML(c) {
   const starsHtml = [1,2,3,4,5].map(i =>
     `<span class="star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
       ${!voted?`onmouseenter="hoverCardStar(this,${i})" onmouseleave="unhoverCardStar(this)" onclick="event.stopPropagation();submitRating('${c.id}',${i})"`:''} style="${voted?'cursor:default':'cursor:pointer'}">★</span>`).join('');
+  // Build descriptive alt text for SEO
+  const cardNum = c.number ? `#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}` : '';
+  const cardTypeInfo = isTC
+    ? (c.cardSubtype==='Parallel' && c.parallel ? c.parallel : c.cardSubtype==='Insert' && c.insert ? c.insert : 'Base')
+    : (c.rarity || '');
+  const altParts = [c.name, cardNum, c.set, cardTypeInfo].filter(Boolean);
+  const altText = altParts.join(' - ');
+
   const imgContent = c.image
-    ? `<img src="${escHtml(c.image)}" alt="${escHtml(c.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
+    ? `<img src="${escHtml(c.image)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
   const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
+  const foilBadge = !isTC && c.foil === 'Foil' ? `<span class="card-foil-badge">Foil</span>` : '';
   return `<div class="card-item" onclick="openModal('${c.id}')">
-    <div class="card-img-wrap">${imgContent}${badgeHTML}${forSaleBadge}</div>
+    <div class="card-img-wrap">${imgContent}${badgeHTML}${foilBadge}${forSaleBadge}</div>
     <div class="card-info">
       <div class="card-name">${escHtml(c.name)}</div>
       <div class="card-meta">
@@ -4182,28 +4270,68 @@ function getFiltered() {
 
 function applyFilters() {
   _visibleCount = 11;
-  currentFilters.type = document.getElementById('filter-type').value;
+  currentFilters.type   = document.getElementById('filter-type').value;
   currentFilters.search = document.getElementById('filter-search').value;
   updateSetFilter();
   currentFilters.set = document.getElementById('filter-set').value;
+
   const isTC  = currentFilters.type === 'Trading Card';
   const isTCG = currentFilters.type === 'Trading Card Game';
+  const setFilter = currentFilters.set;
+
+  // Base pool filtered by type + set
+  const pool = cards.filter(c =>
+    (!currentFilters.type || c.type === currentFilters.type) &&
+    (!setFilter || c.set === setFilter)
+  );
+
   document.querySelectorAll('.filter-tc').forEach(el => el.style.display = isTC ? '' : 'none');
   document.querySelectorAll('.filter-tcg').forEach(el => el.style.display = isTCG ? '' : 'none');
+
   if (isTC) {
-    const subtype = document.getElementById('filter-card-subtype').value;
+    // Only show subtypes that exist in pool
+    const availableSubtypes = new Set(pool.map(c => c.cardSubtype).filter(Boolean));
+    const subtypeSel = document.getElementById('filter-card-subtype');
+    const curSubtype = subtypeSel.value;
+    subtypeSel.innerHTML = '<option value="">Base / Parallel / Insert</option>' +
+      ['Base','Parallel','Insert'].filter(s => availableSubtypes.has(s))
+        .map(s => `<option value="${s}"${s===curSubtype?' selected':''}>${s}</option>`).join('');
+    if (curSubtype && !availableSubtypes.has(curSubtype)) subtypeSel.value = '';
+
+    const subtype = subtypeSel.value;
     currentFilters.cardSubtype = subtype;
-    const showParallel = subtype==='Parallel', showInsert = subtype==='Insert';
-    document.getElementById('filter-parallel-name').style.display = showParallel?'':'none';
-    document.getElementById('filter-insert-name').style.display   = showInsert?'':'none';
-    if(showParallel) updateDynamicFilter('filter-parallel-name',cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Parallel').map(c=>c.parallel),'All Parallels');
-    if(showInsert)   updateDynamicFilter('filter-insert-name',cards.filter(c=>c.type==='Trading Card'&&c.cardSubtype==='Insert').map(c=>c.insert),'All Inserts');
-    currentFilters.parallelName = showParallel?document.getElementById('filter-parallel-name').value:'';
-    currentFilters.insertName   = showInsert?document.getElementById('filter-insert-name').value:'';
-    currentFilters.rarity=''; currentFilters.foil='';
+    const showParallel = subtype === 'Parallel';
+    const showInsert   = subtype === 'Insert';
+
+    document.getElementById('filter-parallel-name').style.display = showParallel ? '' : 'none';
+    document.getElementById('filter-insert-name').style.display   = showInsert   ? '' : 'none';
+
+    if (showParallel) updateDynamicFilter('filter-parallel-name', pool.filter(c=>c.cardSubtype==='Parallel').map(c=>c.parallel), 'All Parallels');
+    if (showInsert)   updateDynamicFilter('filter-insert-name',   pool.filter(c=>c.cardSubtype==='Insert').map(c=>c.insert),     'All Inserts');
+
+    currentFilters.parallelName = showParallel ? document.getElementById('filter-parallel-name').value : '';
+    currentFilters.insertName   = showInsert   ? document.getElementById('filter-insert-name').value   : '';
+    currentFilters.rarity = ''; currentFilters.foil = '';
   } else if (isTCG) {
-    currentFilters.rarity = document.getElementById('filter-rarity').value;
-    currentFilters.foil   = document.getElementById('filter-foil').value;
+    // Only show rarities that exist in pool
+    const availableRarities = [...new Set(pool.map(c=>c.rarity).filter(Boolean))].sort();
+    const raritySel = document.getElementById('filter-rarity');
+    const curRarity = raritySel.value;
+    raritySel.innerHTML = '<option value="">All Rarities</option>' +
+      availableRarities.map(r => `<option value="${escHtml(r)}"${r===curRarity?' selected':''}>${escHtml(r)}</option>`).join('');
+    if (curRarity && !availableRarities.includes(curRarity)) raritySel.value = '';
+
+    // Only show foil options that exist in pool
+    const availableFoils = [...new Set(pool.map(c=>c.foil).filter(Boolean))];
+    const foilSel = document.getElementById('filter-foil');
+    const curFoil = foilSel.value;
+    foilSel.innerHTML = '<option value="">Foil / Non-Foil</option>' +
+      ['Foil','Non-Foil'].filter(f => availableFoils.includes(f))
+        .map(f => `<option value="${f}"${f===curFoil?' selected':''}>${f}</option>`).join('');
+    if (curFoil && !availableFoils.includes(curFoil)) foilSel.value = '';
+
+    currentFilters.rarity = raritySel.value;
+    currentFilters.foil   = foilSel.value;
     currentFilters.cardSubtype=''; currentFilters.parallelName=''; currentFilters.insertName='';
   } else {
     currentFilters.cardSubtype=''; currentFilters.parallelName=''; currentFilters.insertName='';
@@ -4279,13 +4407,23 @@ async function openModal(id) {
   const cardNum = rawNum ? '#'+rawNum.replace(/\/.*$/,'').trim() : '';
   document.getElementById('modal-card-number').textContent = cardNum;
   const imgEl = document.getElementById('modal-img');
-  if (c.image) { imgEl.src=c.image; imgEl.className=c.rotate?'img-rotated':''; imgEl.style.display='block'; document.getElementById('modal-img-side').style.display='block'; }
-  else { document.getElementById('modal-img-side').style.display='none'; }
+  if (c.image) {
+    imgEl.src = c.image;
+    imgEl.className = c.rotate ? 'img-rotated' : '';
+    imgEl.style.display = 'block';
+    const isTC_alt = c.type === 'Trading Card';
+    const cardNum_alt = c.number ? `#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}` : '';
+    const typeInfo_alt = isTC_alt ? (c.cardSubtype==='Parallel'&&c.parallel?c.parallel:c.cardSubtype==='Insert'&&c.insert?c.insert:'Base') : (c.rarity||'');
+    imgEl.alt = [c.name, cardNum_alt, c.set, typeInfo_alt].filter(Boolean).join(' - ');
+    document.getElementById('modal-img-side').style.display='block';
+  } else { document.getElementById('modal-img-side').style.display='none'; }
+
   const isTC = c.type === 'Trading Card';
   const fields = [
     ['Manufacturer', c.manufacturer],
     ['Set', c.set],
     ['Rarity', c.rarity],
+    ['Foil', !isTC && c.foil ? c.foil : null],
     ['Type', isTC && c.cardSubtype === 'Base' ? 'Base' : null],
     ['Parallel', isTC && c.cardSubtype === 'Parallel' ? c.parallel : null],
     ['Insert', isTC && c.cardSubtype === 'Insert' ? c.insert : null],
@@ -4434,7 +4572,16 @@ function closeDonateOutside(e){if(e.target===document.getElementById('donate-ove
 function submitDonate(){if(document.getElementById('d-trap').value)return;const email=document.getElementById('d-email').value.trim();const message=document.getElementById('d-message').value.trim();const captcha=parseInt(document.getElementById('d-captcha-answer').value.trim(),10);if(!email||!email.includes('@')){toast('Please enter a valid email.');return;}if(!message){toast('Please write a message.');return;}if(isNaN(captcha)||captcha!==_donateCaptchaAnswer){toast('Wrong answer — please try again.');generateDonateCaptcha();return;}const subject=encodeURIComponent('Card Offer — Warcraft Cards');const body=encodeURIComponent(`From: ${email}\n\n${message}`);window.location.href=`mailto:warcraftcardscom@gmail.com?subject=${subject}&body=${body}`;toast('Opening your email client…');setTimeout(()=>closeDonate(),1200);}
 
 // ── SUPPORT ──
-function openSupport(){document.getElementById('support-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function openSupport(){
+  const gif = document.getElementById('support-gif');
+  if (gif) {
+    const src = gif.src;
+    gif.src = '';
+    setTimeout(() => gif.src = src, 50);
+  }
+  document.getElementById('support-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 function closeSupport(){document.getElementById('support-overlay').classList.remove('open');document.body.style.overflow='';}
 function closeSupportOutside(e){if(e.target===document.getElementById('support-overlay'))closeSupport();}
 
@@ -4461,59 +4608,26 @@ function closeAdmin(){document.getElementById('admin-overlay').classList.remove(
 function saveMinRatings(){const val=parseInt(document.getElementById('admin-minratings').value,10);if(!isNaN(val)&&val>=1){minRatingsForFav=val;saveSetting('minRatingsForFav',val);renderLeaderboard();toast(`Fan Favourites now requires ${val} rating${val!==1?'s':''}.`);}}
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
+
 function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
 
 async function uploadCardImage(input) {
-  const file = input.files[0];
-  if (!file) return;
-
+  const file = input.files[0]; if (!file) return;
   const status = document.getElementById('img-upload-status');
   const btnText = document.getElementById('img-upload-btn-text');
-
-  // Validate file type and size (max 5MB)
-  if (!file.type.startsWith('image/')) { status.textContent = 'Please select an image file.'; status.className = 'error'; return; }
-  if (file.size > 5 * 1024 * 1024) { status.textContent = 'Image must be under 5MB.'; status.className = 'error'; return; }
-
-  status.textContent = 'Uploading…';
-  status.className = 'loading';
-  btnText.textContent = '⏳ Uploading…';
-
-  // Generate unique filename
+  if (!file.type.startsWith('image/')) { status.textContent = 'Images only.'; status.className = 'error'; return; }
+  if (file.size > 10 * 1024 * 1024) { status.textContent = 'Max 10MB.'; status.className = 'error'; return; }
+  status.textContent = 'Uploading…'; status.className = 'loading'; btnText.textContent = '⏳ Uploading…';
   const ext = file.name.split('.').pop().toLowerCase();
   const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-
-  const { data, error } = await sb.storage.from('card-images').upload(filename, file, {
-    cacheControl: '3600',
-    upsert: false,
-    contentType: file.type
-  });
-
-  if (error) {
-    status.textContent = 'Upload failed — try again.';
-    status.className = 'error';
-    btnText.textContent = '📁 Upload Photo';
-    console.error('Upload error:', error);
-    return;
-  }
-
-  // Get public URL
+  const { error } = await sb.storage.from('card-images').upload(filename, file, { cacheControl:'3600', upsert:false, contentType:file.type });
+  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; return; }
   const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
-  const publicUrl = urlData.publicUrl;
-
-  // Fill in the URL field and preview
-  document.getElementById('f-image').value = publicUrl;
-  const wrap = document.getElementById('img-preview-wrap');
-  const img = document.getElementById('img-preview');
-  img.src = publicUrl;
-  wrap.style.display = 'block';
-
-  status.textContent = '✓ Uploaded!';
-  status.className = 'success';
-  btnText.textContent = '📁 Upload Photo';
-
-  // Reset file input
-  input.value = '';
-  setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
+  document.getElementById('f-image').value = urlData.publicUrl;
+  document.getElementById('img-preview').src = urlData.publicUrl;
+  document.getElementById('img-preview-wrap').style.display = 'block';
+  status.textContent = '✓ Uploaded!'; status.className = 'success'; btnText.textContent = '📁 Upload Photo';
+  input.value = ''; setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
 }
 
 // ── ADMIN TYPE SWITCHING ──
@@ -4524,8 +4638,8 @@ function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype
 // ── SAVE CARD ──
 async function saveCard() {
   const name = document.getElementById('f-name').value.trim();
-  const image = document.getElementById('f-image').value.trim();
   if (!name) { toast('Card name is required.'); return; }
+  const image = document.getElementById('f-image').value.trim();
   const editId = document.getElementById('admin-edit-id').value;
   const type = document.getElementById('f-type').value;
   const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
@@ -4559,7 +4673,22 @@ async function saveCard() {
   clearAdminForm(); renderAdminList(); renderGallery(); renderLeaderboard(); renderForSaleSection();
 }
 
-function clearAdminForm(){['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-type').value='Trading Card';document.getElementById('f-rarity').value='Common';document.getElementById('f-foil').value='Non-Foil';document.getElementById('f-card-subtype').value='Base';document.getElementById('f-forsale').checked=false;document.getElementById('f-price-wrap').style.display='none';document.getElementById('img-preview-wrap').style.display='none';document.getElementById('admin-tc-fields').style.display='block';document.getElementById('admin-tcg-fields').style.display='none';document.getElementById('admin-parallel-field').style.display='none';document.getElementById('admin-insert-field').style.display='none';populateAdminDataLists();cancelEdit();}
+function clearAdminForm(){
+  ['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('f-type').value='Trading Card';
+  document.getElementById('f-rarity').value='Common';
+  document.getElementById('f-foil').value='Non-Foil';
+  document.getElementById('f-card-subtype').value='Base';
+  document.getElementById('f-forsale').checked=false;
+  document.getElementById('f-price-wrap').style.display='none';
+  document.getElementById('img-preview-wrap').style.display='none';
+  document.getElementById('admin-tc-fields').style.display='block';
+  document.getElementById('admin-tcg-fields').style.display='none';
+  document.getElementById('admin-parallel-field').style.display='none';
+  document.getElementById('admin-insert-field').style.display='none';
+  populateAdminDataLists();
+  cancelEdit();
+}
 
 function populateAdminDataLists() {
   const sets = [...new Set(cards.map(c => c.set).filter(Boolean))].sort();
@@ -4570,7 +4699,30 @@ function populateAdminDataLists() {
 
 function cancelEdit(){document.getElementById('admin-edit-id').value='';document.getElementById('admin-form-title').textContent='Add New Card';document.getElementById('edit-mode-note').style.display='none';document.getElementById('admin-save-btn').textContent='Add Card to Collection';document.getElementById('admin-cancel-edit').style.display='none';}
 
-function editCard(id){const c=cards.find(x=>x.id===id);if(!c)return;document.getElementById('admin-edit-id').value=id;document.getElementById('f-name').value=c.name||'';document.getElementById('f-image').value=c.image||'';document.getElementById('f-set').value=c.set||'';document.getElementById('f-type').value=c.type||'Trading Card Game';document.getElementById('f-number').value=c.number||'';document.getElementById('f-manufacturer').value=c.manufacturer||'';document.getElementById('f-forsale').checked=!!c.forSale;document.getElementById('f-price').value=c.price||'';document.getElementById('f-price-wrap').style.display=c.forSale?'block':'none';const isTC=c.type==='Trading Card';const isTCG=c.type==='Trading Card Game';document.getElementById('admin-tc-fields').style.display=isTC?'block':'none';document.getElementById('admin-tcg-fields').style.display=isTCG?'block':'none';if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}previewImg();document.getElementById('admin-form-title').textContent='Edit Card';document.getElementById('edit-mode-note').style.display='block';document.getElementById('admin-save-btn').textContent='Save Changes';document.getElementById('admin-cancel-edit').style.display='block';document.getElementById('admin-form-col').scrollIntoView({behavior:'smooth'});}
+function editCard(id){
+  const c=cards.find(x=>x.id===id);if(!c)return;
+  document.getElementById('admin-edit-id').value=id;
+  document.getElementById('f-name').value=c.name||'';
+  document.getElementById('f-image').value=c.image||'';
+  document.getElementById('f-set').value=c.set||'';
+  document.getElementById('f-type').value=c.type||'Trading Card';
+  document.getElementById('f-number').value=c.number||'';
+  document.getElementById('f-manufacturer').value=c.manufacturer||'';
+  document.getElementById('f-forsale').checked=!!c.forSale;
+  document.getElementById('f-price').value=c.price||'';
+  document.getElementById('f-price-wrap').style.display=c.forSale?'block':'none';
+  const isTC=c.type==='Trading Card'; const isTCG=c.type==='Trading Card Game';
+  document.getElementById('admin-tc-fields').style.display=isTC?'block':'none';
+  document.getElementById('admin-tcg-fields').style.display=isTCG?'block':'none';
+  if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}
+  if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}
+  previewImg();
+  document.getElementById('admin-form-title').textContent='Edit Card';
+  document.getElementById('edit-mode-note').style.display='block';
+  document.getElementById('admin-save-btn').textContent='Save Changes';
+  document.getElementById('admin-cancel-edit').style.display='block';
+  document.getElementById('admin-form-col').scrollIntoView({behavior:'smooth'});
+}
 
 async function deleteCard(id){if(!confirm('Remove this card from the collection?'))return;const{error}=await sb.from('cards').delete().eq('id',id);if(error){toast('Error deleting card.');return;}cards=cards.filter(c=>c.id!==id);updateTopbarCount();renderAdminList();renderGallery();renderLeaderboard();renderForSaleSection();toast('Card removed.');}
 
