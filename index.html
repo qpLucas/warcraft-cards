@@ -1075,7 +1075,7 @@
     max-width: 960px;
     width: 100%;
     max-height: 90vh;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 60px rgba(201,168,76,0.15), 0 20px 80px rgba(0,0,0,0.9);
@@ -1106,7 +1106,7 @@
   #modal-inner {
     display: flex;
     gap: 0;
-    overflow: visible;
+    overflow: hidden;
     flex: 1;
     min-height: 0;
   }
@@ -1116,10 +1116,11 @@
     width: 380px;
     position: sticky;
     top: 0;
-    align-self: flex-start;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    overflow: visible;
+    overflow: hidden;
+    max-height: 90vh;
   }
 
   #modal-img-side > img {
@@ -1127,8 +1128,8 @@
     object-fit: cover;
     border-radius: 7px 0 0 0;
     display: block;
-    min-height: 320px;
-    flex-shrink: 0;
+    flex: 1;
+    min-height: 0;
     cursor: zoom-in;
     transition: filter 0.2s;
   }
