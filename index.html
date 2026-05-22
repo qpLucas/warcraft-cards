@@ -3273,19 +3273,21 @@
       position: static !important;
       height: auto !important;
       max-height: none !important;
+      width: auto !important;
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
       border-radius: 4px !important;
+      overflow: hidden;
     }
     #modal-img-side img#modal-img {
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      max-height: 35vh;
-      object-fit: contain;
+      width: auto !important;
+      height: auto !important;
+      max-width: 100% !important;
+      max-height: 35vh !important;
+      object-fit: contain !important;
       background: #000;
       border-radius: 4px;
       min-height: unset;
