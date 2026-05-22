@@ -3267,16 +3267,23 @@
       justify-content: center;
       padding: 10px 12px;
       gap: 10px;
+      min-height: 200px;
     }
     #modal-img-main-wrap {
+      position: static !important;
       height: auto !important;
+      max-height: none !important;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
       border-radius: 4px !important;
-      flex-shrink: 0;
     }
     #modal-img-side img#modal-img {
       width: auto;
       height: auto;
-      max-width: 65%;
+      max-width: 100%;
       max-height: 35vh;
       object-fit: contain;
       background: #000;
@@ -3284,6 +3291,10 @@
       min-height: unset;
       display: block;
       cursor: zoom-in;
+    }
+    #modal-mobile-thumbs {
+      flex-shrink: 0;
+      width: 50px;
     }
     #modal-info-side {
       max-height: none;
