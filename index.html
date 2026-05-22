@@ -3213,6 +3213,30 @@
 
     /* ── MODAL ── */
     #modal-thumbstrip { display: none !important; }
+    #modal-mobile-thumbs {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      padding-right: 8px;
+      border-right: 1px solid var(--border-gold);
+      flex-shrink: 0;
+    }
+    #modal-mobile-thumbs.visible { display: flex; }
+    .mts-mob-thumb {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 3px;
+      border: 2px solid rgba(201,168,76,0.2);
+      cursor: pointer;
+      opacity: 0.6;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .mts-mob-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
+    .mts-mob-thumb.active { border-color: var(--gold); opacity: 1; }
     #modal-overlay {
       align-items: flex-start;
       overflow-y: auto;
@@ -3238,20 +3262,27 @@
       align-self: auto;
       background: #000;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
+      justify-content: center;
+      padding: 10px 12px;
+      gap: 10px;
+    }
+    #modal-img-main-wrap {
+      height: auto !important;
+      border-radius: 4px !important;
+      flex-shrink: 0;
     }
     #modal-img-side img#modal-img {
       width: auto;
       height: auto;
-      max-width: 60%;
+      max-width: 65%;
       max-height: 35vh;
       object-fit: contain;
       background: #000;
       border-radius: 4px;
       min-height: unset;
       display: block;
-      margin: 16px auto;
       cursor: zoom-in;
     }
     #modal-info-side {
@@ -3524,6 +3555,7 @@
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side">
+        <div id="modal-mobile-thumbs"></div>
         <div id="modal-img-main-wrap" onclick="openLightbox()">
           <img id="modal-img" src="" alt="">
         </div>
@@ -4545,22 +4577,30 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
-  // Thumbnail strip — desktop only, hidden on mobile via CSS
+  // Desktop thumbnail strip
   const strip = document.getElementById('modal-thumbstrip');
   const imgSide = document.getElementById('modal-img-side');
+  // Mobile thumbnail strip
+  const mobileStrip = document.getElementById('modal-mobile-thumbs');
   const photos = Array.isArray(c.media) && c.media.length > 1 ? c.media.filter(Boolean) : [];
   if (photos.length > 1) {
+    const thumbsHTML = photos.map((url, i) => `<img class="mts-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`).join('');
+    const mobThumbsHTML = photos.map((url, i) => `<img class="mts-mob-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumbMob(event,'${escHtml(url)}')" alt="Photo ${i+1}">`).join('');
+    // Desktop
     imgSide.classList.add('has-thumbs');
     imgSide.classList.remove('no-thumbs');
-    strip.innerHTML = photos.map((url, i) =>
-      `<img class="mts-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`
-    ).join('');
+    strip.innerHTML = thumbsHTML;
     strip.style.display = 'flex';
+    // Mobile
+    mobileStrip.innerHTML = mobThumbsHTML;
+    mobileStrip.classList.add('visible');
   } else {
     imgSide.classList.add('no-thumbs');
     imgSide.classList.remove('has-thumbs');
     strip.innerHTML = '';
     strip.style.display = 'none';
+    mobileStrip.innerHTML = '';
+    mobileStrip.classList.remove('visible');
   }
 
   const isTC = c.type === 'Trading Card';
@@ -4741,6 +4781,17 @@ function switchThumb(e, url) {
   document.getElementById('modal-img').src = url;
   document.querySelectorAll('.mts-thumb').forEach(t => t.classList.remove('active'));
   e.target.classList.add('active');
+}
+
+function switchThumbMob(e, url) {
+  e.stopPropagation();
+  document.getElementById('modal-img').src = url;
+  document.querySelectorAll('.mts-mob-thumb').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+  // Also sync desktop thumbs active state
+  document.querySelectorAll('.mts-thumb').forEach(t => {
+    t.classList.toggle('active', t.src === url);
+  });
 }
 
 // ── LIGHTBOX ──
