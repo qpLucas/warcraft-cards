@@ -1120,16 +1120,26 @@
     align-self: stretch;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   #modal-img-main-wrap {
     width: 100%;
-    flex: 1;
-    min-height: 0;
     overflow: hidden;
-    border-radius: 7px 0 0 0;
     cursor: zoom-in;
     background: #000;
+  }
+
+  /* No thumbs — image fills full height */
+  #modal-img-side.no-thumbs #modal-img-main-wrap {
+    height: 100%;
+    border-radius: 7px 0 0 7px;
+  }
+
+  /* Has thumbs — image leaves 70px for strip */
+  #modal-img-side.has-thumbs #modal-img-main-wrap {
+    height: calc(100% - 70px);
+    border-radius: 7px 0 0 0;
   }
 
   #modal-img-side img#modal-img {
@@ -1143,14 +1153,19 @@
 
   /* ── DESKTOP THUMBNAIL STRIP ── */
   #modal-thumbstrip {
-    flex-shrink: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 66px;
     display: none;
+    align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 6px 8px;
+    padding: 0 8px;
     background: rgba(0,0,0,0.4);
     border-top: 1px solid var(--border-gold);
-    flex-wrap: wrap;
+    overflow: hidden;
   }
   .mts-thumb {
     width: 54px;
@@ -4532,14 +4547,18 @@ async function openModal(id) {
 
   // Thumbnail strip — desktop only, hidden on mobile via CSS
   const strip = document.getElementById('modal-thumbstrip');
-  console.log('card media:', c.media, 'photos count:', c.media?.length);
+  const imgSide = document.getElementById('modal-img-side');
   const photos = Array.isArray(c.media) && c.media.length > 1 ? c.media.filter(Boolean) : [];
   if (photos.length > 1) {
+    imgSide.classList.add('has-thumbs');
+    imgSide.classList.remove('no-thumbs');
     strip.innerHTML = photos.map((url, i) =>
       `<img class="mts-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`
     ).join('');
     strip.style.display = 'flex';
   } else {
+    imgSide.classList.add('no-thumbs');
+    imgSide.classList.remove('has-thumbs');
     strip.innerHTML = '';
     strip.style.display = 'none';
   }
