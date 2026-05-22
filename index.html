@@ -4532,6 +4532,7 @@ async function openModal(id) {
 
   // Thumbnail strip — desktop only, hidden on mobile via CSS
   const strip = document.getElementById('modal-thumbstrip');
+  console.log('card media:', c.media, 'photos count:', c.media?.length);
   const photos = Array.isArray(c.media) && c.media.length > 1 ? c.media.filter(Boolean) : [];
   if (photos.length > 1) {
     strip.innerHTML = photos.map((url, i) =>
