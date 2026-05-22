@@ -1074,8 +1074,7 @@
     border-radius: 8px;
     max-width: 960px;
     width: 100%;
-    height: 88vh;
-    max-height: 88vh;
+    max-height: 90vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1120,17 +1119,16 @@
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   #modal-img-main-wrap {
     width: 100%;
     flex: 1;
-    min-height: 0;
     overflow: hidden;
     border-radius: 7px 0 0 0;
     cursor: zoom-in;
-    background: #000;
+    background: var(--bg-card);
+    flex-shrink: 0;
   }
 
   #modal-img-side img#modal-img {
@@ -1142,7 +1140,139 @@
   }
   #modal-img-main-wrap:hover img#modal-img { filter: brightness(1.08); }
 
-  /* Desktop thumbnail strip — below main image */
+  #modal-img-zoom-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--gold-dim);
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  #modal-img-main-wrap:hover #modal-img-zoom-hint { color: var(--gold); }
+
+  #modal-info-side {
+    flex: 1;
+    padding: 32px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  #modal-info-side::-webkit-scrollbar { width: 4px; }
+  #modal-info-side::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+  #modal-card-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  #modal-card-number {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  #modal-card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1.2;
+    text-shadow: 0 0 20px rgba(201,168,76,0.3);
+  }
+
+  .modal-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+  }
+
+  .modal-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .modal-meta-item {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 8px 12px;
+  }
+
+  .modal-meta-item .m-label {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .modal-meta-item .m-value {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    color: var(--text-cream);
+    font-weight: 600;
+  }
+
+  #modal-rating-section h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  #modal-rating-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #modal-rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .modal-stars {
+    display: flex;
+    gap: 6px;
+  }
+
+  .modal-star {
+    font-size: 32px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.15s, transform 0.1s;
+    user-select: none;
+  }
+  .modal-star.filled { color: var(--gold); }
+  .modal-star.hover { color: var(--gold-light); transform: scale(1.15); }
+
+  #modal-rating-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+  #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
+
+  /* ── MODAL GALLERY THUMBNAILS ── */
+  #modal-img { width: 100%; cursor: zoom-in; display: block; }
 
   /* ── ADMIN TABS ── */
   #admin-header-left {
@@ -1445,17 +1575,6 @@
     transition: background 0.15s;
   }
   .admin-media-del:hover { background: #e05555; }
-
-  /* ── ADMIN PHOTOS ── */
-  #admin-photos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .ap-thumb { position: relative; width: 68px; height: 68px; flex-shrink: 0; }
-  .ap-thumb img { width: 68px; height: 68px; object-fit: cover; border-radius: 3px; border: 2px solid var(--border-gold); display: block; }
-  .ap-thumb.ap-main img { border-color: var(--gold); box-shadow: 0 0 6px rgba(201,168,76,0.5); }
-  .ap-badge { position: absolute; bottom: 2px; left: 2px; font-family: 'Cinzel', serif; font-size: 7px; background: rgba(201,168,76,0.9); color: #0A0804; padding: 1px 4px; border-radius: 2px; pointer-events: none; }
-  .ap-set-main { position: absolute; bottom: 2px; left: 2px; font-family: 'Cinzel', serif; font-size: 7px; background: rgba(0,0,0,0.8); color: var(--gold-dim); border: 1px solid var(--gold-dim); padding: 1px 4px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
-  .ap-set-main:hover { background: rgba(201,168,76,0.9); color: #0A0804; }
-  .ap-del { position: absolute; top: -5px; right: -5px; width: 17px; height: 17px; border-radius: 50%; background: #8b1a1a; color: #fff; border: none; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
-  .ap-del:hover { background: #e05555; }
 
   /* ── IMAGE UPLOAD ── */
   #img-upload-area {
@@ -2066,6 +2185,16 @@
   }
 
   /* Image preview in admin */
+  #img-preview-wrap {
+    margin-top: 8px;
+    display: none;
+  }
+  #img-preview-wrap img {
+    max-width: 100%;
+    max-height: 120px;
+    border-radius: 3px;
+    border: 1px solid var(--border-gold);
+  }
 
   /* Scrollbar main */
   ::-webkit-scrollbar { width: 6px; }
@@ -3356,7 +3485,6 @@
         <div id="modal-img-main-wrap" onclick="openLightbox()">
           <img id="modal-img" src="" alt="">
         </div>
-        <div id="modal-gallery-thumbs"></div>
       </div>
       <div id="modal-info-side">
         <div id="modal-card-name-row">
@@ -3581,21 +3709,21 @@
           <input type="text" id="f-name" placeholder="e.g. Thrall, Son of Durotan">
         </div>
         <div class="admin-field">
-          <label>Card Photos <span style="color:var(--text-dim);font-weight:400;font-family:'Crimson Pro',serif;text-transform:none;letter-spacing:0;font-size:11px">(max 5 · first = main)</span></label>
-          <div id="img-upload-btn-row">
-            <label id="img-upload-label" for="f-image-file">
-              <span id="img-upload-btn-text">📁 Upload Photo</span>
-              <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="addPhotoUpload(this)">
-            </label>
-            <span id="img-upload-status"></span>
+          <label>Card Image</label>
+          <div id="img-upload-area">
+            <div id="img-upload-btn-row">
+              <label id="img-upload-label" for="f-image-file">
+                <span id="img-upload-btn-text">📁 Upload Photo</span>
+                <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="uploadCardImage(this)">
+              </label>
+              <span id="img-upload-status"></span>
+            </div>
+            <div id="img-url-row">
+              <span class="img-url-or">or paste URL</span>
+              <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+            </div>
           </div>
-          <div id="img-url-row">
-            <span class="img-url-or">or URL</span>
-            <input type="url" id="f-extra-url" placeholder="https://...">
-            <button type="button" class="admin-setting-confirm" onclick="addPhotoUrl()">+ Add</button>
-          </div>
-          <input type="hidden" id="f-image">
-          <div id="admin-photos"></div>
+          <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
         </div>
         <div class="admin-field">
           <label>Card Category *</label>
@@ -3896,8 +4024,7 @@ function dbToCard(d) {
     insert: d.insert_type || '', rarity: d.rarity || '',
     foil: d.foil || '', manufacturer: d.manufacturer || '',
     number: d.number || '', forSale: d.for_sale || false,
-    price: d.price || 0, added: d.added || 0,
-    media: Array.isArray(d.media) ? d.media.filter(Boolean) : []
+    price: d.price || 0, added: d.added || 0
   };
 }
 
@@ -3909,8 +4036,7 @@ function cardToDB(c) {
     insert_type: c.insert || '', rarity: c.rarity || '',
     foil: c.foil || '', manufacturer: c.manufacturer || '',
     number: c.number || '', for_sale: c.forSale || false,
-    price: c.price || 0, added: c.added || Date.now(),
-    media: c.media || []
+    price: c.price || 0, added: c.added || Date.now()
   };
 }
 
@@ -4374,18 +4500,6 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
-  // Thumbnails — show only if card has 2+ photos in media
-  const thumbsEl = document.getElementById('modal-gallery-thumbs');
-  const allPhotos = Array.isArray(c.media) && c.media.length > 1 ? c.media.filter(Boolean) : [];
-  if (allPhotos.length > 1) {
-    thumbsEl.innerHTML = allPhotos.map((url, i) =>
-      `<img class="mg-thumb${i===0?' active':''}" src="${escHtml(url)}" alt="Photo ${i+1}" onclick="switchPhoto(event,'${escHtml(url)}')">`
-    ).join('');
-    thumbsEl.classList.add('visible');
-  } else {
-    thumbsEl.innerHTML = '';
-    thumbsEl.classList.remove('visible');
-  }
   const isTC = c.type === 'Trading Card';
   const fields = [
     ['Manufacturer', c.manufacturer],
@@ -4558,12 +4672,6 @@ function openAbout(){document.getElementById('about-overlay').classList.add('ope
 function closeAbout(){document.getElementById('about-overlay').classList.remove('open');document.body.style.overflow='';}
 function closeAboutOutside(e){if(e.target===document.getElementById('about-overlay'))closeAbout();}
 
-function switchPhoto(e, url) {
-  e.stopPropagation();
-  document.getElementById('modal-img').src = url;
-  document.querySelectorAll('.mg-thumb').forEach(t => t.classList.remove('active'));
-  e.target.classList.add('active');
-}
 
 // ── LIGHTBOX ──
 function openLightbox(){const src=document.getElementById('modal-img').src;if(!src)return;document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
@@ -4584,64 +4692,25 @@ function saveMinRatings(){const val=parseInt(document.getElementById('admin-minr
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
 // ── ADMIN PHOTO GALLERY ──
-// ── PHOTO MANAGEMENT ──
-let _photos = [];
+function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
 
-function renderAdminPhotos() {
-  const el = document.getElementById('admin-photos');
-  if (!el) return;
-  el.innerHTML = _photos.map((url, i) => `
-    <div class="ap-thumb ${i===0?'ap-main':''}">
-      <img src="${escHtml(url)}" alt="Photo ${i+1}">
-      ${i===0?`<span class="ap-badge">Main</span>`:`<button class="ap-set-main" onclick="setMainPhoto(${i})">Main</button>`}
-      <button class="ap-del" onclick="delPhoto(${i})">✕</button>
-    </div>`).join('');
-}
-
-function setMainPhoto(i) {
-  const url = _photos.splice(i,1)[0];
-  _photos.unshift(url);
-  document.getElementById('f-image').value = _photos[0];
-  renderAdminPhotos(); toast('Main photo set!');
-}
-
-function delPhoto(i) {
-  _photos.splice(i,1);
-  document.getElementById('f-image').value = _photos[0]||'';
-  renderAdminPhotos();
-}
-
-function addPhotoUrl() {
-  const input = document.getElementById('f-extra-url');
-  const url = input.value.trim();
-  if (!url) { toast('Enter a URL first.'); return; }
-  if (_photos.length >= 5) { toast('Maximum 5 photos per card.'); return; }
-  if (_photos.includes(url)) { toast('Already added.'); return; }
-  _photos.push(url);
-  if (_photos.length===1) document.getElementById('f-image').value = url;
-  renderAdminPhotos(); input.value=''; toast('Photo added!');
-}
-
-function previewImg(){}
-
-async function addPhotoUpload(input) {
+async function uploadCardImage(input) {
   const file = input.files[0]; if (!file) return;
-  if (_photos.length >= 5) { toast('Maximum 5 photos.'); input.value=''; return; }
   const status = document.getElementById('img-upload-status');
   const btnText = document.getElementById('img-upload-btn-text');
-  if (!file.type.startsWith('image/')) { status.textContent='Images only.'; status.className='error'; return; }
-  if (file.size > 10*1024*1024) { status.textContent='Max 10MB.'; status.className='error'; return; }
-  status.textContent='Uploading…'; status.className='loading'; btnText.textContent='⏳ Uploading…';
+  if (!file.type.startsWith('image/')) { status.textContent = 'Images only.'; status.className = 'error'; return; }
+  if (file.size > 10 * 1024 * 1024) { status.textContent = 'Max 10MB.'; status.className = 'error'; return; }
+  status.textContent = 'Uploading…'; status.className = 'loading'; btnText.textContent = '⏳ Uploading…';
   const ext = file.name.split('.').pop().toLowerCase();
   const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-  const {error} = await sb.storage.from('card-images').upload(filename, file, {cacheControl:'3600',upsert:false,contentType:file.type});
-  if (error) { status.textContent='Upload failed.'; status.className='error'; btnText.textContent='📁 Upload Photo'; return; }
-  const {data:urlData} = sb.storage.from('card-images').getPublicUrl(filename);
-  _photos.push(urlData.publicUrl);
-  if (_photos.length===1) document.getElementById('f-image').value = urlData.publicUrl;
-  renderAdminPhotos();
-  status.textContent='✓ Uploaded!'; status.className='success'; btnText.textContent='📁 Upload Photo';
-  input.value=''; setTimeout(()=>{status.textContent='';status.className='';},3000);
+  const { error } = await sb.storage.from('card-images').upload(filename, file, { cacheControl:'3600', upsert:false, contentType:file.type });
+  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; return; }
+  const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
+  document.getElementById('f-image').value = urlData.publicUrl;
+  document.getElementById('img-preview').src = urlData.publicUrl;
+  document.getElementById('img-preview-wrap').style.display = 'block';
+  status.textContent = '✓ Uploaded!'; status.className = 'success'; btnText.textContent = '📁 Upload Photo';
+  input.value = ''; setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
 }
 
 // ── ADMIN TYPE SWITCHING ──
@@ -4653,7 +4722,7 @@ function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype
 async function saveCard() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { toast('Card name is required.'); return; }
-  const image = _photos[0] || '';
+  const image = document.getElementById('f-image').value.trim();
   const editId = document.getElementById('admin-edit-id').value;
   const type = document.getElementById('f-type').value;
   const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
@@ -4669,8 +4738,7 @@ async function saveCard() {
     manufacturer: document.getElementById('f-manufacturer').value.trim(),
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
-    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
-    media: _photos.slice()
+    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now()
   };
   if (editId) {
     const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
@@ -4689,20 +4757,20 @@ async function saveCard() {
 }
 
 function clearAdminForm(){
-  _photos=[];
-  ['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('admin-photos').innerHTML='';
+  ['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-type').value='Trading Card';
   document.getElementById('f-rarity').value='Common';
   document.getElementById('f-foil').value='Non-Foil';
   document.getElementById('f-card-subtype').value='Base';
   document.getElementById('f-forsale').checked=false;
   document.getElementById('f-price-wrap').style.display='none';
+  document.getElementById('img-preview-wrap').style.display='none';
   document.getElementById('admin-tc-fields').style.display='block';
   document.getElementById('admin-tcg-fields').style.display='none';
   document.getElementById('admin-parallel-field').style.display='none';
   document.getElementById('admin-insert-field').style.display='none';
-  populateAdminDataLists(); cancelEdit();
+  populateAdminDataLists();
+  cancelEdit();
 }
 
 function populateAdminDataLists() {
@@ -4732,9 +4800,6 @@ function editCard(id){
   if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}
   if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}
   previewImg();
-  _photos = Array.isArray(c.media) && c.media.length>0 ? c.media.filter(Boolean) : (c.image?[c.image]:[]);
-  document.getElementById('f-image').value = _photos[0]||'';
-  renderAdminPhotos();
   document.getElementById('admin-form-title').textContent='Edit Card';
   document.getElementById('edit-mode-note').style.display='block';
   document.getElementById('admin-save-btn').textContent='Save Changes';
