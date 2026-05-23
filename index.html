@@ -4354,7 +4354,7 @@ function cardHTML(c) {
     `<span class="star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
       ${!voted?`onmouseenter="hoverCardStar(this,${i})" onmouseleave="unhoverCardStar(this)" onclick="event.stopPropagation();submitRating('${c.id}',${i})"`:''} style="${voted?'cursor:default':'cursor:pointer'}">★</span>`).join('');
   // Build descriptive alt text for SEO
-  const cardNum = c.number ? `#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}` : '';
+  const cardNum = c.number ? `#${c.number.replace(/\/.*$/,'').trim()}` : '';
   const cardTypeInfo = isTC
     ? (c.cardSubtype==='Parallel' && c.parallel ? c.parallel : c.cardSubtype==='Insert' && c.insert ? c.insert : 'Base')
     : (c.rarity || '');
@@ -4377,7 +4377,7 @@ function cardHTML(c) {
         ${isTC && c.cardSubtype==='Parallel' && c.parallel?`<div class="card-meta-row"><span class="meta-label">Parallel</span><span class="meta-value">${escHtml(c.parallel)}</span></div>`:''}
         ${isTC && c.cardSubtype==='Insert' && c.insert?`<div class="card-meta-row"><span class="meta-label">Insert</span><span class="meta-value">${escHtml(c.insert)}</span></div>`:''}
         ${!isTC && c.rarity?`<div class="card-meta-row"><span class="meta-label">Rarity</span><span class="meta-value">${escHtml(c.rarity)}</span></div>`:''}
-        ${c.number?`<div class="card-meta-row"><span class="meta-label">Card #</span><span class="meta-value">#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}</span></div>`:''}
+        ${c.number?`<div class="card-meta-row"><span class="meta-label">Card #</span><span class="meta-value">#${escHtml(c.number.replace(/\/.*$/,'').trim())}</span></div>`:''}
       </div>
       <div class="star-rating"><div class="stars">${starsHtml}</div>
         <span class="rating-info">${r.count>0?`<span class="avg">${r.avg}</span> (${r.count})`:'Rate'}</span>
@@ -4553,7 +4553,7 @@ async function openModal(id) {
     imgEl.className = c.rotate ? 'img-rotated' : '';
     imgEl.style.display = 'block';
     const isTC_alt = c.type === 'Trading Card';
-    const cardNum_alt = c.number ? `#${parseInt(c.number.replace(/\/.*$/,'').trim(),10)}` : '';
+    const cardNum_alt = c.number ? `#${c.number.replace(/\/.*$/,'').trim()}` : '';
     const typeInfo_alt = isTC_alt ? (c.cardSubtype==='Parallel'&&c.parallel?c.parallel:c.cardSubtype==='Insert'&&c.insert?c.insert:'Base') : (c.rarity||'');
     imgEl.alt = [c.name, cardNum_alt, c.set, typeInfo_alt].filter(Boolean).join(' - ');
     document.getElementById('modal-img-side').style.display='block';
