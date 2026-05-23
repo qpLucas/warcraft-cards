@@ -4361,8 +4361,12 @@ function cardHTML(c) {
   const altParts = [c.name, cardNum, c.set, cardTypeInfo].filter(Boolean);
   const altText = altParts.join(' - ');
 
+  const homepageImg = c.image && c.image.includes('supabase.co/storage/v1/object/public/')
+    ? c.image.replace('/object/public/', '/render/image/public/') + '?width=600&quality=65'
+    : c.image;
+
   const imgContent = c.image
-    ? `<img src="${escHtml(c.image)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
+    ? `<img src="${escHtml(homepageImg)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
   const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
   const foilBadge = !isTC && c.foil === 'Foil' ? `<span class="card-foil-badge">Foil</span>` : '';
