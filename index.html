@@ -4363,7 +4363,7 @@ function cardHTML(c) {
 
   // Compressed thumbnail for homepage (full image loads in card detail)
   const homepageImg = c.image && c.image.includes('supabase.co/storage/v1/object/public/')
-    ? c.image.replace('/object/public/', '/render/image/public/') + '?width=200&quality=50'
+    ? c.image.replace('/object/public/', '/render/image/public/') + '?width=400&quality=70'
     : c.image;
 
   const imgContent = c.image
