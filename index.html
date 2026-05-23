@@ -4598,8 +4598,14 @@ async function openModal(id) {
   const cardData = cards.find(x => x.id === id);
   if (cardData) {
     document.title = `${cardData.name} — WarcraftCards.com`;
-    document.querySelector('meta[name="description"]')?.setAttribute('content',
-      `${cardData.name}${cardData.set?' from '+cardData.set:''} — Warcraft card collection on WarcraftCards.com`);
+    const isTC = cardData.type === 'Trading Card';
+    const typeInfo = isTC
+      ? (cardData.cardSubtype === 'Parallel' && cardData.parallel ? `${cardData.parallel} Parallel` : cardData.cardSubtype === 'Insert' && cardData.insert ? `${cardData.insert} Insert` : 'Base')
+      : ([cardData.rarity, cardData.foil].filter(Boolean).join(' '));
+    const fromSet = cardData.set ? ` from ${cardData.set} set` : '';
+    const byMfr = cardData.manufacturer ? ` by ${cardData.manufacturer}` : '';
+    const desc = `${cardData.name}${typeInfo ? ' — ' + typeInfo : ''}${fromSet}${byMfr}. Part of a personal Warcraft card collection.`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', desc);
   }
   const c = cards.find(x => x.id === id);
   if (!c) return;
