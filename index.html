@@ -4033,9 +4033,14 @@ async function init() {
     renderForSaleSection();
     updateSetFilter();
     updateTopbarCount();
-    // Auto-open card from URL e.g. ?card=c123456
-    const urlCardId = new URLSearchParams(window.location.search).get('card');
-    if (urlCardId && cards.find(c => c.id === urlCardId)) openModal(urlCardId);
+    // Auto-open card from URL e.g. ?card=illidan-the-betrayer-c123456
+    const urlCardParam = new URLSearchParams(window.location.search).get('card');
+    if (urlCardParam) {
+      // Try exact ID match first, then extract ID from end of slug
+      const byId = cards.find(c => c.id === urlCardParam);
+      const bySlug = byId || cards.find(c => urlCardParam.endsWith('-' + c.id));
+      if (bySlug) openModal(bySlug.id);
+    }
   } catch(e) {
     console.error('Init error:', e);
     toast('Connection error — please refresh.');
@@ -4581,9 +4586,15 @@ function renderLeaderboard() {
 // ── MODAL ──
 let currentModalId = null;
 
+function cardSlug(c) {
+  return c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + c.id;
+}
+
 async function openModal(id) {
   // Update URL for SEO and sharing
-  history.pushState({ cardId: id }, '', `?card=${id}`);
+  const cardForSlug = cards.find(x => x.id === id);
+  const slug = cardForSlug ? cardSlug(cardForSlug) : id;
+  history.pushState({ cardId: id }, '', `?card=${slug}`);
   const cardData = cards.find(x => x.id === id);
   if (cardData) {
     document.title = `${cardData.name} — WarcraftCards.com`;
