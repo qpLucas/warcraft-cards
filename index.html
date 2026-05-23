@@ -1074,8 +1074,7 @@
     border-radius: 8px;
     max-width: 960px;
     width: 100%;
-    height: 88vh;
-    max-height: 88vh;
+    max-height: 90vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1120,26 +1119,16 @@
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   #modal-img-main-wrap {
     width: 100%;
+    flex: 1;
     overflow: hidden;
-    cursor: zoom-in;
-    background: #000;
-  }
-
-  /* No thumbs — image fills full height */
-  #modal-img-side.no-thumbs #modal-img-main-wrap {
-    height: 100%;
-    border-radius: 7px 0 0 7px;
-  }
-
-  /* Has thumbs — image leaves 70px for strip */
-  #modal-img-side.has-thumbs #modal-img-main-wrap {
-    height: calc(100% - 70px);
     border-radius: 7px 0 0 0;
+    cursor: zoom-in;
+    background: var(--bg-card);
+    flex-shrink: 0;
   }
 
   #modal-img-side img#modal-img {
@@ -1150,36 +1139,6 @@
     transition: filter 0.2s;
   }
   #modal-img-main-wrap:hover img#modal-img { filter: brightness(1.08); }
-
-  /* ── DESKTOP THUMBNAIL STRIP ── */
-  #modal-thumbstrip {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 66px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 8px;
-    background: rgba(0,0,0,0.4);
-    border-top: 1px solid var(--border-gold);
-    overflow: hidden;
-  }
-  .mts-thumb {
-    width: 54px;
-    height: 54px;
-    object-fit: cover;
-    border-radius: 3px;
-    border: 2px solid rgba(201,168,76,0.2);
-    cursor: pointer;
-    opacity: 0.6;
-    flex-shrink: 0;
-    transition: all 0.18s;
-  }
-  .mts-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
-  .mts-thumb.active { border-color: var(--gold); opacity: 1; }
 
   #modal-img-zoom-hint {
     position: absolute;
@@ -1314,6 +1273,28 @@
 
   /* ── MODAL GALLERY THUMBNAILS ── */
   #modal-img { width: 100%; cursor: zoom-in; display: block; }
+  #modal-gallery-thumbs {
+    display: none;
+    flex-direction: row;
+    gap: 4px;
+    flex-wrap: nowrap;
+    padding: 6px;
+    background: transparent;
+    border-top: 1px solid var(--border-gold);
+  }
+  .gallery-thumb {
+    flex: 1;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 2px solid rgba(201,168,76,0.2);
+    cursor: pointer;
+    opacity: 0.65;
+    transition: all 0.2s;
+    min-width: 0;
+  }
+  .gallery-thumb:hover { opacity: 1; border-color: var(--gold-dim); }
+  .gallery-thumb.active { border-color: var(--gold); opacity: 1; box-shadow: 0 0 6px rgba(201,168,76,0.4); }
 
   /* ── ADMIN TABS ── */
   #admin-header-left {
@@ -3212,30 +3193,6 @@
     .meta-label, .meta-value { font-size: 10px; }
 
     /* ── MODAL ── */
-    #modal-thumbstrip { display: none !important; }
-    #modal-mobile-thumbs {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      align-items: center;
-      justify-content: center;
-      padding-right: 8px;
-      border-right: 1px solid var(--border-gold);
-      flex-shrink: 0;
-    }
-    #modal-mobile-thumbs.visible { display: flex; }
-    .mts-mob-thumb {
-      width: 42px;
-      height: 42px;
-      object-fit: cover;
-      border-radius: 3px;
-      border: 2px solid rgba(201,168,76,0.2);
-      cursor: pointer;
-      opacity: 0.6;
-      flex-shrink: 0;
-      display: block;
-    }
-    .mts-mob-thumb.active { border-color: var(--gold); opacity: 1; }
     #modal-overlay {
       align-items: flex-start;
       overflow-y: auto;
@@ -3261,23 +3218,30 @@
       align-self: auto;
       background: #000;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px;
     }
     #modal-img-side img#modal-img {
       width: auto;
       height: auto;
-      max-width: 55%;
+      max-width: 60%;
       max-height: 35vh;
       object-fit: contain;
       background: #000;
       border-radius: 4px;
       min-height: unset;
       display: block;
+      margin: 16px auto;
       cursor: zoom-in;
+    }
+    #modal-gallery-thumbs {
+      width: 100%;
+      padding: 6px 10px;
+      gap: 5px;
+    }
+    .gallery-thumb {
+      width: 44px;
+      height: 44px;
     }
     #modal-info-side {
       max-height: none;
@@ -3549,11 +3513,10 @@
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side">
-        <div id="modal-mobile-thumbs"></div>
         <div id="modal-img-main-wrap" onclick="openLightbox()">
           <img id="modal-img" src="" alt="">
         </div>
-        <div id="modal-thumbstrip"></div>
+        <div id="modal-gallery-thumbs"></div>
       </div>
       <div id="modal-info-side">
         <div id="modal-card-name-row">
@@ -3778,21 +3741,21 @@
           <input type="text" id="f-name" placeholder="e.g. Thrall, Son of Durotan">
         </div>
         <div class="admin-field">
-          <label>Card Photos <span style="color:var(--text-dim);font-weight:400;font-family:'Crimson Pro',serif;text-transform:none;letter-spacing:0;font-size:11px">(max 5 · first = main)</span></label>
-          <div id="img-upload-btn-row">
-            <label id="img-upload-label" for="f-image-file">
-              <span id="img-upload-btn-text">📁 Upload Photo</span>
-              <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="adminUpload(this)">
-            </label>
-            <span id="img-upload-status"></span>
+          <label>Card Image</label>
+          <div id="img-upload-area">
+            <div id="img-upload-btn-row">
+              <label id="img-upload-label" for="f-image-file">
+                <span id="img-upload-btn-text">📁 Upload Photo</span>
+                <input type="file" id="f-image-file" accept="image/*" style="display:none" onchange="uploadCardImage(this)">
+              </label>
+              <span id="img-upload-status"></span>
+            </div>
+            <div id="img-url-row">
+              <span class="img-url-or">or paste URL</span>
+              <input type="url" id="f-image" placeholder="https://..." oninput="previewImg()">
+            </div>
           </div>
-          <div id="img-url-row">
-            <span class="img-url-or">or URL</span>
-            <input type="url" id="f-extra-url" placeholder="https://...">
-            <button type="button" class="admin-setting-confirm" onclick="adminAddUrl()">+ Add</button>
-          </div>
-          <input type="hidden" id="f-image">
-          <div id="admin-photos" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
+          <div id="img-preview-wrap"><img id="img-preview" src="" alt="Preview"></div>
         </div>
         <div class="admin-field">
           <label>Card Category *</label>
@@ -4093,8 +4056,7 @@ function dbToCard(d) {
     insert: d.insert_type || '', rarity: d.rarity || '',
     foil: d.foil || '', manufacturer: d.manufacturer || '',
     number: d.number || '', forSale: d.for_sale || false,
-    price: d.price || 0, added: d.added || 0,
-    media: Array.isArray(d.media) ? d.media.filter(Boolean) : []
+    price: d.price || 0, added: d.added || 0
   };
 }
 
@@ -4106,8 +4068,7 @@ function cardToDB(c) {
     insert_type: c.insert || '', rarity: c.rarity || '',
     foil: c.foil || '', manufacturer: c.manufacturer || '',
     number: c.number || '', for_sale: c.forSale || false,
-    price: c.price || 0, added: c.added || Date.now(),
-    media: c.media || []
+    price: c.price || 0, added: c.added || Date.now()
   };
 }
 
@@ -4571,23 +4532,25 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
-  // Desktop thumbnail strip
-  const strip = document.getElementById('modal-thumbstrip');
-  const imgSide = document.getElementById('modal-img-side');
-  const mobileStrip = document.getElementById('modal-mobile-thumbs');
-  const photos = Array.isArray(c.media) && c.media.length > 1 ? c.media.filter(Boolean) : [];
-  if (photos.length > 1) {
-    imgSide.classList.add('has-thumbs'); imgSide.classList.remove('no-thumbs');
-    strip.innerHTML = photos.map((url,i)=>`<img class="mts-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`).join('');
-    strip.style.display = 'flex';
-    mobileStrip.innerHTML = photos.map((url,i)=>`<img class="mts-mob-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumbMob(event,'${escHtml(url)}')" alt="Photo ${i+1}">`).join('');
-    mobileStrip.classList.add('visible');
-  } else {
-    imgSide.classList.add('no-thumbs'); imgSide.classList.remove('has-thumbs');
-    strip.innerHTML = ''; strip.style.display = 'none';
-    mobileStrip.innerHTML = ''; mobileStrip.classList.remove('visible');
+  // Build photos array from media - handle both string and object formats
+  let photos = [];
+  if (Array.isArray(c.media) && c.media.length > 0) {
+    photos = c.media.map(m => typeof m === 'string' ? m : (m && m.url ? m.url : null)).filter(Boolean);
   }
+  // Always include main image, dedupe
+  if (c.image && !photos.includes(c.image)) photos.unshift(c.image);
+  if (photos.length === 0 && c.image) photos = [c.image];
 
+  const thumbsEl = document.getElementById('modal-gallery-thumbs');
+  if (photos.length > 1) {
+    thumbsEl.innerHTML = photos.map((url, i) =>
+      `<img class="gallery-thumb ${i===0?'active':''}" src="${escHtml(url)}" alt="Photo ${i+1}" onclick="switchModalPhoto('${escHtml(url)}', this)">`
+    ).join('');
+    thumbsEl.style.display = 'flex';
+  } else {
+    thumbsEl.innerHTML = '';
+    thumbsEl.style.display = 'none';
+  }
   const isTC = c.type === 'Trading Card';
   const fields = [
     ['Manufacturer', c.manufacturer],
@@ -4760,19 +4723,10 @@ function openAbout(){document.getElementById('about-overlay').classList.add('ope
 function closeAbout(){document.getElementById('about-overlay').classList.remove('open');document.body.style.overflow='';}
 function closeAboutOutside(e){if(e.target===document.getElementById('about-overlay'))closeAbout();}
 
-
-function switchThumb(e, url) {
-  e.stopPropagation();
+function switchModalPhoto(url, thumbEl) {
   document.getElementById('modal-img').src = url;
-  document.querySelectorAll('.mts-thumb').forEach(t => t.classList.remove('active'));
-  e.target.classList.add('active');
-}
-
-function switchThumbMob(e, url) {
-  e.stopPropagation();
-  document.getElementById('modal-img').src = url;
-  document.querySelectorAll('.mts-mob-thumb').forEach(t => t.classList.remove('active'));
-  e.target.classList.add('active');
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  thumbEl.classList.add('active');
 }
 
 // ── LIGHTBOX ──
@@ -4794,66 +4748,25 @@ function saveMinRatings(){const val=parseInt(document.getElementById('admin-minr
 function savePopularLimit(){const val=parseInt(document.getElementById('admin-popularlimit').value,10);if(!isNaN(val)&&val>=1){popularLimit=val;saveSetting('popularLimit',val);toast(`Popular page will show up to ${val} card${val!==1?'s':''}.`);}}
 
 // ── ADMIN PHOTO GALLERY ──
-// ── ADMIN MULTI-PHOTO ──
-let _photos = [];
+function previewImg(){const url=document.getElementById('f-image').value.trim();const wrap=document.getElementById('img-preview-wrap');const img=document.getElementById('img-preview');if(url){img.src=url;wrap.style.display='block';}else{wrap.style.display='none';}}
 
-function _renderPhotos() {
-  const el = document.getElementById('admin-photos');
-  if (!el) return;
-  el.innerHTML = _photos.map((url,i) => `
-    <div style="position:relative;width:68px;height:68px;flex-shrink:0">
-      <img src="${escHtml(url)}" style="width:68px;height:68px;object-fit:cover;border-radius:3px;border:2px solid ${i===0?'var(--gold)':'var(--border-gold)'};display:block" alt="Photo ${i+1}">
-      ${i===0
-        ? `<span style="position:absolute;bottom:2px;left:2px;font-family:'Cinzel',serif;font-size:7px;background:rgba(201,168,76,0.9);color:#0A0804;padding:1px 4px;border-radius:2px">Main</span>`
-        : `<button onclick="setMain(${i})" style="position:absolute;bottom:2px;left:2px;font-family:'Cinzel',serif;font-size:7px;background:rgba(0,0,0,0.8);color:var(--gold-dim);border:1px solid var(--gold-dim);padding:1px 4px;border-radius:2px;cursor:pointer">Main</button>`}
-      <button onclick="delPhoto(${i})" style="position:absolute;top:-5px;right:-5px;width:17px;height:17px;border-radius:50%;background:#8b1a1a;color:#fff;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center">✕</button>
-    </div>`).join('');
-}
-
-function setMain(i) {
-  const url = _photos.splice(i,1)[0];
-  _photos.unshift(url);
-  document.getElementById('f-image').value = _photos[0];
-  _renderPhotos(); toast('Main photo set!');
-}
-
-function delPhoto(i) {
-  _photos.splice(i,1);
-  document.getElementById('f-image').value = _photos[0]||'';
-  _renderPhotos();
-}
-
-function adminAddUrl() {
-  const inp = document.getElementById('f-extra-url');
-  const url = inp.value.trim();
-  if (!url) { toast('Enter a URL first.'); return; }
-  if (_photos.length >= 5) { toast('Max 5 photos.'); return; }
-  if (_photos.includes(url)) { toast('Already added.'); return; }
-  _photos.push(url);
-  if (_photos.length===1) document.getElementById('f-image').value = url;
-  _renderPhotos(); inp.value=''; toast('Photo added!');
-}
-
-function previewImg(){}
-
-async function adminUpload(input) {
+async function uploadCardImage(input) {
   const file = input.files[0]; if (!file) return;
-  if (_photos.length >= 5) { toast('Max 5 photos.'); input.value=''; return; }
   const status = document.getElementById('img-upload-status');
-  const btn = document.getElementById('img-upload-btn-text');
-  if (!file.type.startsWith('image/')) { status.textContent='Images only.'; status.className='error'; return; }
-  if (file.size > 10*1024*1024) { status.textContent='Max 10MB.'; status.className='error'; return; }
-  status.textContent='Uploading…'; status.className='loading'; btn.textContent='⏳ Uploading…';
-  const ext=file.name.split('.').pop().toLowerCase();
-  const fn=`card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-  const {error}=await sb.storage.from('card-images').upload(fn,file,{cacheControl:'3600',upsert:false,contentType:file.type});
-  if (error){status.textContent='Upload failed.';status.className='error';btn.textContent='📁 Upload Photo';return;}
-  const {data:u}=sb.storage.from('card-images').getPublicUrl(fn);
-  _photos.push(u.publicUrl);
-  if (_photos.length===1) document.getElementById('f-image').value=u.publicUrl;
-  _renderPhotos();
-  status.textContent='✓ Uploaded!';status.className='success';btn.textContent='📁 Upload Photo';
-  input.value=''; setTimeout(()=>{status.textContent='';status.className='';},3000);
+  const btnText = document.getElementById('img-upload-btn-text');
+  if (!file.type.startsWith('image/')) { status.textContent = 'Images only.'; status.className = 'error'; return; }
+  if (file.size > 10 * 1024 * 1024) { status.textContent = 'Max 10MB.'; status.className = 'error'; return; }
+  status.textContent = 'Uploading…'; status.className = 'loading'; btnText.textContent = '⏳ Uploading…';
+  const ext = file.name.split('.').pop().toLowerCase();
+  const filename = `card_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await sb.storage.from('card-images').upload(filename, file, { cacheControl:'3600', upsert:false, contentType:file.type });
+  if (error) { status.textContent = 'Upload failed.'; status.className = 'error'; btnText.textContent = '📁 Upload Photo'; return; }
+  const { data: urlData } = sb.storage.from('card-images').getPublicUrl(filename);
+  document.getElementById('f-image').value = urlData.publicUrl;
+  document.getElementById('img-preview').src = urlData.publicUrl;
+  document.getElementById('img-preview-wrap').style.display = 'block';
+  status.textContent = '✓ Uploaded!'; status.className = 'success'; btnText.textContent = '📁 Upload Photo';
+  input.value = ''; setTimeout(() => { status.textContent = ''; status.className = ''; }, 3000);
 }
 
 // ── ADMIN TYPE SWITCHING ──
@@ -4865,7 +4778,7 @@ function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype
 async function saveCard() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { toast('Card name is required.'); return; }
-  const image = _photos[0] || '';
+  const image = document.getElementById('f-image').value.trim();
   const editId = document.getElementById('admin-edit-id').value;
   const type = document.getElementById('f-type').value;
   const isTC = type==='Trading Card', isTCG=type==='Trading Card Game';
@@ -4881,8 +4794,7 @@ async function saveCard() {
     manufacturer: document.getElementById('f-manufacturer').value.trim(),
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
-    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
-    media: _photos.slice()
+    added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now()
   };
   if (editId) {
     const { error } = await sb.from('cards').update(cardToDB(data)).eq('id', editId);
@@ -4901,20 +4813,20 @@ async function saveCard() {
 }
 
 function clearAdminForm(){
-  _photos=[];
-  ['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const ap=document.getElementById('admin-photos');if(ap)ap.innerHTML='';
+  ['f-name','f-image','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-type').value='Trading Card';
   document.getElementById('f-rarity').value='Common';
   document.getElementById('f-foil').value='Non-Foil';
   document.getElementById('f-card-subtype').value='Base';
   document.getElementById('f-forsale').checked=false;
   document.getElementById('f-price-wrap').style.display='none';
+  document.getElementById('img-preview-wrap').style.display='none';
   document.getElementById('admin-tc-fields').style.display='block';
   document.getElementById('admin-tcg-fields').style.display='none';
   document.getElementById('admin-parallel-field').style.display='none';
   document.getElementById('admin-insert-field').style.display='none';
-  populateAdminDataLists(); cancelEdit();
+  populateAdminDataLists();
+  cancelEdit();
 }
 
 function populateAdminDataLists() {
@@ -4944,9 +4856,6 @@ function editCard(id){
   if(isTC){document.getElementById('f-card-subtype').value=c.cardSubtype||'Base';adminSubtypeChanged();document.getElementById('f-parallel').value=c.parallel||'';document.getElementById('f-insert').value=c.insert||'';}
   if(isTCG){document.getElementById('f-rarity').value=c.rarity||'Common';document.getElementById('f-foil').value=c.foil||'Non-Foil';}
   previewImg();
-  _photos = Array.isArray(c.media) && c.media.length > 0 ? c.media.filter(Boolean) : (c.image ? [c.image] : []);
-  document.getElementById('f-image').value = _photos[0]||'';
-  _renderPhotos();
   document.getElementById('admin-form-title').textContent='Edit Card';
   document.getElementById('edit-mode-note').style.display='block';
   document.getElementById('admin-save-btn').textContent='Save Changes';
