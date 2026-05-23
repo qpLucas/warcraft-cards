@@ -3213,6 +3213,33 @@
 
     /* ── MODAL ── */
     #modal-thumbstrip { display: none !important; }
+
+    /* Mobile thumbnail column */
+    #modal-mobile-thumbs {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding-right: 8px;
+      border-right: 1px solid rgba(201,168,76,0.3);
+    }
+    #modal-mobile-thumbs.mob-visible { display: flex; }
+    .mob-thumb {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 3px;
+      border: 2px solid rgba(201,168,76,0.2);
+      cursor: pointer;
+      opacity: 0.6;
+      flex-shrink: 0;
+      display: block;
+      transition: all 0.2s;
+    }
+    .mob-thumb.active { border-color: var(--gold); opacity: 1; }
+
     #modal-overlay {
       align-items: flex-start;
       overflow-y: auto;
@@ -3238,20 +3265,22 @@
       align-self: auto;
       background: #000;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
     }
     #modal-img-side img#modal-img {
       width: auto;
       height: auto;
-      max-width: 60%;
+      max-width: 65%;
       max-height: 35vh;
       object-fit: contain;
       background: #000;
       border-radius: 4px;
       min-height: unset;
       display: block;
-      margin: 16px auto;
       cursor: zoom-in;
     }
     #modal-info-side {
@@ -3524,6 +3553,7 @@
     <button id="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-inner">
       <div id="modal-img-side">
+        <div id="modal-mobile-thumbs"></div>
         <div id="modal-img-main-wrap" onclick="openLightbox()">
           <img id="modal-img" src="" alt="">
         </div>
@@ -4545,22 +4575,21 @@ async function openModal(id) {
     document.getElementById('modal-img-side').style.display='block';
   } else { document.getElementById('modal-img-side').style.display='none'; }
 
-  // Thumbnail strip — desktop only, hidden on mobile via CSS
+  // Thumbnail strip — desktop + mobile
   const strip = document.getElementById('modal-thumbstrip');
   const imgSide = document.getElementById('modal-img-side');
+  const mobThumbs = document.getElementById('modal-mobile-thumbs');
   const photos = Array.isArray(c.media) && c.media.length > 1 ? c.media.filter(Boolean) : [];
   if (photos.length > 1) {
-    imgSide.classList.add('has-thumbs');
-    imgSide.classList.remove('no-thumbs');
-    strip.innerHTML = photos.map((url, i) =>
-      `<img class="mts-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`
-    ).join('');
+    imgSide.classList.add('has-thumbs'); imgSide.classList.remove('no-thumbs');
+    strip.innerHTML = photos.map((url,i)=>`<img class="mts-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`).join('');
     strip.style.display = 'flex';
+    mobThumbs.innerHTML = photos.map((url,i)=>`<img class="mob-thumb${i===0?' active':''}" src="${escHtml(url)}" onclick="switchMobThumb(event,'${escHtml(url)}')" alt="Photo ${i+1}">`).join('');
+    mobThumbs.classList.add('mob-visible');
   } else {
-    imgSide.classList.add('no-thumbs');
-    imgSide.classList.remove('has-thumbs');
-    strip.innerHTML = '';
-    strip.style.display = 'none';
+    imgSide.classList.add('no-thumbs'); imgSide.classList.remove('has-thumbs');
+    strip.innerHTML = ''; strip.style.display = 'none';
+    mobThumbs.innerHTML = ''; mobThumbs.classList.remove('mob-visible');
   }
 
   const isTC = c.type === 'Trading Card';
@@ -4740,6 +4769,13 @@ function switchThumb(e, url) {
   e.stopPropagation();
   document.getElementById('modal-img').src = url;
   document.querySelectorAll('.mts-thumb').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+}
+
+function switchMobThumb(e, url) {
+  e.stopPropagation();
+  document.getElementById('modal-img').src = url;
+  document.querySelectorAll('.mob-thumb').forEach(t => t.classList.remove('active'));
   e.target.classList.add('active');
 }
 
