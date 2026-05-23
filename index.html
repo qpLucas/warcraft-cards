@@ -1284,14 +1284,15 @@
 
   #modal-rating-row {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    gap: 8px;
   }
 
   .modal-stars {
     display: flex;
     gap: 6px;
+    justify-content: center;
   }
 
   .modal-star {
@@ -1308,10 +1309,10 @@
     font-family: 'Crimson Pro', serif;
     font-size: 17px;
     color: var(--text-muted);
-    text-align: right;
+    text-align: center;
   }
   #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
-  .mob-break { display: none; }
+  .mob-break { display: block; }
 
   /* ── MODAL GALLERY THUMBNAILS ── */
   #modal-img { width: 100%; cursor: zoom-in; display: block; }
@@ -3276,13 +3277,6 @@
       gap: 12px;
     }
     #modal-card-name { font-size: 16px; }
-    .mob-break { display: block; }
-    #modal-rating-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-    }
-    #modal-rating-text { text-align: left; font-size: 13px; }
     .modal-meta-grid { grid-template-columns: 1fr 1fr; }
     .comment-form-row { grid-template-columns: 1fr; }
 
