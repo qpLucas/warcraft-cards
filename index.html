@@ -409,13 +409,13 @@
     position: relative;
     aspect-ratio: 2/3;
     overflow: hidden;
-    background: #000;
+    background: #0c0904;
   }
 
   .card-img-wrap img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     transition: transform 0.4s;
   }
   .card-item:hover .card-img-wrap img { transform: scale(1.04); }
@@ -4361,12 +4361,8 @@ function cardHTML(c) {
   const altParts = [c.name, cardNum, c.set, cardTypeInfo].filter(Boolean);
   const altText = altParts.join(' - ');
 
-  const homepageImg = c.image && c.image.includes('supabase.co/storage/v1/object/public/')
-    ? c.image.replace('/object/public/', '/render/image/public/') + '?width=600&quality=65'
-    : c.image;
-
   const imgContent = c.image
-    ? `<img src="${escHtml(homepageImg)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
+    ? `<img src="${escHtml(c.image)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
   const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
   const foilBadge = !isTC && c.foil === 'Foil' ? `<span class="card-foil-badge">Foil</span>` : '';
