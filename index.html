@@ -1311,6 +1311,7 @@
     text-align: right;
   }
   #modal-rating-text .avg { color: var(--gold); font-weight: 600; font-size: 20px; }
+  .mob-break { display: none; }
 
   /* ── MODAL GALLERY THUMBNAILS ── */
   #modal-img { width: 100%; cursor: zoom-in; display: block; }
@@ -3275,6 +3276,7 @@
       gap: 12px;
     }
     #modal-card-name { font-size: 16px; }
+    .mob-break { display: block; }
     .modal-meta-grid { grid-template-columns: 1fr 1fr; }
     .comment-form-row { grid-template-columns: 1fr; }
 
@@ -4599,8 +4601,8 @@ async function openModal(id) {
   mStars.innerHTML = [1,2,3,4,5].map(i=>`<span class="modal-star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
       ${!voted?`onmouseenter="hoverModalStar(this,${i})" onmouseleave="unhoverModalStar(this)" onclick="submitRating('${id}',${i})"`:''} style="${voted?'cursor:default;opacity:0.7':'cursor:pointer'}">★</span>`).join('');
   document.getElementById('modal-rating-text').innerHTML = voted
-    ? `You rated <span class="avg">${myStars}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}, avg <span class="avg">${r.avg}</span>`
-    : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate this card!';
+    ? `You rated <span class="avg">${myStars}</span> / 5<br class="mob-break"> ${r.count} vote${r.count!==1?'s':''}, avg <span class="avg">${r.avg}</span>`
+    : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate!';
   const fsSection = document.getElementById('modal-forsale-section');
   const fsDivider = document.getElementById('modal-forsale-divider');
   if (c.forSale && c.price > 0) {
