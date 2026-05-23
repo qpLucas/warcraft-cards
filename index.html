@@ -1210,6 +1210,30 @@
   #modal-info-side::-webkit-scrollbar { width: 4px; }
   #modal-info-side::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
+  /* ── SHARE BUTTONS ── */
+  #modal-share-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .share-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .share-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
   #modal-card-name-row {
     display: flex;
     align-items: baseline;
@@ -3546,6 +3570,12 @@
         <div id="modal-thumbstrip"></div>
       </div>
       <div id="modal-info-side">
+        <div id="modal-share-row">
+          <button class="share-btn" onclick="shareCard('copy')" title="Copy link">🔗 Copy Link</button>
+          <button class="share-btn" onclick="shareCard('twitter')" title="Share on X">𝕏</button>
+          <button class="share-btn" onclick="shareCard('facebook')" title="Share on Facebook">f</button>
+          <button class="share-btn" onclick="shareCard('whatsapp')" title="Share on WhatsApp">💬</button>
+        </div>
         <div id="modal-card-name-row">
           <div id="modal-card-name"></div>
           <div id="modal-card-number"></div>
@@ -4015,6 +4045,9 @@ async function init() {
     renderForSaleSection();
     updateSetFilter();
     updateTopbarCount();
+    // Auto-open card from URL e.g. ?card=c123456
+    const urlCardId = new URLSearchParams(window.location.search).get('card');
+    if (urlCardId && cards.find(c => c.id === urlCardId)) openModal(urlCardId);
   } catch(e) {
     console.error('Init error:', e);
     toast('Connection error — please refresh.');
@@ -4023,6 +4056,20 @@ async function init() {
   document.getElementById('admin-tcg-fields').style.display = 'none';
   document.getElementById('admin-tc-fields').style.display  = 'block';
 }
+
+// Handle browser back/forward button
+window.addEventListener('popstate', (e) => {
+  if (e.state?.cardId) {
+    openModal(e.state.cardId);
+  } else {
+    const overlay = document.getElementById('modal-overlay');
+    if (overlay.classList.contains('open')) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      currentModalId = null;
+    }
+  }
+});
 
 function showLoading(on) {
   let el = document.getElementById('loading-overlay');
@@ -4547,6 +4594,14 @@ function renderLeaderboard() {
 let currentModalId = null;
 
 async function openModal(id) {
+  // Update URL for SEO and sharing
+  history.pushState({ cardId: id }, '', `?card=${id}`);
+  const cardData = cards.find(x => x.id === id);
+  if (cardData) {
+    document.title = `${cardData.name} — WarcraftCards.com`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content',
+      `${cardData.name}${cardData.set?' from '+cardData.set:''} — Warcraft card collection on WarcraftCards.com`);
+  }
   const c = cards.find(x => x.id === id);
   if (!c) return;
   currentModalId = id;
@@ -4629,7 +4684,13 @@ async function openModal(id) {
   else { document.body.style.overflow=''; window.scrollTo(0,0); }
 }
 
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; currentModalId=null; }
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+  currentModalId=null;
+  history.pushState({}, '', window.location.pathname);
+  document.title = 'WarcraftCards.com | May my ancestors watch over my collection!';
+}
 function closeModalOutside(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
 function hoverModalStar(el,val){document.querySelectorAll('.modal-star').forEach((s,i)=>{s.classList.remove('hover');if(i<val)s.classList.add('hover');});}
 function unhoverModalStar(){document.querySelectorAll('.modal-star').forEach(s=>s.classList.remove('hover'));}
@@ -4789,6 +4850,20 @@ function filterFromModal(field, value) {
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderGallery();
+}
+
+function shareCard(platform) {
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(document.title);
+  if (platform === 'copy') {
+    navigator.clipboard.writeText(window.location.href).then(() => toast('Link copied!')).catch(() => toast('Copy failed.'));
+  } else if (platform === 'twitter') {
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+  } else if (platform === 'facebook') {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+  } else if (platform === 'whatsapp') {
+    window.open(`https://wa.me/?text=${title}%20${url}`, '_blank');
+  }
 }
 
 function switchThumb(e, url) {
