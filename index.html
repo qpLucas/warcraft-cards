@@ -4595,14 +4595,18 @@ async function openModal(id) {
     ['Parallel', isTC && c.cardSubtype === 'Parallel' ? c.parallel : null],
     ['Insert', isTC && c.cardSubtype === 'Insert' ? c.insert : null],
   ].filter(([,v]) => v);
-  document.getElementById('modal-meta-grid').innerHTML = fields.map(([l,v])=>`<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value">${escHtml(v)}</div></div>`).join('');
+  document.getElementById('modal-meta-grid').innerHTML = fields.map(([l,v]) => {
+    const clickable = ['Set','Parallel','Insert'].includes(l);
+    const onclick = clickable ? `onclick="filterFromModal('${l}','${escHtml(v).replace(/'/g,"\\'")}')" style="cursor:pointer"` : '';
+    return `<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value" ${onclick}>${escHtml(v)}</div></div>`;
+  }).join('');
   const mStars = document.getElementById('modal-stars');
   const voted = hasVoted(id); const myStars = myVotes[id]||0;
   mStars.innerHTML = [1,2,3,4,5].map(i=>`<span class="modal-star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
       ${!voted?`onmouseenter="hoverModalStar(this,${i})" onmouseleave="unhoverModalStar(this)" onclick="submitRating('${id}',${i})"`:''} style="${voted?'cursor:default;opacity:0.7':'cursor:pointer'}">★</span>`).join('');
   document.getElementById('modal-rating-text').innerHTML = voted
     ? `You rated <span class="avg">${myStars}</span> / 5<br class="mob-break"> ${r.count} vote${r.count!==1?'s':''}, avg <span class="avg">${r.avg}</span>`
-    : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate!';
+    : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate this card!';
   const fsSection = document.getElementById('modal-forsale-section');
   const fsDivider = document.getElementById('modal-forsale-divider');
   if (c.forSale && c.price > 0) {
@@ -4758,7 +4762,33 @@ function closeAbout(){document.getElementById('about-overlay').classList.remove(
 function closeAboutOutside(e){if(e.target===document.getElementById('about-overlay'))closeAbout();}
 
 
-function switchThumb(e, url) {
+function filterFromModal(field, value) {
+  closeModal();
+  // Reset all filters first
+  currentFilters = {type:'',set:'',cardSubtype:'',parallelName:'',insertName:'',rarity:'',foil:'',search:''};
+  ['filter-type','filter-set','filter-card-subtype','filter-parallel-name','filter-insert-name','filter-rarity','filter-foil','filter-search'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  if (field === 'Set') {
+    document.getElementById('filter-set').value = value;
+    currentFilters.set = value;
+  } else if (field === 'Parallel') {
+    document.getElementById('filter-type').value = 'Trading Card';
+    document.getElementById('filter-card-subtype').value = 'Parallel';
+    currentFilters.type = 'Trading Card';
+    currentFilters.cardSubtype = 'Parallel';
+    currentFilters.parallelName = value;
+  } else if (field === 'Insert') {
+    document.getElementById('filter-type').value = 'Trading Card';
+    document.getElementById('filter-card-subtype').value = 'Insert';
+    currentFilters.type = 'Trading Card';
+    currentFilters.cardSubtype = 'Insert';
+    currentFilters.insertName = value;
+  }
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  renderGallery();
+}
   e.stopPropagation();
   document.getElementById('modal-img').src = url;
   document.querySelectorAll('.mts-thumb').forEach(t => t.classList.remove('active'));
