@@ -409,13 +409,13 @@
     position: relative;
     aspect-ratio: 2/3;
     overflow: hidden;
-    background: #000;
+    background: #0c0904;
   }
 
   .card-img-wrap img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     transition: transform 0.4s;
   }
   .card-item:hover .card-img-wrap img { transform: scale(1.04); }
@@ -4311,7 +4311,7 @@ function renderAdminPollList() {
 }
 
 // ── RENDER GALLERY ──
-let _visibleCount = 11;
+let _visibleCount = 6;
 
 function renderGallery() {
   const grid = document.getElementById('cards-grid');
@@ -4325,14 +4325,14 @@ function renderGallery() {
   const showing = Math.min(_visibleCount, filtered.length);
   const visible = filtered.slice(0, showing);
   const activePolls = [...polls].filter(p => p.active).sort((a,b)=>(a.position||5)-(b.position||5));
-  let items = visible.map(c => ({ type: 'card', c }));
+  let items = visible.map((c, i) => ({ type: 'card', c, idx: i }));
   let offset = 0;
   activePolls.forEach(poll => {
     const insertAt = Math.min((poll.position||5)-1+offset, items.length);
     items.splice(insertAt, 0, { type: 'poll', poll });
     offset++;
   });
-  grid.innerHTML = items.map(item => item.type==='card' ? cardHTML(item.c) : pollHTML(item.poll)).join('');
+  grid.innerHTML = items.map(item => item.type==='card' ? cardHTML(item.c, item.idx >= 6) : pollHTML(item.poll)).join('');
   updateSetFilter();
   const wrap = document.getElementById('show-more-wrap');
   const remaining = filtered.length - showing;
@@ -4340,9 +4340,9 @@ function renderGallery() {
   else { wrap.style.display = 'none'; }
 }
 
-function showMore() { _visibleCount += 12; renderGallery(); }
+function showMore() { _visibleCount += 6; renderGallery(); }
 
-function cardHTML(c) {
+function cardHTML(c, lazy = false) {
   const r = getRating(c.id);
   const voted = hasVoted(c.id);
   const myStars = myVotes[c.id] || 0;
@@ -4361,12 +4361,8 @@ function cardHTML(c) {
   const altParts = [c.name, cardNum, c.set, cardTypeInfo].filter(Boolean);
   const altText = altParts.join(' - ');
 
-  const homepageImg = c.image && c.image.includes('supabase.co/storage/v1/object/public/')
-    ? c.image.replace('/object/public/', '/render/image/public/') + '?width=600&quality=30'
-    : c.image;
-
   const imgContent = c.image
-    ? `<img src="${escHtml(homepageImg)}" alt="${escHtml(altText)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
+    ? `<img src="${escHtml(c.image)}" alt="${escHtml(altText)}" loading="${lazy ? 'lazy' : 'eager'}" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
   const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
   const foilBadge = !isTC && c.foil === 'Foil' ? `<span class="card-foil-badge">Foil</span>` : '';
@@ -4414,7 +4410,7 @@ function getFiltered() {
 }
 
 function applyFilters() {
-  _visibleCount = 11;
+  _visibleCount = 6;
   currentFilters.type   = document.getElementById('filter-type').value;
   currentFilters.search = document.getElementById('filter-search').value;
   updateSetFilter();
