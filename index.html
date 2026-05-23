@@ -1210,18 +1210,6 @@
   #modal-info-side::-webkit-scrollbar { width: 4px; }
   #modal-info-side::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
-  /* ── VIEW COUNT ── */
-  #modal-view-count {
-    font-family: 'Crimson Pro', serif;
-    font-size: 11px;
-    color: var(--text-dim);
-    font-style: italic;
-    margin-left: auto;
-    white-space: nowrap;
-    flex-shrink: 0;
-    align-self: center;
-  }
-
   /* ── SHARE BUTTONS ── */
   .share-btn {
     font-family: 'Cinzel', serif;
@@ -3579,7 +3567,6 @@
         <div id="modal-card-name-row">
           <div id="modal-card-name"></div>
           <div id="modal-card-number"></div>
-          <div id="modal-view-count"></div>
         </div>
         <div class="modal-divider"></div>
         <div class="modal-meta-grid" id="modal-meta-grid"></div>
@@ -4721,8 +4708,6 @@ async function openModal(id) {
   document.getElementById('modal-overlay').classList.add('open');
   if (window.innerWidth > 768) document.body.style.overflow='hidden';
   else { document.body.style.overflow=''; window.scrollTo(0,0); }
-  document.getElementById('modal-view-count').textContent = '';
-  trackView(id);
 }
 
 function closeModal() {
