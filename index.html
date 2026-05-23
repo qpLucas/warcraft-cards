@@ -1215,57 +1215,8 @@
     font-family: 'Crimson Pro', serif;
     font-size: 11px;
     color: var(--text-dim);
-    text-align: right;
-    padding: 8px 0 4px;
-    border-top: 1px solid var(--border-gold);
-    margin-top: 12px;
     font-style: italic;
-  }
-
-  /* ── SPOTLIGHT ── */
-  #spotlight-section {
-    padding: 32px 40px;
-    border-bottom: 1px solid var(--border-gold);
-  }
-  #spotlight-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 16px;
-  }
-  .spotlight-card {
-    position: relative;
-    cursor: pointer;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid var(--border-gold);
-    transition: all 0.2s;
-    background: var(--bg-card);
-  }
-  .spotlight-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-  .spotlight-card img { width: 100%; aspect-ratio: 2/3; object-fit: contain; background: #000; display: block; }
-  .spotlight-card-name {
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    color: var(--gold-light);
-    padding: 8px 10px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .spotlight-badge {
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    font-family: 'Cinzel', serif;
-    font-size: 7px;
-    letter-spacing: 0.1em;
-    background: rgba(201,168,76,0.9);
-    color: #0A0804;
-    padding: 2px 6px;
-    border-radius: 2px;
-    text-transform: uppercase;
+    margin-top: 4px;
   }
 
   /* ── SHARE BUTTONS ── */
@@ -3571,15 +3522,6 @@
   </div>
 </div>
 
-<!-- SPOTLIGHT -->
-<div id="spotlight-section" style="display:none">
-  <div class="section-title">
-    <h2>✨ Spotlight</h2>
-    <div class="title-ornament"></div>
-  </div>
-  <div id="spotlight-grid"></div>
-</div>
-
 <!-- LEADERBOARD -->
 <div id="leaderboard">
   <div class="section-title">
@@ -3635,6 +3577,7 @@
           <div id="modal-card-name"></div>
           <div id="modal-card-number"></div>
         </div>
+        <div id="modal-view-count"></div>
         <div class="modal-divider"></div>
         <div class="modal-meta-grid" id="modal-meta-grid"></div>
         <div class="modal-divider"></div>
@@ -3689,7 +3632,6 @@
             </div>
           </div>
         </div>
-        <div id="modal-view-count"></div>
       </div>
     </div>
   </div>
@@ -3837,12 +3779,6 @@
             <input type="number" id="admin-popularlimit" min="1" max="500" value="100">
             <button class="admin-setting-confirm" onclick="savePopularLimit()">Confirm</button>
           </div>
-          <div id="admin-minratings-wrap">
-            <label for="admin-spotlight-input">Spotlight card ID (max 3):</label>
-            <input type="text" id="admin-spotlight-input" placeholder="Paste card ID">
-            <button class="admin-setting-confirm" onclick="addSpotlight()">+ Add</button>
-          </div>
-          <div id="admin-spotlight-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"></div>
           <button id="admin-close-btn" onclick="closeAdmin()">Close Panel</button>
         </div>
     </div>
@@ -4107,7 +4043,6 @@ async function init() {
     renderForSaleSection();
     updateSetFilter();
     updateTopbarCount();
-    await loadSpotlight();
     // Auto-open card from URL e.g. ?card=illidan-the-betrayer-c123456
     const urlCardParam = new URLSearchParams(window.location.search).get('card');
     if (urlCardParam) {
@@ -4156,68 +4091,6 @@ async function trackView(id) {
     await sb.from('card_views').insert({ card_id: id, views: 1 });
     document.getElementById('modal-view-count').textContent = '👁 1 view';
   }
-}
-
-// ── SPOTLIGHT ──
-let spotlight = [];
-
-async function loadSpotlight() {
-  const { data } = await sb.from('settings').select('value').eq('key', 'spotlight').single();
-  spotlight = data ? JSON.parse(data.value) : [];
-  renderSpotlight();
-  renderAdminSpotlight();
-}
-
-function renderSpotlight() {
-  const section = document.getElementById('spotlight-section');
-  const grid = document.getElementById('spotlight-grid');
-  const pinned = spotlight.map(id => cards.find(c => c.id === id)).filter(Boolean);
-  if (pinned.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-  grid.innerHTML = pinned.map(c => `
-    <div class="spotlight-card" onclick="openModal('${c.id}')">
-      <span class="spotlight-badge">✨ Spotlight</span>
-      <img src="${escHtml(c.image)}" alt="${escHtml(c.name)}">
-      <div class="spotlight-card-name">${escHtml(c.name)}</div>
-    </div>`).join('');
-}
-
-function renderAdminSpotlight() {
-  const el = document.getElementById('admin-spotlight-list');
-  if (!el) return;
-  if (spotlight.length === 0) { el.innerHTML = '<span style="font-family:Crimson Pro,serif;font-size:12px;color:var(--text-dim)">No cards pinned</span>'; return; }
-  el.innerHTML = spotlight.map((id) => {
-    const c = cards.find(x => x.id === id);
-    return `<span style="font-family:Cinzel,serif;font-size:9px;color:var(--gold-dim);border:1px solid var(--border-gold);padding:2px 8px;border-radius:3px;display:inline-flex;align-items:center;gap:6px">
-      ${c ? escHtml(c.name) : id}
-      <button onclick="removeSpotlight('${id}')" style="background:none;border:none;color:#e05555;cursor:pointer;font-size:11px">✕</button>
-    </span>`;
-  }).join('');
-}
-
-async function addSpotlight() {
-  const input = document.getElementById('admin-spotlight-input');
-  const id = input.value.trim();
-  if (!id) { toast('Enter a card ID.'); return; }
-  if (!cards.find(c => c.id === id)) { toast('Card not found.'); return; }
-  if (spotlight.includes(id)) { toast('Already in spotlight.'); return; }
-  if (spotlight.length >= 3) { toast('Max 3 spotlight cards.'); return; }
-  spotlight.push(id);
-  await saveSpotlight();
-  input.value = '';
-  toast('Added to spotlight!');
-}
-
-async function removeSpotlight(id) {
-  spotlight = spotlight.filter(x => x !== id);
-  await saveSpotlight();
-  toast('Removed from spotlight.');
-}
-
-async function saveSpotlight() {
-  await sb.from('settings').upsert({ key: 'spotlight', value: JSON.stringify(spotlight) });
-  renderSpotlight();
-  renderAdminSpotlight();
 }
 
 // ── LOAD DATA ──
