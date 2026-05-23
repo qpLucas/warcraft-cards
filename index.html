@@ -4332,7 +4332,9 @@ function renderGallery() {
     items.splice(insertAt, 0, { type: 'poll', poll });
     offset++;
   });
-  grid.innerHTML = items.map(item => item.type==='card' ? cardHTML(item.c, item.idx >= 6) : pollHTML(item.poll)).join('');
+  // Limit to 6 total items (cards + polls combined) per page
+  const visibleItems = items.slice(0, _visibleCount);
+  grid.innerHTML = visibleItems.map(item => item.type==='card' ? cardHTML(item.c, item.idx >= 6) : pollHTML(item.poll)).join('');
   updateSetFilter();
   const wrap = document.getElementById('show-more-wrap');
   const remaining = filtered.length - showing;
