@@ -4790,7 +4790,8 @@ function filterFromModal(field, value) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderGallery();
 }
-  e.stopPropagation();
+
+function switchThumb(e, url) {
   document.getElementById('modal-img').src = url;
   document.querySelectorAll('.mts-thumb').forEach(t => t.classList.remove('active'));
   e.target.classList.add('active');
