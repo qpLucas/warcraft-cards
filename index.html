@@ -4597,7 +4597,8 @@ async function openModal(id) {
   ].filter(([,v]) => v);
   document.getElementById('modal-meta-grid').innerHTML = fields.map(([l,v]) => {
     const clickable = ['Set','Parallel','Insert'].includes(l);
-    const onclick = clickable ? `onclick="filterFromModal('${l}','${escHtml(v).replace(/'/g,"\\'")}')" style="cursor:pointer"` : '';
+    const safeV = escHtml(v).replace(/'/g,'&#39;');
+    const onclick = clickable ? `onclick="filterFromModal('${l}','${safeV}')" style="cursor:pointer"` : '';
     return `<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value" ${onclick}>${escHtml(v)}</div></div>`;
   }).join('');
   const mStars = document.getElementById('modal-stars');
