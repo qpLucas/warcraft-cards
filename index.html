@@ -3458,7 +3458,30 @@
     letter-spacing: 0.15em;
     color: var(--text-dim);
     text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
   }
+  #footer-share { display: flex; gap: 5px; align-items: center; }
+  .footer-share-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  .footer-share-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.06); }
 
   #footer-left { flex: 1; }
 
@@ -3640,7 +3663,15 @@
       </svg>
     </a>
   </div>
-  <div id="footer-right"><span id="footer-year"></span> · All rights reserved</div>
+  <div id="footer-right">
+    <div id="footer-share">
+      <button class="footer-share-btn" onclick="shareHomepage('copy')" title="Copy link">🔗</button>
+      <button class="footer-share-btn" onclick="shareHomepage('twitter')" title="Share on X">𝕏</button>
+      <button class="footer-share-btn" onclick="shareHomepage('facebook')" title="Share on Facebook">f</button>
+      <button class="footer-share-btn" onclick="shareHomepage('whatsapp')" title="Share on WhatsApp">💬</button>
+    </div>
+    <span id="footer-year"></span> · All rights reserved
+  </div>
 </footer>
 
 <!-- CARD MODAL -->
@@ -5014,6 +5045,20 @@ function filterFromModal(field, value) {
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderGallery();
+}
+
+function shareHomepage(platform) {
+  const url = encodeURIComponent('https://warcraftcards.com');
+  const title = encodeURIComponent('WarcraftCards.com — Warcraft Card Collection');
+  if (platform === 'copy') {
+    navigator.clipboard.writeText('https://warcraftcards.com').then(() => toast('Link copied!')).catch(() => toast('Copy failed.'));
+  } else if (platform === 'twitter') {
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+  } else if (platform === 'facebook') {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+  } else if (platform === 'whatsapp') {
+    window.open(`https://wa.me/?text=${title}%20${url}`, '_blank');
+  }
 }
 
 function shareCard(platform) {
