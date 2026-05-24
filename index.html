@@ -4739,6 +4739,15 @@ async function openModal(id) {
     const byMfr = cardData.manufacturer ? ` by ${cardData.manufacturer}` : '';
     const desc = `${cardData.name}${typeInfo ? ' — ' + typeInfo : ''}${fromSet}${byMfr}. Part of a personal Warcraft card collection.`;
     document.querySelector('meta[name="description"]')?.setAttribute('content', desc);
+    // Update og:image to card photo for social sharing
+    if (cardData.image) {
+      document.querySelector('meta[property="og:image"]')?.setAttribute('content', cardData.image);
+      document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', cardData.image);
+    }
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${cardData.name} — WarcraftCards.com`);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', desc);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', `${cardData.name} — WarcraftCards.com`);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', desc);
   }
   const c = cards.find(x => x.id === id);
   if (!c) return;
@@ -4836,6 +4845,15 @@ function closeModal() {
   currentModalId=null;
   history.pushState({}, '', window.location.pathname);
   document.title = 'WarcraftCards.com | May my ancestors watch over my collection!';
+  const defaultDesc = 'WarcraftCards.com — A personal collection of Warcraft trading cards and TCG cards. Browse, rate and discover rare parallels, inserts and base cards.';
+  const defaultImg = 'https://warcraftcards.com/og-image.jpg';
+  document.querySelector('meta[name="description"]')?.setAttribute('content', defaultDesc);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'WarcraftCards.com — Warcraft Card Collection');
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', defaultDesc);
+  document.querySelector('meta[property="og:image"]')?.setAttribute('content', defaultImg);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', 'WarcraftCards.com — Warcraft Card Collection');
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', defaultDesc);
+  document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', defaultImg);
 }
 function closeModalOutside(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
 function hoverModalStar(el,val){document.querySelectorAll('.modal-star').forEach((s,i)=>{s.classList.remove('hover');if(i<val)s.classList.add('hover');});}
