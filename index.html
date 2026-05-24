@@ -701,6 +701,22 @@
     font-style: italic;
   }
 
+  #newest-section {
+    padding: 32px 40px;
+    border-bottom: 1px solid var(--border-gold);
+  }
+  #newest-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  #newest-show-more-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
   /* ── FOR SALE ── */
   .admin-forsale-row {
     display: flex;
@@ -3227,7 +3243,8 @@
     .filter-count { font-size: 11px; }
 
     /* ── GALLERY ── */
-    #gallery, #leaderboard, #forsale-section { padding: 12px 14px; }
+    #gallery, #leaderboard, #forsale-section, #newest-section { padding: 12px 14px; }
+    #newest-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .card-name { font-size: 11px; }
     .meta-label, .meta-value { font-size: 10px; }
 
@@ -3520,6 +3537,18 @@
     <div class="title-ornament"></div>
   </div>
   <div id="leaderboard-list"></div>
+</div>
+
+<!-- NEWEST SECTION -->
+<div id="newest-section">
+  <div class="section-title">
+    <h2>🆕 Newest</h2>
+    <div class="title-ornament"></div>
+  </div>
+  <div id="newest-grid"></div>
+  <div id="newest-show-more-wrap" style="display:none">
+    <button id="newest-show-more-btn" onclick="newestShowMore()">Show More</button>
+  </div>
 </div>
 
 <!-- FOR SALE SECTION -->
@@ -4030,6 +4059,7 @@ async function init() {
     await Promise.all([loadCards(), loadRatings(), loadPolls(), loadPollVotes(), loadSettings()]);
     renderGallery();
     renderLeaderboard();
+    renderNewest();
     renderForSaleSection();
     updateSetFilter();
     updateTopbarCount();
@@ -4083,7 +4113,22 @@ async function trackView(id) {
   }
 }
 
-// ── LOAD DATA ──
+// ── NEWEST SECTION ──
+let _newestVisible = 6;
+
+function renderNewest() {
+  const grid = document.getElementById('newest-grid');
+  const sorted = [...cards].sort((a, b) => (b.added || 0) - (a.added || 0));
+  const showing = sorted.slice(0, _newestVisible);
+  grid.innerHTML = showing.map((c, i) => cardHTML(c, i >= 6)).join('');
+  const wrap = document.getElementById('newest-show-more-wrap');
+  wrap.style.display = sorted.length > _newestVisible ? 'flex' : 'none';
+}
+
+function newestShowMore() {
+  _newestVisible += 6;
+  renderNewest();
+}
 async function loadCards() {
   const { data, error } = await sb.from('cards').select('*').order('added', { ascending: false });
   if (error) throw error;
