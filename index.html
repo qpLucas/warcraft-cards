@@ -735,6 +735,25 @@
     border-color: var(--gold);
     background: rgba(201,168,76,0.06);
   }
+  #newest-show-less-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    padding: 11px 36px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  #newest-show-less-btn:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
 
   /* ── FOR SALE ── */
   .admin-forsale-row {
@@ -3567,6 +3586,7 @@
   <div id="newest-grid"></div>
   <div id="newest-show-more-wrap" style="display:none">
     <button id="newest-show-more-btn" onclick="newestShowMore()">Show More</button>
+    <button id="newest-show-less-btn" onclick="newestShowLess()" style="display:none">Show Less</button>
   </div>
 </div>
 
@@ -4141,11 +4161,20 @@ function renderNewest() {
   const showing = sorted.slice(0, _newestVisible);
   grid.innerHTML = showing.map((c, i) => cardHTML(c, i >= 6)).join('');
   const wrap = document.getElementById('newest-show-more-wrap');
-  wrap.style.display = sorted.length > _newestVisible ? 'flex' : 'none';
+  const moreBtn = document.getElementById('newest-show-more-btn');
+  const lessBtn = document.getElementById('newest-show-less-btn');
+  wrap.style.display = (sorted.length > 6 || _newestVisible > 6) ? 'flex' : 'none';
+  moreBtn.style.display = sorted.length > _newestVisible ? 'inline-block' : 'none';
+  lessBtn.style.display = _newestVisible > 6 ? 'inline-block' : 'none';
 }
 
 function newestShowMore() {
   _newestVisible += 6;
+  renderNewest();
+}
+
+function newestShowLess() {
+  _newestVisible = Math.max(6, _newestVisible - 6);
   renderNewest();
 }
 async function loadCards() {
