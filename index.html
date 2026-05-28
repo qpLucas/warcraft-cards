@@ -1307,6 +1307,22 @@
     gap: 8px;
   }
 
+  /* ── COMC ICON ── */
+  .comc-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 5px;
+    vertical-align: middle;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .comc-icon:hover { opacity: 1; }
+  .comc-icon img {
+    height: 14px;
+    width: auto;
+    display: block;
+  }
+
   /* ── ABOUT CARD ── */
   #modal-about-btn {
     font-family: 'Cinzel', serif;
@@ -4128,6 +4144,25 @@
             </div>
           </div>
         </div>
+        <div class="admin-field admin-forsale-row">
+          <label class="forsale-label">
+            <input type="checkbox" id="f-comc" onchange="adminComcChanged()">
+            <span>In COMC Inventory</span>
+          </label>
+          <div id="f-comc-wrap" style="display:none">
+            <input type="url" id="f-comc-url" placeholder="https://www.comc.com/Cards/...">
+            <label class="forsale-label" style="margin-top:8px">
+              <input type="checkbox" id="f-comc-forsale" onchange="adminComcForSaleChanged()">
+              <span>For Sale on COMC</span>
+            </label>
+            <div id="f-comc-price-wrap" style="display:none">
+              <div class="price-input-wrap">
+                <span class="price-symbol">$</span>
+                <input type="number" id="f-comc-price" placeholder="0.00" min="0" step="0.01">
+              </div>
+            </div>
+          </div>
+        </div>
         <button id="admin-save-btn" onclick="saveCard()">Add Card to Collection</button>
         <button id="admin-cancel-edit" onclick="cancelEdit()">Cancel Edit</button>
         </div><!-- end admin-form-col -->
@@ -4419,7 +4454,8 @@ function dbToCard(d) {
     foil: d.foil || '', manufacturer: d.manufacturer || '',
     number: d.number || '', forSale: d.for_sale || false,
     price: d.price || 0, added: d.added || 0,
-    media: Array.isArray(d.media) ? d.media.filter(Boolean) : []
+    media: Array.isArray(d.media) ? d.media.filter(Boolean) : [],
+    comcUrl: d.comc_url || '', comcForSale: d.comc_for_sale || false, comcPrice: d.comc_price || 0
   };
 }
 
@@ -4432,7 +4468,8 @@ function cardToDB(c) {
     foil: c.foil || '', manufacturer: c.manufacturer || '',
     number: c.number || '', for_sale: c.forSale || false,
     price: c.price || 0, added: c.added || Date.now(),
-    media: c.media || []
+    media: c.media || [],
+    comc_url: c.comcUrl || '', comc_for_sale: c.comcForSale || false, comc_price: c.comcPrice || 0
   };
 }
 
@@ -4716,7 +4753,10 @@ function cardHTML(c, lazy = false) {
   return `<div class="card-item" onclick="openModal('${c.id}')">
     <div class="card-img-wrap">${imgContent}${badgeHTML}${foilBadge}${forSaleBadge}</div>
     <div class="card-info">
-      <div class="card-name">${escHtml(c.name)}</div>
+      <div class="card-name">
+        ${escHtml(c.name)}
+        ${c.comcUrl ? `<a href="${escHtml(c.comcUrl)}" target="_blank" rel="noopener" class="comc-icon" title="Open the card in COMC marketplace" onclick="event.stopPropagation()"><img src="https://i0.wp.com/blog.comc.com/wp-content/uploads/2020/01/comc-logo-800ppi.png?resize=396%2C176&ssl=1" alt="COMC"></a>` : ''}
+      </div>
       <div class="card-meta">
         ${c.manufacturer?`<div class="card-meta-row"><span class="meta-label">Manufacturer</span><span class="meta-value">${escHtml(c.manufacturer)}</span></div>`:''}
         ${c.set?`<div class="card-meta-row"><span class="meta-label">Set</span><span class="meta-value">${escHtml(c.set)}</span></div>`:''}
@@ -4989,9 +5029,16 @@ async function openModal(id) {
     : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate this card!';
   const fsSection = document.getElementById('modal-forsale-section');
   const fsDivider = document.getElementById('modal-forsale-divider');
-  if (c.forSale && c.price > 0) {
+  const fsBtn = document.getElementById('modal-forsale-btn');
+  if (c.comcForSale && c.comcUrl && c.comcPrice > 0) {
     fsSection.style.display='block'; fsDivider.style.display='block';
-    document.getElementById('modal-forsale-price').textContent=`€${parseFloat(c.price).toFixed(2)}`;
+    fsBtn.innerHTML = `<span id="modal-forsale-btn-icon">💚</span> For Sale on COMC — <span id="modal-forsale-price">$${parseFloat(c.comcPrice).toFixed(2)}</span>`;
+    fsBtn.onclick = () => window.open(c.comcUrl, '_blank');
+    document.getElementById('modal-forsale-form').style.display='none';
+  } else if (c.forSale && c.price > 0) {
+    fsSection.style.display='block'; fsDivider.style.display='block';
+    fsBtn.innerHTML = `<span id="modal-forsale-btn-icon">💚</span> For Sale — <span id="modal-forsale-price">€${parseFloat(c.price).toFixed(2)}</span>`;
+    fsBtn.onclick = () => toggleForSaleForm();
     document.getElementById('modal-forsale-form').style.display='none';
   } else { fsSection.style.display='none'; fsDivider.style.display='none'; }
   // Load comments from Supabase
@@ -5427,6 +5474,8 @@ async function adminUpload(input) {
 
 // ── ADMIN TYPE SWITCHING ──
 function adminForSaleChanged(){const checked=document.getElementById('f-forsale').checked;document.getElementById('f-price-wrap').style.display=checked?'block':'none';}
+function adminComcChanged(){const checked=document.getElementById('f-comc').checked;document.getElementById('f-comc-wrap').style.display=checked?'block':'none';}
+function adminComcForSaleChanged(){const checked=document.getElementById('f-comc-forsale').checked;document.getElementById('f-comc-price-wrap').style.display=checked?'block':'none';}
 function adminTypeChanged(){const type=document.getElementById('f-type').value;document.getElementById('admin-tc-fields').style.display=type==='Trading Card'?'block':'none';document.getElementById('admin-tcg-fields').style.display=type==='Trading Card Game'?'block':'none';if(type==='Trading Card'){document.getElementById('f-card-subtype').value='Base';adminSubtypeChanged();}}
 function adminSubtypeChanged(){const sub=document.getElementById('f-card-subtype').value;document.getElementById('admin-parallel-field').style.display=sub==='Parallel'?'block':'none';document.getElementById('admin-insert-field').style.display=sub==='Insert'?'block':'none';}
 
@@ -5450,6 +5499,9 @@ async function saveCard() {
     manufacturer: document.getElementById('f-manufacturer').value.trim(),
     forSale: document.getElementById('f-forsale').checked,
     price: document.getElementById('f-forsale').checked?parseFloat(document.getElementById('f-price').value)||0:0,
+    comcUrl: document.getElementById('f-comc').checked ? (document.getElementById('f-comc-url').value.trim()||'') : '',
+    comcForSale: document.getElementById('f-comc').checked && document.getElementById('f-comc-forsale').checked,
+    comcPrice: document.getElementById('f-comc-forsale').checked ? parseFloat(document.getElementById('f-comc-price').value)||0 : 0,
     added: editId?(cards.find(c=>c.id===editId)?.added||Date.now()):Date.now(),
     media: _photos.slice()
   };
@@ -5471,7 +5523,7 @@ async function saveCard() {
 
 function clearAdminForm(){
   _photos=[];
-  ['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['f-name','f-image','f-extra-url','f-set','f-parallel','f-insert','f-number','f-manufacturer','f-price','f-comc-url','f-comc-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const ap=document.getElementById('admin-photos');if(ap)ap.innerHTML='';
   document.getElementById('f-type').value='Trading Card';
   document.getElementById('f-rarity').value='Common';
@@ -5479,6 +5531,10 @@ function clearAdminForm(){
   document.getElementById('f-card-subtype').value='Base';
   document.getElementById('f-forsale').checked=false;
   document.getElementById('f-price-wrap').style.display='none';
+  document.getElementById('f-comc').checked=false;
+  document.getElementById('f-comc-wrap').style.display='none';
+  document.getElementById('f-comc-forsale').checked=false;
+  document.getElementById('f-comc-price-wrap').style.display='none';
   document.getElementById('admin-tc-fields').style.display='block';
   document.getElementById('admin-tcg-fields').style.display='none';
   document.getElementById('admin-parallel-field').style.display='none';
@@ -5507,6 +5563,12 @@ function editCard(id){
   document.getElementById('f-forsale').checked=!!c.forSale;
   document.getElementById('f-price').value=c.price||'';
   document.getElementById('f-price-wrap').style.display=c.forSale?'block':'none';
+  document.getElementById('f-comc').checked=!!c.comcUrl;
+  document.getElementById('f-comc-wrap').style.display=c.comcUrl?'block':'none';
+  document.getElementById('f-comc-url').value=c.comcUrl||'';
+  document.getElementById('f-comc-forsale').checked=!!c.comcForSale;
+  document.getElementById('f-comc-price-wrap').style.display=c.comcForSale?'block':'none';
+  document.getElementById('f-comc-price').value=c.comcPrice||'';
   const isTC=c.type==='Trading Card'; const isTCG=c.type==='Trading Card Game';
   document.getElementById('admin-tc-fields').style.display=isTC?'block':'none';
   document.getElementById('admin-tcg-fields').style.display=isTCG?'block':'none';
