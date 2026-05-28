@@ -385,15 +385,29 @@
     border-radius: 6px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    transition: border-color 0.25s, box-shadow 0.25s;
     position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 
   .card-item:hover {
-    transform: translateY(-4px);
     border-color: var(--gold);
     box-shadow: var(--shadow-gold), var(--shadow-card);
   }
+
+  /* Sheen overlay for foil effect on hover */
+  .card-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .card-item:hover::after { opacity: 1; }
 
   .card-item::before {
     content: '';
@@ -5553,6 +5567,30 @@ function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('lightbox').classList.contains('open')){closeLightbox();return;}if(document.getElementById('popular-overlay').classList.contains('open')){closePopular();return;}if(document.getElementById('donate-overlay').classList.contains('open')){closeDonate();return;}if(document.getElementById('support-overlay').classList.contains('open')){closeSupport();return;}if(document.getElementById('about-overlay').classList.contains('open')){closeAbout();return;}if(document.getElementById('admin-login-overlay').classList.contains('open')){closeAdminLogin();return;}if(document.getElementById('modal-overlay').classList.contains('open'))closeModal();if(document.getElementById('admin-overlay').classList.contains('open'))closeAdmin();}});
 
 // ── START ──
+// ── 3D CARD TILT ──
+document.addEventListener('mousemove', e => {
+  const card = e.target.closest('.card-item');
+  if (!card) return;
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const rotY = ((x - cx) / cx) * 8;
+  const rotX = -((y - cy) / cy) * 8;
+  card.style.transform = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(6px)`;
+  card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+  card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+});
+
+document.addEventListener('mouseout', e => {
+  const card = e.target.closest('.card-item');
+  if (!card || card.contains(e.relatedTarget)) return;
+  card.style.transition = 'transform 0.4s ease, border-color 0.25s, box-shadow 0.25s';
+  card.style.transform = '';
+  setTimeout(() => { card.style.transition = ''; }, 400);
+});
+
 init();
 </script>
 </body>
