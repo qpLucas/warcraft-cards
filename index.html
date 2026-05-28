@@ -4944,7 +4944,15 @@ async function openModal(id) {
     const safeV = escHtml(v).replace(/'/g,'&#39;');
     const onclick = clickable ? `onclick="filterFromModal('${l}','${safeV}')" style="cursor:pointer"` : '';
     return `<div class="modal-meta-item"><div class="m-label">${escHtml(l)}</div><div class="m-value" ${onclick}>${escHtml(v)}</div></div>`;
-  }).join('');
+  }).join('') + `<div class="modal-meta-item">
+    <div class="m-label">Share</div>
+    <div class="m-value" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <button class="share-btn" onclick="shareCard('copy')" title="Copy link">🔗 Copy</button>
+      <button class="share-btn" onclick="shareCard('twitter')" title="Share on X">𝕏</button>
+      <button class="share-btn" onclick="shareCard('facebook')" title="Facebook">f</button>
+      <button class="share-btn" onclick="shareCard('whatsapp')" title="WhatsApp">💬</button>
+    </div>
+  </div>`;
   const mStars = document.getElementById('modal-stars');
   const voted = hasVoted(id); const myStars = myVotes[id]||0;
   mStars.innerHTML = [1,2,3,4,5].map(i=>`<span class="modal-star ${voted?(i<=myStars?'filled':''):(i<=Math.round(r.avg)?'filled':'')}"
