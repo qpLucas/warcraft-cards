@@ -5043,7 +5043,7 @@ async function openModal(id) {
   const fsBtn = document.getElementById('modal-forsale-btn');
   if (c.comcForSale && c.comcUrl && c.comcPrice > 0) {
     fsSection.style.display='block'; fsDivider.style.display='block';
-    fsBtn.innerHTML = `💚 For Sale on COMC — $${parseFloat(c.comcPrice).toFixed(2)}`;
+    fsBtn.innerHTML = `💚 For Sale on COMC — $${parseFloat(c.comcPrice).toFixed(2)} <em style="font-family:'Crimson Pro',serif;font-weight:400;font-size:11px;opacity:0.7;text-transform:none;letter-spacing:0"> · for COMC registered users</em>`;
     fsBtn.onclick = (e) => { e.preventDefault(); window.open(c.comcUrl, '_blank'); };
     document.getElementById('modal-forsale-form').style.display='none';
   } else if (c.forSale && c.price > 0) {
