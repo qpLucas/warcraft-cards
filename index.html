@@ -5238,8 +5238,8 @@ async function openAboutCard() {
   document.getElementById('modal-comments-section').style.display = 'none';
   document.getElementById('modal-meta-grid').style.display = 'none';
   document.getElementById('modal-forsale-section').style.display = 'none';
-  document.getElementById('modal-about-divider').style.display = 'none';
   document.querySelectorAll('#modal-info-side .modal-divider').forEach(d => d.style.display = 'none');
+  document.getElementById('modal-about-divider').style.display = '';
 
   // Update URL to about format
   const namePart = c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
