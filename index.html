@@ -1338,8 +1338,8 @@
   }
   #about-card-body {
     font-family: 'Crimson Pro', serif;
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.8;
     color: var(--text-muted);
   }
   #about-card-body p { margin-bottom: 10px; }
@@ -5170,6 +5170,9 @@ async function openAboutCard() {
   if (content.style.display !== 'none') {
     content.style.display = 'none';
     btn.textContent = '&#10024; About this Card';
+    // Restore rating and comments
+    document.getElementById('modal-rating-section').style.display = '';
+    document.getElementById('modal-comments-section').style.display = '';
     // Restore card URL
     history.pushState({ cardId: c.id }, '', `?card=${cardSlug(c)}`);
     return;
@@ -5178,6 +5181,9 @@ async function openAboutCard() {
   content.style.display = 'block';
   btn.innerHTML = '&#10024; Hide Card Info';
   body.innerHTML = '<div class="about-loading">&#10024; Generating card info…</div>';
+  // Hide rating and comments
+  document.getElementById('modal-rating-section').style.display = 'none';
+  document.getElementById('modal-comments-section').style.display = 'none';
 
   // Update URL to about format
   const namePart = c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -5247,7 +5253,10 @@ function closeAboutCard() {
   if (content) content.style.display = 'none';
   const btn = document.getElementById('modal-about-btn');
   if (btn) btn.innerHTML = '&#10024; About this Card';
-  // Restore card URL if modal is still open
+  const rating = document.getElementById('modal-rating-section');
+  const comments = document.getElementById('modal-comments-section');
+  if (rating) rating.style.display = '';
+  if (comments) comments.style.display = '';
   if (currentModalId) {
     const c = cards.find(x => x.id === currentModalId);
     if (c) history.pushState({ cardId: c.id }, '', `?card=${cardSlug(c)}`);
