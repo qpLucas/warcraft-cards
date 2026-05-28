@@ -4160,10 +4160,11 @@ async function init() {
     // Auto-open card from URL e.g. ?card=illidan-the-betrayer-c123456
     const urlCardParam = new URLSearchParams(window.location.search).get('card');
     if (urlCardParam) {
-      // Try exact ID match first, then extract ID from end of slug
-      const byId = cards.find(c => c.id === urlCardParam);
-      const bySlug = byId || cards.find(c => urlCardParam.endsWith('-' + c.id));
-      if (bySlug) openModal(bySlug.id);
+      // Extract ID — look for -cXXXX at end, or match full ID
+      const match = urlCardParam.match(/-c([^-]+)$/);
+      const extractedId = match ? 'c' + match[1] : urlCardParam;
+      const found = cards.find(c => c.id === extractedId) || cards.find(c => c.id === urlCardParam);
+      if (found) openModal(found.id);
     }
   } catch(e) {
     console.error('Init error:', e);
@@ -4752,7 +4753,10 @@ function renderLeaderboard() {
 let currentModalId = null;
 
 function cardSlug(c) {
-  return c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + c.id;
+  const namePart = c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const setPart = c.set ? c.set.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : '';
+  const slug = setPart ? `${namePart}-${setPart}` : namePart;
+  return `${slug}-c${c.id}`;
 }
 
 async function openModal(id) {
