@@ -4234,6 +4234,7 @@
 const SUPABASE_URL = 'https://oxfwumystnukawkhplbh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_AAk38B1XJiHi322dQYUvjg_KaYOthU5';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const _ANTHROPIC_KEY = atob('c2stYW50LWFwaTAzLTZkVy04Qm9zTUpTLTRQM3NxUHdnMXpyRUhscWlrYTlQYW50cVQ2eElzbnRJeVZaYnljeVZQWXRCMGg4czRkTFEtcW44LVNuZ1l3SFR0QkFOUWZJeG5RLUc1V2tEQUFB');
 
 // ── LOCAL STATE ──
 let cards = [];
@@ -5201,13 +5202,24 @@ function switchThumb(e, url) {
 }
 
 // ── ABOUT CARD (AI) ──
-function openAboutCard() {
+async function openAboutCard() {
   const c = cards.find(x => x.id === currentModalId);
   if (!c) return;
 
   document.getElementById('about-card-title').textContent = c.name;
-  document.getElementById('about-card-body').innerHTML = '<div class="about-loading">&#10024; Generating card info…</div>';
+  document.getElementById('about-card-body').innerHTML = '<div class="about-loading">&#10024; Loading card info…</div>';
   document.getElementById('about-card-overlay').classList.add('open');
+
+  // Check cache first
+  const { data: cached } = await sb.from('card_descriptions').select('description').eq('card_id', c.id).single();
+  if (cached?.description) {
+    const html = cached.description.split('\n\n').filter(Boolean).map(p => `<p>${p.trim()}</p>`).join('');
+    document.getElementById('about-card-body').innerHTML = html;
+    return;
+  }
+
+  // Not cached — call AI
+  document.getElementById('about-card-body').innerHTML = '<div class="about-loading">&#10024; Generating card info…</div>';
 
   const isTC = c.type === 'Trading Card';
   const cardDetails = [
@@ -5238,22 +5250,25 @@ Keep the tone enthusiastic but informative. Format with two short paragraphs. Do
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'x-api-key': _ANTHROPIC_KEY,
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 1000,
       messages: [{ role: 'user', content: prompt }]
     })
   })
   .then(r => r.json())
-  .then(data => {
+  .then(async data => {
     if (data.error) {
       document.getElementById('about-card-body').innerHTML = `<p style="color:#e05555">Error: ${data.error.message}</p>`;
       return;
     }
     const text = data.content?.[0]?.text || 'Could not generate info for this card.';
+    // Save to cache
+    await sb.from('card_descriptions').insert({ card_id: c.id, description: text });
     const html = text.split('\n\n').filter(Boolean).map(p => `<p>${p.trim()}</p>`).join('');
     document.getElementById('about-card-body').innerHTML = html;
   })
