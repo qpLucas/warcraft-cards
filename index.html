@@ -3788,7 +3788,7 @@
           <div id="modal-card-name"></div>
           <div id="modal-card-number"></div>
         </div>
-        <div class="modal-divider"></div>
+        <div class="modal-divider" id="modal-about-divider"></div>
         <div id="modal-about-wrap">
           <button id="modal-about-btn" onclick="openAboutCard()">About this Card<span style="font-size:14px;margin-left:6px">✦</span></button>
           <div id="modal-about-content" style="display:none">
@@ -5220,6 +5220,7 @@ async function openAboutCard() {
     document.getElementById('modal-rating-section').style.display = '';
     document.getElementById('modal-comments-section').style.display = '';
     document.getElementById('modal-meta-grid').style.display = '';
+    document.getElementById('modal-about-divider').style.display = '';
     const fsSection = document.getElementById('modal-forsale-section');
     const fsDivider = document.getElementById('modal-forsale-divider');
     if (fsSection) fsSection.style.display = c?.forSale ? 'block' : 'none';
@@ -5232,11 +5233,12 @@ async function openAboutCard() {
   content.style.display = 'block';
   btn.innerHTML = 'Hide Card Info<span style="font-size:14px;margin-left:6px">✦</span>';
   body.innerHTML = '<div class="about-loading">&#10024; Generating card info…</div>';
-  // Hide rating, comments and meta
+  // Hide meta, rating, comments, dividers
   document.getElementById('modal-rating-section').style.display = 'none';
   document.getElementById('modal-comments-section').style.display = 'none';
   document.getElementById('modal-meta-grid').style.display = 'none';
   document.getElementById('modal-forsale-section').style.display = 'none';
+  document.getElementById('modal-about-divider').style.display = 'none';
   document.querySelectorAll('#modal-info-side .modal-divider').forEach(d => d.style.display = 'none');
 
   // Update URL to about format
@@ -5310,6 +5312,8 @@ function closeAboutCard() {
   ['modal-rating-section','modal-comments-section','modal-meta-grid'].forEach(id => {
     const el = document.getElementById(id); if (el) el.style.display = '';
   });
+  const aboutDiv = document.getElementById('modal-about-divider');
+  if (aboutDiv) aboutDiv.style.display = '';
   // Only restore for sale if card is actually for sale
   if (currentModalId) {
     const c = cards.find(x => x.id === currentModalId);
