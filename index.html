@@ -1311,14 +1311,14 @@
   .comc-icon {
     display: inline-flex;
     align-items: center;
-    margin-left: 5px;
     vertical-align: middle;
-    opacity: 0.7;
+    opacity: 0.75;
     transition: opacity 0.2s;
+    margin-right: 4px;
   }
   .comc-icon:hover { opacity: 1; }
   .comc-icon img {
-    height: 14px;
+    height: 13px;
     width: auto;
     display: block;
   }
@@ -4748,14 +4748,15 @@ function cardHTML(c, lazy = false) {
   const imgContent = c.image
     ? `<img src="${escHtml(homepageImg)}" alt="${escHtml(altText)}" loading="${lazy ? 'lazy' : 'eager'}" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder><span style=\\'font-size:11px;color:var(--text-dim)\\'>No image</span></div>'">`
     : `<div class="card-img-placeholder"><span style="font-size:11px;color:var(--text-dim)">No image</span></div>`;
-  const forSaleBadge = c.forSale && c.price > 0 ? `<span class="card-forsale-badge">💚 For Sale · €${parseFloat(c.price).toFixed(2)}</span>` : '';
+  const forSaleBadge = (c.forSale && c.price > 0) || (c.comcForSale && c.comcPrice > 0)
+    ? `<span class="card-forsale-badge">💚 For Sale${c.comcForSale ? ' · COMC' : ' · €' + parseFloat(c.price).toFixed(2)}</span>` : '';
   const foilBadge = !isTC && c.foil === 'Foil' ? `<span class="card-foil-badge">Foil</span>` : '';
+  const comcIcon = c.comcUrl ? `<span class="comc-icon"><img src="https://i0.wp.com/blog.comc.com/wp-content/uploads/2020/01/comc-logo-800ppi.png?resize=396%2C176&ssl=1" alt="COMC"></span>` : '';
   return `<div class="card-item" onclick="openModal('${c.id}')">
     <div class="card-img-wrap">${imgContent}${badgeHTML}${foilBadge}${forSaleBadge}</div>
     <div class="card-info">
       <div class="card-name">
-        ${escHtml(c.name)}
-        ${c.comcUrl ? `<a href="${escHtml(c.comcUrl)}" target="_blank" rel="noopener" class="comc-icon" title="Open the card in COMC marketplace" onclick="event.stopPropagation()"><img src="https://i0.wp.com/blog.comc.com/wp-content/uploads/2020/01/comc-logo-800ppi.png?resize=396%2C176&ssl=1" alt="COMC"></a>` : ''}
+        ${comcIcon}${escHtml(c.name)}
       </div>
       <div class="card-meta">
         ${c.manufacturer?`<div class="card-meta-row"><span class="meta-label">Manufacturer</span><span class="meta-value">${escHtml(c.manufacturer)}</span></div>`:''}
@@ -4894,7 +4895,7 @@ function updateSetFilter() {
 let _forsaleVisible = 6;
 
 function renderForSaleSection() {
-  const forSaleCards = cards.filter(c => c.forSale && c.price > 0);
+  const forSaleCards = cards.filter(c => (c.forSale && c.price > 0) || (c.comcForSale && c.comcPrice > 0));
   const section = document.getElementById('forsale-section');
   const grid = document.getElementById('forsale-grid');
   if (forSaleCards.length === 0) { section.classList.remove('visible'); return; }
@@ -4962,7 +4963,8 @@ async function openModal(id) {
   if (!c) return;
   currentModalId = id;
   const r = getRating(id);
-  document.getElementById('modal-card-name').textContent = c.name;
+  document.getElementById('modal-card-name').innerHTML = escHtml(c.name) +
+    (c.comcUrl ? ` <a href="${escHtml(c.comcUrl)}" target="_blank" rel="noopener" class="comc-icon" title="Open the card in COMC marketplace" onclick="event.stopPropagation()"><img src="https://i0.wp.com/blog.comc.com/wp-content/uploads/2020/01/comc-logo-800ppi.png?resize=396%2C176&ssl=1" alt="COMC"></a>` : '');
   const rawNum = (c.number||'').trim();
   const cardNum = rawNum ? '#'+rawNum.replace(/\/.*$/,'').trim() : '';
   document.getElementById('modal-card-number').textContent = cardNum;
