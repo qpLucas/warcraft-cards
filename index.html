@@ -1307,6 +1307,13 @@
     gap: 8px;
   }
 
+  #modal-comc-note {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
   /* ── COMC ICON ── */
   .comc-icon {
     display: inline-flex;
@@ -3820,6 +3827,7 @@
           <div id="modal-card-name"></div>
           <div id="modal-card-number"></div>
         </div>
+        <div id="modal-comc-note" style="display:none">ℹ️ <em>Card is stored in my COMC inventory</em></div>
         <div class="modal-divider" id="modal-about-divider"></div>
         <div id="modal-about-wrap">
           <button id="modal-about-btn" onclick="openAboutCard()">About this Card <span style="font-size:14px">✦</span></button>
@@ -5029,11 +5037,11 @@ async function openModal(id) {
   document.getElementById('modal-rating-text').innerHTML = voted
     ? `You rated <span class="avg">${myStars}</span> / 5<br class="mob-break"> ${r.count} vote${r.count!==1?'s':''}, avg <span class="avg">${r.avg}</span>`
     : r.count>0 ? `<span class="avg">${r.avg}</span> / 5 — ${r.count} vote${r.count!==1?'s':''}` : 'Be the first to rate this card!';
+  document.getElementById('modal-comc-note').style.display = c.comcUrl ? 'block' : 'none';
   const fsSection = document.getElementById('modal-forsale-section');
   const fsDivider = document.getElementById('modal-forsale-divider');
   const fsBtn = document.getElementById('modal-forsale-btn');
   if (c.comcForSale && c.comcUrl && c.comcPrice > 0) {
-    fsSection.style.display='block'; fsDivider.style.display='block';
     fsBtn.innerHTML = `<span id="modal-forsale-btn-icon">💚</span> For Sale on COMC — <span id="modal-forsale-price">$${parseFloat(c.comcPrice).toFixed(2)}</span>`;
     fsBtn.onclick = () => window.open(c.comcUrl, '_blank');
     document.getElementById('modal-forsale-form').style.display='none';
