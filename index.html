@@ -5218,7 +5218,7 @@ async function openAboutCard() {
   // Toggle — if already open, close it
   if (content.style.display !== 'none') {
     content.style.display = 'none';
-    btn.innerHTML = 'About this Card <span style="font-size:14px">✦</span>';
+    btn.innerHTML = 'About this Card <span style="font-size:14px">✦</span>'; btn.style.animation = ''; btn.style.boxShadow = '';
     document.getElementById('modal-rating-section').style.display = '';
     document.getElementById('modal-comments-section').style.display = '';
     document.getElementById('modal-meta-grid').style.display = '';
@@ -5234,6 +5234,8 @@ async function openAboutCard() {
 
   content.style.display = 'block';
   btn.innerHTML = 'Hide Card Info <span style="font-size:14px">✦</span>';
+  btn.style.animation = 'none';
+  btn.style.boxShadow = 'none';
   body.innerHTML = '<div class="about-loading">&#10024; Generating card info…</div>';
   // Hide meta, rating, comments, dividers
   document.getElementById('modal-rating-section').style.display = 'none';
@@ -5310,7 +5312,7 @@ function closeAboutCard() {
   const content = document.getElementById('modal-about-content');
   if (content) content.style.display = 'none';
   const btn = document.getElementById('modal-about-btn');
-  if (btn) btn.innerHTML = 'About this Card <span style="font-size:14px">✦</span>';
+  if (btn) { btn.innerHTML = 'About this Card <span style="font-size:14px">✦</span>'; btn.style.animation = ''; btn.style.boxShadow = ''; } btn.style.animation = ''; btn.style.boxShadow = '';
   ['modal-rating-section','modal-comments-section','modal-meta-grid'].forEach(id => {
     const el = document.getElementById(id); if (el) el.style.display = '';
   });
