@@ -3827,7 +3827,7 @@
           <div id="modal-card-name"></div>
           <div id="modal-card-number"></div>
         </div>
-        <div id="modal-comc-note" style="display:none">ℹ️ <em>Card is stored in my COMC inventory</em></div>
+        <div id="modal-comc-note" style="display:none"><em>Card is stored in my COMC inventory</em></div>
         <div class="modal-divider" id="modal-about-divider"></div>
         <div id="modal-about-wrap">
           <button id="modal-about-btn" onclick="openAboutCard()">About this Card <span style="font-size:14px">✦</span></button>
@@ -4971,8 +4971,8 @@ async function openModal(id) {
   if (!c) return;
   currentModalId = id;
   const r = getRating(id);
-  document.getElementById('modal-card-name').innerHTML = escHtml(c.name) +
-    (c.comcUrl ? ` <a href="${escHtml(c.comcUrl)}" target="_blank" rel="noopener" class="comc-icon" title="Open the card in COMC marketplace" onclick="event.stopPropagation()"><img src="https://i0.wp.com/blog.comc.com/wp-content/uploads/2020/01/comc-logo-800ppi.png?resize=396%2C176&ssl=1" alt="COMC"></a>` : '');
+  document.getElementById('modal-card-name').innerHTML =
+    (c.comcUrl ? `<a href="${escHtml(c.comcUrl)}" target="_blank" rel="noopener" class="comc-icon" title="Open the card in COMC marketplace" onclick="event.stopPropagation()"><img src="https://i0.wp.com/blog.comc.com/wp-content/uploads/2020/01/comc-logo-800ppi.png?resize=396%2C176&ssl=1" alt="COMC"></a> ` : '') + escHtml(c.name);
   const rawNum = (c.number||'').trim();
   const cardNum = rawNum ? '#'+rawNum.replace(/\/.*$/,'').trim() : '';
   document.getElementById('modal-card-number').textContent = cardNum;
